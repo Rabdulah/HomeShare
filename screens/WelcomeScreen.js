@@ -1,19 +1,41 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { View, Text, Image, StyleSheet } from 'react-native';
+import { AppIntroSlider } from 'react-native-app-intro-slider';
+import Slides from '../components/Slides';
+
+const COLOURS = {
+  lightSeaGreen: '#1b9aaa',
+  darkBlue: '#26547c',
+  greyBlue: '#95afba',
+  moonStoneBlue: '#64a6bd',
+  orange: '#FF5700'
+};
+
+const SLIDE_DATA = [
+  { text: 'Welcome to HomeShare', colour: COLOURS.lightSeaGreen },
+  { text: 'Track chores, bills, and errands', colour: COLOURS.orange },
+  { text: 'Organize your home life!', colour: COLOURS.moonStoneBlue }
+];
+
 
 class WelcomeScreen extends Component {
- render() {
-   return (
-     <View>
-       <Text>WelcomeScreen</Text>
-       <Text>WelcomeScreen</Text>
-       <Text>WelcomeScreen</Text>
-       <Text>WelcomeScreen</Text>
-       <Text>WelcomeScreen</Text>
-       <Text>WelcomeScreen</Text>
-     </View>
-   );
- } 
+  onSlidesComplete = () => {
+    this.props.navigation.navigate('auth');
+  }
+
+  render() {
+    // if (this.state.showRealApp) {
+    //   return this.props.navigation.navigate('home');
+    // } else {
+    //   return <AppIntroSlider slides={slides} renderItem={this._renderItem} bottomButton />;
+
+    // }
+    return (
+      <Slides data={SLIDE_DATA} onComplete={this.onSlidesComplete} />
+    );
+  }
 }
 
 export default WelcomeScreen;
