@@ -37,9 +37,7 @@ class Slides extends Component {
           title="Signup!"
           containerStyle={{ marginTop: 15 }}
           onPress={this.props.onComplete}
-        >
-          
-        </Button>
+        />
       )
     }
   }

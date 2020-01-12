@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   }
 });
 
-class AuthScreen extends Component {
+class LoginScreen extends Component {
   constructor(props) {
     super(props);
   }
@@ -101,4 +101,4 @@ const mapStateToProps = state => { // state arg = our global app state
 }
 export default connect(mapStateToProps, { 
   emailChanged, passwordChanged, loginUser
-})(AuthScreen);
+})(LoginScreen);

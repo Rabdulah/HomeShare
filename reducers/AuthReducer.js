@@ -1,10 +1,16 @@
 import { 
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
-  LOGIN_USER_SUCCESS
+  LOGIN_USER_SUCCESS,
+  LOGIN_USER_FAIL
 } from '../actions/types';
 
-const INITIAL_STATE = { email: '', password: '' };
+const INITIAL_STATE = { 
+  email: '',
+  password: '',
+  user: null,
+  error: ''
+};
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -14,7 +20,9 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, password: action.payload };
     case LOGIN_USER_SUCCESS:
       // add the new user model to our application state
-      return { ...state, user: action.payload }
+      return { ...state, user: action.payload };
+    case LOGIN_USER_FAIL:
+      return { ...state, error: 'Authenticaiton Failed.' };
     default: 
       return state;
   }

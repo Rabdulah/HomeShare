@@ -35,7 +35,7 @@ componentDidMount() {
 }
   
   onSlidesComplete = () => {
-    this.props.navigation.navigate('auth');
+    this.props.navigation.navigate('login');
   }
 
   render() {
