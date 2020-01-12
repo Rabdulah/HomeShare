@@ -45,6 +45,20 @@ class LoginScreen extends Component {
     //   });
   };
 
+  /*
+    case where user successfully logs in.
+  */
+  componentDidUpdate(prevProps) {
+    this.onAuthComplete(this.props);
+  }
+
+  onAuthComplete = (props) => {
+    if (props.user) {
+      // programmatically navigate user
+      this.props.navigation.navigate('home');
+    }
+  }
+
   onEmailChange = (text) => {
     this.props.emailChanged(text);  
   };
@@ -140,7 +154,8 @@ const mapStateToProps = state => { // state arg = our global app state
     email: state.auth.email,
     password: state.auth.password,
     error: state.auth.error,
-    loading: state.auth.loading
+    loading: state.auth.loading,
+    user: state.auth.user
   }
 }
 export default connect(mapStateToProps, { 
