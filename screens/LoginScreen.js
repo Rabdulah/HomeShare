@@ -17,6 +17,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 50,
     paddingHorizontal: 25
+  },
+  errorTextStyle: {
+    color: 'red',
+    fontSize: 14,
+    textAlign: 'left'
   }
 });
 
@@ -27,7 +32,6 @@ class LoginScreen extends Component {
 
   doFirebaseLogin = () => {
     // do firebase login
-    console.log('woof');
     // Firebase.auth()
     //   .signInWithEmailAndPassword(email, password)
     //   .then(() => {
@@ -44,19 +48,30 @@ class LoginScreen extends Component {
 
   onPasswordChange = (text) => {
     this.props.passwordChanged(text);
-  }
+  };
 
   onButtonPress = () => {
     const { email, password } = this.props;
 
     this.props.loginUser({ email, password });
-  }
+  };
+
+  renderError = () => {
+    if (this.props.error) {
+      return (
+        <View style={{ backgroundColor: 'white' }}>
+          <Text style={styles.errorTextStyle}>
+            {this.props.error}
+          </Text>
+        </View>
+      )
+    }
+  };
 
   render() {
-
     return (
       <View style={styles.container}>
-        <Text style={styles.subTitle}>Login in to HomeShare</Text>
+        <Text style={styles.subTitle}>Login to HomeShare</Text>
         <Input 
           placeholder="Email"
           onChangeText={this.onEmailChange}
@@ -70,6 +85,9 @@ class LoginScreen extends Component {
           onChangeText={this.onPasswordChange}
           value={this.props.password}
         />
+
+        { this.renderError() }
+
         <Button
           title="Log In"
           onPress={this.onButtonPress}
@@ -96,7 +114,8 @@ const mapStateToProps = state => { // state arg = our global app state
   */
   return {
     email: state.auth.email,
-    password: state.auth.password
+    password: state.auth.password,
+    error: state.auth.error
   }
 }
 export default connect(mapStateToProps, { 
