@@ -42,19 +42,7 @@ class WelcomeScreen extends Component {
     return (
       <Slides data={SLIDE_DATA} onComplete={this.onSlidesComplete} />
     );
-
- render() {
-   return (
-     <View>
-       <Text>WelcomeScreen</Text>
-       <Text>WelcomeScreen</Text>
-       <Text>WelcomeScreen</Text>
-       <Text>WelcomeScreen</Text>
-       <Text>WelcomeScreen</Text>
-       <Text>WelcomeScreen</Text>
-     </View>
-   );
- } 
+  }
 }
 
 export default WelcomeScreen;
