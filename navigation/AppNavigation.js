@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { createStackNavigator } from 'react-navigation-stack';
 
 import WelcomeScreen from '../screens/WelcomeScreen';
-import AuthScreen from '../screens/AuthScreen';
+import LoginScreen from '../screens/LoginScreen';
 import ChatScreen from '../screens/ChatScreen';
 import HomeScreen from '../screens/HomeScreen';
 
@@ -24,7 +24,7 @@ const AppNavigator = createBottomTabNavigator({
     key-value pair (allows for programmatic navigation)
   */
   welcome: { screen: WelcomeScreen },
-  auth: { screen: AuthScreen },
+  login: { screen: LoginScreen },
   main: { // nested nav
     screen: createBottomTabNavigator({
       home: { screen: HomeScreen },
