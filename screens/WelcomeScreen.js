@@ -5,6 +5,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import { AppIntroSlider } from 'react-native-app-intro-slider';
 import Firebase from 'firebase';
 import Slides from '../components/Slides';
+import config from '../configs/firebaseConfig';
 
 const COLOURS = {
   lightSeaGreen: '#1b9aaa',
@@ -27,6 +28,11 @@ class WelcomeScreen extends Component {
 //     .signInWithEmailAndPassword('ramzi@email.com', 'password');
 //     console.log('okay?')
 // }
+componentDidMount() {
+  if (!Firebase.apps.length) {
+    Firebase.initializeApp(config);
+  }
+}
   
   onSlidesComplete = () => {
     this.props.navigation.navigate('auth');
