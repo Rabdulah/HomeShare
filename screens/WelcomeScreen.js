@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { AppIntroSlider } from 'react-native-app-intro-slider';
+import Firebase from 'firebase';
 import Slides from '../components/Slides';
 
 const COLOURS = {
@@ -19,8 +20,14 @@ const SLIDE_DATA = [
   { text: 'Organize your home life!', colour: COLOURS.moonStoneBlue }
 ];
 
-
 class WelcomeScreen extends Component {
+
+//   async componentDidMount() {
+//     await Firebase.auth()
+//     .signInWithEmailAndPassword('ramzi@email.com', 'password');
+//     console.log('okay?')
+// }
+  
   onSlidesComplete = () => {
     this.props.navigation.navigate('auth');
   }
@@ -35,7 +42,19 @@ class WelcomeScreen extends Component {
     return (
       <Slides data={SLIDE_DATA} onComplete={this.onSlidesComplete} />
     );
-  }
+
+ render() {
+   return (
+     <View>
+       <Text>WelcomeScreen</Text>
+       <Text>WelcomeScreen</Text>
+       <Text>WelcomeScreen</Text>
+       <Text>WelcomeScreen</Text>
+       <Text>WelcomeScreen</Text>
+       <Text>WelcomeScreen</Text>
+     </View>
+   );
+ } 
 }
 
 export default WelcomeScreen;
