@@ -4,7 +4,7 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import Firebase from 'firebase';
 
 import Input from '../components/Input';
-import { emailChanged, passwordChanged } from '../actions';
+import { emailChanged, passwordChanged, loginUser } from '../actions';
 
 const styles = StyleSheet.create({
   subTitle: {
@@ -46,6 +46,12 @@ class AuthScreen extends Component {
     this.props.passwordChanged(text);
   }
 
+  onButtonPress = () => {
+    const { email, password } = this.props;
+
+    this.props.loginUser({ email, password });
+  }
+
   render() {
 
     return (
@@ -66,7 +72,7 @@ class AuthScreen extends Component {
         />
         <Button
           title="Log In"
-          onPress={this.doFirebaseLogin}
+          onPress={this.onButtonPress}
         />
       </View>
     );
@@ -93,4 +99,6 @@ const mapStateToProps = state => { // state arg = our global app state
     password: state.auth.password
   }
 }
-export default connect(mapStateToProps, { emailChanged, passwordChanged })(AuthScreen);
+export default connect(mapStateToProps, { 
+  emailChanged, passwordChanged, loginUser
+})(AuthScreen);

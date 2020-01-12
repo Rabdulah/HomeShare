@@ -4,8 +4,8 @@ import reducers from '../reducers';
 
 const store = createStore(
   reducers,
-  {}, // default state
-  compose(
+  {}, // default state 
+  compose( // Compose is used when you want to pass multiple store enhancers to the store
     applyMiddleware(thunk) // wire up middleware (which is thunk)
   )
 );
