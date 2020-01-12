@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 
-const UserInput = ({
-  term,
+const Input = ({
+  value,
   placeholder,
-  onTermChange,
+  onChangeText,
   onTermSubmit,
   secure
 }) => {
@@ -12,11 +12,11 @@ const UserInput = ({
     <View style={styles.backgroundStyle}>
       <TextInput
         style={styles.inputStyle}
-        value={term}
+        value={value}
         placeholder={placeholder}
         autoCapitalize="none"
         autoCorrect={false}
-        onChangeText={newTerm => onTermChange(newTerm)}
+        onChangeText={onChangeText}
         onEndEditing={onTermSubmit}
         secureTextEntry={secure}
       />
@@ -39,4 +39,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default UserInput;
+export default Input;
