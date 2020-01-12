@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button } from 'react-native-elements'
 import Firebase from 'firebase';
 
-import Input from '../components/Input';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
+import Input from '../components/Input';
+import Spinner from '../components/Spinner';
+import { DARK_BLUE } from '../styles/colours';
 
 const styles = StyleSheet.create({
   subTitle: {
@@ -68,6 +71,28 @@ class LoginScreen extends Component {
     }
   };
 
+  renderButton = () => {
+    if (this.props.loading) {
+      return <Spinner size='small' colour={DARK_BLUE} />;
+    }
+
+    return (
+      <Button
+        title="Log In"
+        buttonStyle={{
+          borderRadius: 5,
+          padding: 10,
+          backgroundColor: DARK_BLUE
+        }}
+        titleStyle={{
+          width: '90%',
+          fontSize: 20
+        }}
+        onPress={this.onButtonPress}
+      />
+    );
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -87,11 +112,9 @@ class LoginScreen extends Component {
         />
 
         { this.renderError() }
-
-        <Button
-          title="Log In"
-          onPress={this.onButtonPress}
-        />
+        <View style={[this.props.loading ? {marginTop: 14} : {marginTop: 0} ]}>
+          { this.renderButton() }
+        </View>
       </View>
     );
   } 
@@ -112,10 +135,12 @@ const mapStateToProps = state => { // state arg = our global app state
 
     our reducer produces the "email" property.
   */
+  
   return {
     email: state.auth.email,
     password: state.auth.password,
-    error: state.auth.error
+    error: state.auth.error,
+    loading: state.auth.loading
   }
 }
 export default connect(mapStateToProps, { 

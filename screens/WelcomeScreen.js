@@ -4,8 +4,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { AppIntroSlider } from 'react-native-app-intro-slider';
 import Firebase from 'firebase';
-import Slides from '../components/Slides';
+
 import config from '../configs/firebaseConfig';
+import Slides from '../components/Slides';
+import {
+  LIGHT_SEA_GREEN,
+  ORANGE,
+  MOONSTONE_BLUE
+} from '../styles/colours';
+
 
 const COLOURS = {
   lightSeaGreen: '#1b9aaa',
@@ -16,9 +23,9 @@ const COLOURS = {
 };
 
 const SLIDE_DATA = [
-  { text: 'Welcome to HomeShare', colour: COLOURS.lightSeaGreen },
-  { text: 'Track chores, bills, and errands', colour: COLOURS.orange },
-  { text: 'Organize your home life!', colour: COLOURS.moonStoneBlue }
+  { text: 'Welcome to HomeShare', colour: LIGHT_SEA_GREEN },
+  { text: 'Track chores, bills, and errands', colour: ORANGE },
+  { text: 'Organize your home life!', colour: MOONSTONE_BLUE }
 ];
 
 class WelcomeScreen extends Component {
