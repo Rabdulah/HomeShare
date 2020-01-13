@@ -5,6 +5,9 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
   LOGIN_USER,
+  FNAME_CHANGED,
+  LNAME_CHANGED,
+  USERNAME_CHANGED,
 } from './types';
 
 export const emailChanged = text => {
@@ -17,6 +20,27 @@ export const emailChanged = text => {
 export const passwordChanged = text => {
   return {
     type: PASSWORD_CHANGED,
+    payload: text,
+  };
+};
+
+export const fnameChanged = text => {
+  return {
+    type: FNAME_CHANGED,
+    payload: text,
+  };
+};
+
+export const lNameChanged = text => {
+  return {
+    type: LNAME_CHANGED,
+    payload: text,
+  };
+};
+
+export const usernameChanged = text => {
+  return {
+    type: USERNAME_CHANGED,
     payload: text,
   };
 };
