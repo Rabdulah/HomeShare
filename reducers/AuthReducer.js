@@ -52,7 +52,6 @@ export default (state = INITIAL_STATE, action) => {
     case SIGNUP_USER_FAIL:
       return { ...state, error: 'Signup Failed.', loading: false };
       case GET_USER_GROUP:
-        console.log({ ...state, group: action.payload });
         return { ...state, group: action.payload };
     default:
       return state;

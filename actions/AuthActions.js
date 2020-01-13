@@ -115,7 +115,7 @@ export const getUserGroup = userId => {
         .doc(userId)
         .get()
         .then(doc => {
-          return doc.data().group.id;
+          return doc.data().group;
         });
 
       dispatch({ type: GET_USER_GROUP, payload: response });

@@ -8,8 +8,6 @@ import Input from '../components/Input';
 import Spinner from '../components/Spinner';
 import { DARK_BLUE } from '../styles/colours';
 
-import firebase from 'firebase';
-
 const styles = StyleSheet.create({
   subTitle: {
     fontSize: 18,
@@ -41,7 +39,7 @@ class LoginScreen extends Component {
     if (props.user) {
       // Set user's group if available
       this.props.getUserGroup(this.props.user)
-      
+
       // programmatically navigate user
       this.props.navigation.navigate('home');
     }

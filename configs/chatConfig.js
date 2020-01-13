@@ -2,6 +2,8 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 import config from './firebaseConfig';
 
+import store from '../store';
+
 class ChatConfig {
   constructor() {
     this.init();
@@ -28,36 +30,37 @@ class ChatConfig {
     return (firebase.auth().currentUser || {}).uid;
   }
 
-  get ref() {
-    return firebase
-      .firestore()
-      .collection('chats')
-      .doc('xSEtHpW5Fop6toQgz31Y')
-      .collection('messages');
+  async ref() {
+    // return firebase
+    //   .firestore()
+    //   .collection('chats')
+    //   .doc('xSEtHpW5Fop6toQgz31Y')
+    //   .collection('messages');
 
     /* this is how we would reference a document later when we 
     implement chat for more than one group*/
     // const groupDocRef = firebase
     //   .firestore()
     //   .collection('groups')
-    //   .doc('IjWPZxGwGEEMYZAtQ96x');
+    //   .doc(store.getState().auth.group);
+    //   console.log('grp ref', groupDocRef);
 
-    // firebase
-    //   .firestore()
-    //   .collection('chats')
-    //   .where('group', '==', groupDocRef)
-    //   .get()
-    //   .then(snapshot => {
-    //     if (qsnap.empty) {
-    //       console.log('rip');
-    //     } else {
-    //       console.log('hooray');
-    //       snapshot.forEach(doc => {
-    //         console.log(doc.id);
-    //         return doc.id;
-    //       });
-    //     }
-    //   });
+    const response = await firebase
+      .firestore()
+      .collection('chats')
+      .where('group', '==', store.getState().auth.group)
+      .get()
+      .then(q =>
+        q.forEach(doc => {
+          console.log(doc.id);
+        })
+      );
+    //console.log('resp', response);
+    return firebase
+      .firestore()
+      .collection('chats')
+      .doc(response)
+      .collection('messages');
   }
 
   // We parse the message into the shape that GiftedChat needs
@@ -77,13 +80,15 @@ class ChatConfig {
   and render only the latest message added. Otherwise we end up in the situation
   where GiftedChat renders the same messages multiple times */
   on = callback => {
-    unsubscribe = this.ref.orderBy('timestamp').onSnapshot(snapshots => {
-      snapshots.docChanges().forEach(document => {
-        if (document.type == 'added') {
-          callback(this.parse(document.doc));
-        }
-      });
-    });
+    console.log('some success');
+    console.log('crazyshityo', this.ref());
+    // unsubscribe = this.ref.orderBy('timestamp').onSnapshot(snapshots => {
+    //   snapshots.docChanges().forEach(document => {
+    //     if (document.type == 'added') {
+    //       callback(this.parse(document.doc));
+    //     }
+    //   });
+    // });
   };
 
   get timestamp() {
@@ -112,4 +117,5 @@ class ChatConfig {
 }
 
 ChatConfig.shared = new ChatConfig();
+
 export default ChatConfig;
