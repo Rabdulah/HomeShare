@@ -13,7 +13,6 @@ import {
   signupUser,
 } from '../actions';
 import Input from '../components/Input';
-import Spinner from '../components/Spinner';
 import { DARK_BLUE } from '../styles/colours';
 import AuthStyles from '../styles/auth';
 
@@ -36,6 +35,10 @@ class SignupScreen extends Component {
 
   onUsernameChange = text => {
     this.props.usernameChanged(text);
+  };
+
+  navigateToLogin = () => {
+    this.props.navigation.navigate('login');
   };
 
   onButtonPress = () => {
@@ -96,6 +99,18 @@ class SignupScreen extends Component {
 
           {/* {this.renderError()} */}
           <View style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}>
+            <Text style={{ marginBottom: 14 }}>
+              Already have an account?{' '}
+              <Text
+                style={{
+                  color: DARK_BLUE,
+                }}
+                onPress={this.navigateToLogin}
+              >
+                Sign in here
+              </Text>
+              .
+            </Text>
             <Button
               title="Log In"
               buttonStyle={{
