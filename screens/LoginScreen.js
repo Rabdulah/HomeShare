@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
-import { Button } from 'react-native-elements'
-import Firebase from 'firebase';
+import { Button } from 'react-native-elements';
 
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import Input from '../components/Input';
@@ -13,38 +12,22 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 18,
     textAlign: 'left',
-    marginVertical: 14
+    marginVertical: 14,
   },
   container: {
     flexDirection: 'column',
     flex: 1,
     paddingVertical: 50,
-    paddingHorizontal: 25
+    paddingHorizontal: 25,
   },
   errorTextStyle: {
     color: 'red',
     fontSize: 14,
-    textAlign: 'left'
-  }
+    textAlign: 'left',
+  },
 });
 
 class LoginScreen extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  doFirebaseLogin = () => {
-    // do firebase login
-    // Firebase.auth()
-    //   .signInWithEmailAndPassword(email, password)
-    //   .then(() => {
-    //     navigation.navigate('Landing', {
-    //       payload: email,
-    //       typeOfLogin: 'Log In'
-    //     });
-    //   });
-  };
-
   /*
     case where user successfully logs in.
   */
@@ -52,18 +35,18 @@ class LoginScreen extends Component {
     this.onAuthComplete(this.props);
   }
 
-  onAuthComplete = (props) => {
+  onAuthComplete = props => {
     if (props.user) {
       // programmatically navigate user
       this.props.navigation.navigate('home');
     }
-  }
-
-  onEmailChange = (text) => {
-    this.props.emailChanged(text);  
   };
 
-  onPasswordChange = (text) => {
+  onEmailChange = text => {
+    this.props.emailChanged(text);
+  };
+
+  onPasswordChange = text => {
     this.props.passwordChanged(text);
   };
 
@@ -77,17 +60,15 @@ class LoginScreen extends Component {
     if (this.props.error) {
       return (
         <View style={{ backgroundColor: 'white' }}>
-          <Text style={styles.errorTextStyle}>
-            {this.props.error}
-          </Text>
+          <Text style={styles.errorTextStyle}>{this.props.error}</Text>
         </View>
-      )
+      );
     }
   };
 
   renderButton = () => {
     if (this.props.loading) {
-      return <Spinner size='small' colour={DARK_BLUE} />;
+      return <Spinner size="small" colour={DARK_BLUE} />;
     }
 
     return (
@@ -96,11 +77,11 @@ class LoginScreen extends Component {
         buttonStyle={{
           borderRadius: 5,
           padding: 10,
-          backgroundColor: DARK_BLUE
+          backgroundColor: DARK_BLUE,
         }}
         titleStyle={{
           width: '90%',
-          fontSize: 20
+          fontSize: 20,
         }}
         onPress={this.onButtonPress}
       />
@@ -111,7 +92,7 @@ class LoginScreen extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.subTitle}>Login to HomeShare</Text>
-        <Input 
+        <Input
           placeholder="Email"
           onChangeText={this.onEmailChange}
           secure={false}
@@ -125,13 +106,13 @@ class LoginScreen extends Component {
           value={this.props.password}
         />
 
-        { this.renderError() }
-        <View style={[this.props.loading ? {marginTop: 14} : {marginTop: 0} ]}>
-          { this.renderButton() }
+        {this.renderError()}
+        <View style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}>
+          {this.renderButton()}
         </View>
       </View>
     );
-  } 
+  }
 }
 
 /*
@@ -141,7 +122,8 @@ class LoginScreen extends Component {
 
   now "emailChanged" is accessible via: this.props.emailChanged
 */
-const mapStateToProps = state => { // state arg = our global app state
+const mapStateToProps = state => {
+  // state arg = our global app state
   /*
     return the property on the state obj we care about
     it is specifically state.AUTH b/c that is the value we assigned
@@ -149,15 +131,17 @@ const mapStateToProps = state => { // state arg = our global app state
 
     our reducer produces the "email" property.
   */
-  
+
   return {
     email: state.auth.email,
     password: state.auth.password,
     error: state.auth.error,
     loading: state.auth.loading,
-    user: state.auth.user
-  }
-}
-export default connect(mapStateToProps, { 
-  emailChanged, passwordChanged, loginUser
+    user: state.auth.user,
+  };
+};
+export default connect(mapStateToProps, {
+  emailChanged,
+  passwordChanged,
+  loginUser,
 })(LoginScreen);

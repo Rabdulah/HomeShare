@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import * as actions from '../actions'
-import { StyleSheet, Text, View } from 'react-native';
 import { createAppContainer } from 'react-navigation';
-import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import WelcomeScreen from '../screens/WelcomeScreen';
 import LoginScreen from '../screens/LoginScreen';
+import SignupScreen from '../screens/SignupScreen';
 import ChatScreen from '../screens/ChatScreen';
 import HomeScreen from '../screens/HomeScreen';
 
@@ -17,42 +15,49 @@ import HomeScreen from '../screens/HomeScreen';
 
   handle it with config for navigation
 */
-const AppNavigator = createBottomTabNavigator({
-  /*
+const AppNavigator = createBottomTabNavigator(
+  {
+    /*
     just need to specify the diff screens we want
     the TabNavigator to show; do so by specifying a
     key-value pair (allows for programmatic navigation)
   */
-  welcome: { screen: WelcomeScreen },
-  login: { screen: LoginScreen },
-  main: { // nested nav
-    screen: createBottomTabNavigator({
-      home: { screen: HomeScreen },
-      chat: { screen: ChatScreen },
-      // review: {
-      //   screen: createStackNavigator({
-      //     review: { screen: ReviewScreen },
-      //     settings: { screen: SettingsScreen }
-      //   })
-      // }
-    })
-  }
-}, {
-  // nav configuration options for initial tab navigator
-  lazy: true,
-  defaultNavigationOptions: {
-    tabBarVisible: true // hide all initial tabs
-  }
-});
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    welcome: { screen: WelcomeScreen },
+    auth: {
+      screen: createStackNavigator(
+        {
+          signup: { screen: SignupScreen },
+          login: { screen: LoginScreen },
+        },
+        {
+          defaultNavigationOptions: {
+            headerShown: false,
+          },
+        }
+      ),
+    },
+    main: {
+      // nested nav
+      screen: createBottomTabNavigator({
+        home: { screen: HomeScreen },
+        chat: { screen: ChatScreen },
+        // review: {
+        //   screen: createStackNavigator({
+        //     review: { screen: ReviewScreen },
+        //     settings: { screen: SettingsScreen }
+        //   })
+        // }
+      }),
+    },
   },
-});
+  {
+    // nav configuration options for initial tab navigator
+    lazy: true,
+    defaultNavigationOptions: {
+      tabBarVisible: true, // hide all initial tabs
+    },
+  }
+);
 
 const AppContainer = createAppContainer(AppNavigator);
 
@@ -67,7 +72,5 @@ class AppNavigation extends Component {
 
   i.e. your components can dispatch actions.
 */
-export default connect(
-  null,
-  actions
-)(AppNavigation);
+// export default connect(null, actions)(AppNavigation);
+export default AppNavigation;
