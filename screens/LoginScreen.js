@@ -28,18 +28,6 @@ const styles = StyleSheet.create({
 });
 
 class LoginScreen extends Component {
-  doFirebaseLogin = () => {
-    // do firebase login
-    // Firebase.auth()
-    //   .signInWithEmailAndPassword(email, password)
-    //   .then(() => {
-    //     navigation.navigate('Landing', {
-    //       payload: email,
-    //       typeOfLogin: 'Log In'
-    //     });
-    //   });
-  };
-
   /*
     case where user successfully logs in.
   */

@@ -7,6 +7,9 @@ import {
   FNAME_CHANGED,
   LNAME_CHANGED,
   USERNAME_CHANGED,
+  SIGNUP_USER,
+  SIGNUP_USER_SUCCESS,
+  SIGNUP_USER_FAIL,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -34,11 +37,18 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, password: action.payload };
     case LOGIN_USER:
       return { ...state, loading: true, error: '' };
+    case SIGNUP_USER:
+      return { ...state, loading: true, error: '' };
     case LOGIN_USER_SUCCESS:
+      // add the new user model to our application state
+      return { ...state, ...INITIAL_STATE, user: action.payload };
+    case SIGNUP_USER_SUCCESS:
       // add the new user model to our application state
       return { ...state, ...INITIAL_STATE, user: action.payload };
     case LOGIN_USER_FAIL:
       return { ...state, error: 'Authentication Failed.', loading: false };
+    case SIGNUP_USER_FAIL:
+      return { ...state, error: 'Signup Failed.', loading: false };
     default:
       return state;
   }
