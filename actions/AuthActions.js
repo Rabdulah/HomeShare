@@ -11,6 +11,7 @@ import {
   SIGNUP_USER,
   SIGNUP_USER_FAIL,
   SIGNUP_USER_SUCCESS,
+  GET_USER_GROUP
 } from './types';
 
 const insertNewUser = async (firstName, lastName, username, email, uid) => {
@@ -23,43 +24,43 @@ const insertNewUser = async (firstName, lastName, username, email, uid) => {
       username,
       name: {
         firstName,
-        lastName,
-      },
+        lastName
+      }
     });
 };
 
 export const emailChanged = text => {
   return {
     type: EMAIL_CHANGED,
-    payload: text,
+    payload: text
   };
 };
 
 export const passwordChanged = text => {
   return {
     type: PASSWORD_CHANGED,
-    payload: text,
+    payload: text
   };
 };
 
 export const fnameChanged = text => {
   return {
     type: FNAME_CHANGED,
-    payload: text,
+    payload: text
   };
 };
 
 export const lnameChanged = text => {
   return {
     type: LNAME_CHANGED,
-    payload: text,
+    payload: text
   };
 };
 
 export const usernameChanged = text => {
   return {
     type: USERNAME_CHANGED,
-    payload: text,
+    payload: text
   };
 };
 
@@ -70,7 +71,9 @@ export const loginUser = ({ email, password }) => {
     dispatch({ type: LOGIN_USER });
 
     try {
-      const response = await firebase.auth().signInWithEmailAndPassword(email, password);
+      const response = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
       dispatch({ type: LOGIN_USER_SUCCESS, payload: response.user.uid });
     } catch (error) {
       console.log(error);
@@ -79,18 +82,46 @@ export const loginUser = ({ email, password }) => {
   };
 };
 
-export const signupUser = ({ firstName, lastName, username, email, password }) => {
+export const signupUser = ({
+  firstName,
+  lastName,
+  username,
+  email,
+  password
+}) => {
   return async dispatch => {
     dispatch({ type: SIGNUP_USER });
 
     try {
-      const response = await firebase.auth().createUserWithEmailAndPassword(email, password);
+      const response = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
 
       insertNewUser(firstName, lastName, username, email, response.user.uid);
       dispatch({ type: SIGNUP_USER_SUCCESS, payload: response.user.uid });
     } catch (error) {
       console.log(error);
       dispatch({ type: SIGNUP_USER_FAIL });
+    }
+  };
+};
+
+export const getUserGroup = userId => {
+  return async dispatch => {
+    try {
+      const response = await firebase
+        .firestore()
+        .collection('users')
+        .doc(userId)
+        .get()
+        .then(doc => {
+          return doc.data().group.id;
+        });
+
+      dispatch({ type: GET_USER_GROUP, payload: response });
+    } catch (error) {
+      console.log(error);
+      // TODO: Handle case where user is not in a group yet
     }
   };
 };

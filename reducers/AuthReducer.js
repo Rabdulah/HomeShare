@@ -10,6 +10,7 @@ import {
   SIGNUP_USER,
   SIGNUP_USER_SUCCESS,
   SIGNUP_USER_FAIL,
+  GET_USER_GROUP
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -21,6 +22,7 @@ const INITIAL_STATE = {
   firstName: '',
   lastName: '',
   username: '',
+  group: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -49,6 +51,9 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, error: 'Authentication Failed.', loading: false };
     case SIGNUP_USER_FAIL:
       return { ...state, error: 'Signup Failed.', loading: false };
+      case GET_USER_GROUP:
+        console.log({ ...state, group: action.payload });
+        return { ...state, group: action.payload };
     default:
       return state;
   }
