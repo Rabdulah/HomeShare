@@ -9,3 +9,4 @@ export const USERNAME_CHANGED = 'username_changed';
 export const SIGNUP_USER = 'signup_user';
 export const SIGNUP_USER_SUCCESS = 'signup_user_success';
 export const SIGNUP_USER_FAIL = 'signup_user_fail';
+export const GET_USER_GROUP = 'get_user_group';

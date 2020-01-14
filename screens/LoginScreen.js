@@ -3,7 +3,12 @@ import { connect } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import { emailChanged, passwordChanged, loginUser } from '../actions';
+import {
+  emailChanged,
+  passwordChanged,
+  loginUser,
+  getUserGroup
+} from '../actions';
 import Input from '../components/Input';
 import Spinner from '../components/Spinner';
 import { DARK_BLUE } from '../styles/colours';
@@ -12,19 +17,19 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 18,
     textAlign: 'left',
-    marginVertical: 14,
+    marginVertical: 14
   },
   container: {
     flexDirection: 'column',
     flex: 1,
     paddingVertical: 50,
-    paddingHorizontal: 25,
+    paddingHorizontal: 25
   },
   errorTextStyle: {
     color: 'red',
     fontSize: 14,
-    textAlign: 'left',
-  },
+    textAlign: 'left'
+  }
 });
 
 class LoginScreen extends Component {
@@ -37,6 +42,9 @@ class LoginScreen extends Component {
 
   onAuthComplete = props => {
     if (props.user) {
+      // Set user's group if available
+      this.props.getUserGroup(this.props.user);
+
       // programmatically navigate user
       this.props.navigation.navigate('home');
     }
@@ -52,7 +60,6 @@ class LoginScreen extends Component {
 
   onButtonPress = () => {
     const { email, password } = this.props;
-
     this.props.loginUser({ email, password });
   };
 
@@ -77,11 +84,11 @@ class LoginScreen extends Component {
         buttonStyle={{
           borderRadius: 5,
           padding: 10,
-          backgroundColor: DARK_BLUE,
+          backgroundColor: DARK_BLUE
         }}
         titleStyle={{
           width: '90%',
-          fontSize: 20,
+          fontSize: 20
         }}
         onPress={this.onButtonPress}
       />
@@ -107,7 +114,9 @@ class LoginScreen extends Component {
         />
 
         {this.renderError()}
-        <View style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}>
+        <View
+          style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
+        >
           {this.renderButton()}
         </View>
       </View>
@@ -137,11 +146,12 @@ const mapStateToProps = state => {
     password: state.auth.password,
     error: state.auth.error,
     loading: state.auth.loading,
-    user: state.auth.user,
+    user: state.auth.user
   };
 };
 export default connect(mapStateToProps, {
   emailChanged,
   passwordChanged,
   loginUser,
+  getUserGroup
 })(LoginScreen);
