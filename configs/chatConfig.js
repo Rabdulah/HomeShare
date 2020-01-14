@@ -30,7 +30,7 @@ class ChatConfig {
     return (firebase.auth().currentUser || {}).uid;
   }
 
-  async ref() {
+  getChatMessages = async () => {
     // return firebase
     //   .firestore()
     //   .collection('chats')
@@ -45,22 +45,41 @@ class ChatConfig {
     //   .doc(store.getState().auth.group);
     //   console.log('grp ref', groupDocRef);
 
-    const response = await firebase
-      .firestore()
+    var response = await firebase.firestore()
       .collection('chats')
       .where('group', '==', store.getState().auth.group)
-      .get()
-      .then(q =>
-        q.forEach(doc => {
-          console.log(doc.id);
-        })
-      );
+      .get();
+
+    let docID = null;
+    response.forEach(doc => {
+      console.log('in snap, doc', doc.id);
+      docID = doc.id;
+    });
+
+    console.log(docID)
+      // .then((q) => {
+      //   q.forEach(doc => {
+          // console.log('in snap, doc', doc.id);
+          // res(doc.id)
+        // })
+    // });
+
+    // help.then((x)=>{
+    //   return firebase
+    //   .firestore()
+    //   .collection('chats')
+    //   .doc(x)
+    //   .collection('messages');
+    // });
+    // console.log('thing', thing)
+    //   console.log('first res', response);
     //console.log('resp', response);
-    return firebase
+    let chatMessages = firebase
       .firestore()
       .collection('chats')
-      .doc(response)
+      .doc(docID)
       .collection('messages');
+      return chatMessages;
   }
 
   // We parse the message into the shape that GiftedChat needs
@@ -80,15 +99,19 @@ class ChatConfig {
   and render only the latest message added. Otherwise we end up in the situation
   where GiftedChat renders the same messages multiple times */
   on = callback => {
-    console.log('some success');
-    console.log('crazyshityo', this.ref());
-    // unsubscribe = this.ref.orderBy('timestamp').onSnapshot(snapshots => {
-    //   snapshots.docChanges().forEach(document => {
-    //     if (document.type == 'added') {
-    //       callback(this.parse(document.doc));
-    //     }
-    //   });
-    // });
+    // console.log('some success');
+    // console.log('crazyshityo', await this.ref);
+    // var thing = await this.ref;
+    //this.getChatMessages();
+    unsubscribe = this.getChatMessages().then(promise => {
+      promise.onSnapshot(snapshots => {
+        snapshots.docChanges().forEach(document => {
+          if (document.type == 'added') {
+            callback(this.parse(document.doc));
+          }
+        });
+      });
+    })
   };
 
   get timestamp() {
