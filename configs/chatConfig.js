@@ -31,56 +31,24 @@ class ChatConfig {
   }
 
   getChatMessages = async () => {
-    // return firebase
-    //   .firestore()
-    //   .collection('chats')
-    //   .doc('xSEtHpW5Fop6toQgz31Y')
-    //   .collection('messages');
-
-    /* this is how we would reference a document later when we 
-    implement chat for more than one group*/
-    // const groupDocRef = firebase
-    //   .firestore()
-    //   .collection('groups')
-    //   .doc(store.getState().auth.group);
-    //   console.log('grp ref', groupDocRef);
-
-    var response = await firebase.firestore()
+    var response = await firebase
+      .firestore()
       .collection('chats')
       .where('group', '==', store.getState().auth.group)
       .get();
 
     let docID = null;
     response.forEach(doc => {
-      console.log('in snap, doc', doc.id);
       docID = doc.id;
     });
 
-    console.log(docID)
-      // .then((q) => {
-      //   q.forEach(doc => {
-          // console.log('in snap, doc', doc.id);
-          // res(doc.id)
-        // })
-    // });
-
-    // help.then((x)=>{
-    //   return firebase
-    //   .firestore()
-    //   .collection('chats')
-    //   .doc(x)
-    //   .collection('messages');
-    // });
-    // console.log('thing', thing)
-    //   console.log('first res', response);
-    //console.log('resp', response);
     let chatMessages = firebase
       .firestore()
       .collection('chats')
       .doc(docID)
       .collection('messages');
-      return chatMessages;
-  }
+    return chatMessages;
+  };
 
   // We parse the message into the shape that GiftedChat needs
   parse = snapshot => {
@@ -99,10 +67,6 @@ class ChatConfig {
   and render only the latest message added. Otherwise we end up in the situation
   where GiftedChat renders the same messages multiple times */
   on = callback => {
-    // console.log('some success');
-    // console.log('crazyshityo', await this.ref);
-    // var thing = await this.ref;
-    //this.getChatMessages();
     unsubscribe = this.getChatMessages().then(promise => {
       promise.onSnapshot(snapshots => {
         snapshots.docChanges().forEach(document => {
@@ -111,7 +75,7 @@ class ChatConfig {
           }
         });
       });
-    })
+    });
   };
 
   get timestamp() {
@@ -131,7 +95,10 @@ class ChatConfig {
     }
   };
 
-  append = message => this.ref.add(message);
+  append = message =>
+    this.getChatMessages().then(promise => {
+      promise.add(message);
+    });
 
   // close the connection to the Backend
   off() {

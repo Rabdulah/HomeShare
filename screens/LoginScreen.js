@@ -3,7 +3,12 @@ import { connect } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import { emailChanged, passwordChanged, loginUser, getUserGroup } from '../actions';
+import {
+  emailChanged,
+  passwordChanged,
+  loginUser,
+  getUserGroup
+} from '../actions';
 import Input from '../components/Input';
 import Spinner from '../components/Spinner';
 import { DARK_BLUE } from '../styles/colours';
@@ -38,7 +43,7 @@ class LoginScreen extends Component {
   onAuthComplete = props => {
     if (props.user) {
       // Set user's group if available
-      this.props.getUserGroup(this.props.user)
+      this.props.getUserGroup(this.props.user);
 
       // programmatically navigate user
       this.props.navigation.navigate('home');
@@ -54,9 +59,7 @@ class LoginScreen extends Component {
   };
 
   onButtonPress = () => {
-    //const { email, password } = this.props;
-    const email = 'ramzi@uwo.ca';
-    const password = 'password';
+    const { email, password } = this.props;
     this.props.loginUser({ email, password });
   };
 
