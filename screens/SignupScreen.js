@@ -10,7 +10,7 @@ import {
   fnameChanged,
   lnameChanged,
   usernameChanged,
-  signupUser,
+  signupUser
 } from '../actions';
 import Input from '../components/Input';
 import { DARK_BLUE } from '../styles/colours';
@@ -49,7 +49,7 @@ class SignupScreen extends Component {
       lastName,
       username,
       email,
-      password,
+      password
     });
   };
 
@@ -103,7 +103,7 @@ class SignupScreen extends Component {
               Already have an account?{' '}
               <Text
                 style={{
-                  color: DARK_BLUE,
+                  color: DARK_BLUE
                 }}
                 onPress={this.navigateToLogin}
               >
@@ -116,11 +116,11 @@ class SignupScreen extends Component {
               buttonStyle={{
                 borderRadius: 5,
                 padding: 10,
-                backgroundColor: DARK_BLUE,
+                backgroundColor: DARK_BLUE
               }}
               titleStyle={{
                 width: '90%',
-                fontSize: 20,
+                fontSize: 20
               }}
               onPress={this.onButtonPress}
             />
@@ -144,7 +144,7 @@ const mapStateToProps = ({ auth }) => {
     firstName,
     lastName,
     username,
-    user,
+    user
   };
 };
 export default connect(mapStateToProps, {
@@ -153,5 +153,5 @@ export default connect(mapStateToProps, {
   fnameChanged,
   lnameChanged,
   usernameChanged,
-  signupUser,
+  signupUser
 })(SignupScreen);

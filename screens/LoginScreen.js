@@ -3,12 +3,7 @@ import { connect } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import {
-  emailChanged,
-  passwordChanged,
-  loginUser,
-  getUserGroup
-} from '../actions';
+import { emailChanged, passwordChanged, loginUser, getUserGroup } from '../actions';
 import Input from '../components/Input';
 import Spinner from '../components/Spinner';
 import { DARK_BLUE } from '../styles/colours';
@@ -114,9 +109,7 @@ class LoginScreen extends Component {
         />
 
         {this.renderError()}
-        <View
-          style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
-        >
+        <View style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}>
           {this.renderButton()}
         </View>
       </View>

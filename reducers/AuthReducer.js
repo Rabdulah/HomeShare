@@ -14,8 +14,8 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  email: '',
-  password: '',
+  email: 'matt@uwo.ca',
+  password: 'password',
   user: null,
   error: '',
   loading: false,
@@ -43,7 +43,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true, error: '' };
     case LOGIN_USER_SUCCESS:
       // add the new user model to our application state
-      return { ...state, ...INITIAL_STATE, user: action.payload };
+      return { ...state, ...INITIAL_STATE, ...action.payload };
     case SIGNUP_USER_SUCCESS:
       // add the new user model to our application state
       return { ...state, ...INITIAL_STATE, user: action.payload };
@@ -51,8 +51,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, error: 'Authentication Failed.', loading: false };
     case SIGNUP_USER_FAIL:
       return { ...state, error: 'Signup Failed.', loading: false };
-      case GET_USER_GROUP:
-        return { ...state, group: action.payload };
+    case GET_USER_GROUP:
+      return { ...state, group: action.payload };
     default:
       return state;
   }

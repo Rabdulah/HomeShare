@@ -71,10 +71,21 @@ export const loginUser = ({ email, password }) => {
     dispatch({ type: LOGIN_USER });
 
     try {
-      const response = await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password);
-      dispatch({ type: LOGIN_USER_SUCCESS, payload: response.user.uid });
+      const response = await firebase.auth().signInWithEmailAndPassword(email, password);
+      const user = await firebase
+        .firestore()
+        .collection('users')
+        .doc(response.user.uid)
+        .get();
+
+      const userPayload = {
+        email: user.data().email,
+        firstName: user.data().name.firstName,
+        lastName: user.data().name.lastName,
+        username: user.data().username,
+        user: response.user.uid
+      };
+      dispatch({ type: LOGIN_USER_SUCCESS, payload: userPayload });
     } catch (error) {
       console.log(error);
       dispatch({ type: LOGIN_USER_FAIL });
@@ -82,20 +93,12 @@ export const loginUser = ({ email, password }) => {
   };
 };
 
-export const signupUser = ({
-  firstName,
-  lastName,
-  username,
-  email,
-  password
-}) => {
+export const signupUser = ({ firstName, lastName, username, email, password }) => {
   return async dispatch => {
     dispatch({ type: SIGNUP_USER });
 
     try {
-      const response = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
+      const response = await firebase.auth().createUserWithEmailAndPassword(email, password);
 
       insertNewUser(firstName, lastName, username, email, response.user.uid);
       dispatch({ type: SIGNUP_USER_SUCCESS, payload: response.user.uid });

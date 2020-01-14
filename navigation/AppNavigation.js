@@ -8,6 +8,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import ChatScreen from '../screens/ChatScreen';
 import HomeScreen from '../screens/HomeScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 /*
   big gotcha: for any navigator, when it is rendered, react
@@ -27,35 +28,36 @@ const AppNavigator = createBottomTabNavigator(
       screen: createStackNavigator(
         {
           signup: { screen: SignupScreen },
-          login: { screen: LoginScreen },
+          login: { screen: LoginScreen }
         },
         {
           defaultNavigationOptions: {
-            headerShown: false,
-          },
+            headerShown: false
+          }
         }
-      ),
+      )
     },
     main: {
       // nested nav
       screen: createBottomTabNavigator({
+        profile: { screen: ProfileScreen },
         home: { screen: HomeScreen },
-        chat: { screen: ChatScreen },
+        chat: { screen: ChatScreen }
         // review: {
         //   screen: createStackNavigator({
         //     review: { screen: ReviewScreen },
         //     settings: { screen: SettingsScreen }
         //   })
         // }
-      }),
-    },
+      })
+    }
   },
   {
     // nav configuration options for initial tab navigator
     lazy: true,
     defaultNavigationOptions: {
-      tabBarVisible: true, // hide all initial tabs
-    },
+      tabBarVisible: false // hide all initial tabs
+    }
   }
 );
 

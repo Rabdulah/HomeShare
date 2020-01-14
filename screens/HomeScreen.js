@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
+
+import { emailChanged } from '../actions';
 
 class HomeScreen extends Component {
   render() {
@@ -11,9 +14,15 @@ class HomeScreen extends Component {
         <Text>HomeScreen</Text>
         <Text>HomeScreen</Text>
         <Text>HomeScreen</Text>
+        <Text>{this.props.firstName}</Text>
       </View>
     );
   }
 }
 
-export default HomeScreen;
+const mapStateToProps = ({ auth }) => {
+  const { firstName, lastName } = auth;
+
+  return { firstName, lastName };
+};
+export default connect(mapStateToProps, { emailChanged })(HomeScreen);
