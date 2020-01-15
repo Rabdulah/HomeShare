@@ -98,7 +98,9 @@ class SignupScreen extends Component {
           />
 
           {/* {this.renderError()} */}
-          <View style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}>
+          <View
+            style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
+          >
             <Text style={{ marginBottom: 14 }}>
               Already have an account?{' '}
               <Text
@@ -112,7 +114,7 @@ class SignupScreen extends Component {
               .
             </Text>
             <Button
-              title="Log In"
+              title="Sign Up"
               buttonStyle={{
                 borderRadius: 5,
                 padding: 10,
@@ -134,7 +136,16 @@ class SignupScreen extends Component {
 // note: first argument is "state";
 // ({ auth }) gets you state.auth
 const mapStateToProps = ({ auth }) => {
-  const { email, password, error, loading, firstName, lastName, username, user } = auth;
+  const {
+    email,
+    password,
+    error,
+    loading,
+    firstName,
+    lastName,
+    username,
+    user
+  } = auth;
 
   return {
     email,
