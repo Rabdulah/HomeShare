@@ -11,7 +11,8 @@ import {
   SIGNUP_USER,
   SIGNUP_USER_FAIL,
   SIGNUP_USER_SUCCESS,
-  GET_USER_GROUP
+  GET_USER_GROUP,
+  CLEAR_ERRORS
 } from './types';
 
 const insertNewUser = async (firstName, lastName, username, email, uid) => {
@@ -61,6 +62,12 @@ export const usernameChanged = text => {
   return {
     type: USERNAME_CHANGED,
     payload: text
+  };
+};
+
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
   };
 };
 

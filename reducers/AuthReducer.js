@@ -10,14 +10,16 @@ import {
   SIGNUP_USER,
   SIGNUP_USER_SUCCESS,
   SIGNUP_USER_FAIL,
-  GET_USER_GROUP
+  GET_USER_GROUP,
+  CLEAR_ERRORS
 } from '../actions/types';
 
 const INITIAL_STATE = {
   email: '',
   password: '',
   user: null,
-  error: '',
+  errorLogin: '',
+  errorSignUp: '',
   loading: false,
   firstName: '',
   lastName: '',
@@ -48,11 +50,13 @@ export default (state = INITIAL_STATE, action) => {
       // add the new user model to our application state
       return { ...state, ...INITIAL_STATE, user: action.payload };
     case LOGIN_USER_FAIL:
-      return { ...state, error: 'Authentication Failed.', loading: false };
+      return { ...state, errorLogin: 'Authentication Failed.', loading: false };
     case SIGNUP_USER_FAIL:
-      return { ...state, error: action.payload.message, loading: false };
-      case GET_USER_GROUP:
-        return { ...state, group: action.payload };
+      return { ...state, errorSignUp: action.payload.message, loading: false };
+    case GET_USER_GROUP:
+      return { ...state, group: action.payload };
+    case CLEAR_ERRORS:
+      return { ...state, errorLogin: '', errorSignUp: '' };
     default:
       return state;
   }
