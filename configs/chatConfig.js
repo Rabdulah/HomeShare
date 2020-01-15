@@ -31,16 +31,16 @@ class ChatConfig {
   }
 
   getChatMessages = async () => {
+    let docID = null;
     var response = await firebase
       .firestore()
       .collection('chats')
       .where('group', '==', store.getState().auth.group)
-      .get();
-
-    let docID = null;
-    response.forEach(doc => {
-      docID = doc.id;
-    });
+      .get().then(snapshot => {
+        snapshot.forEach(doc => {
+          docID = doc.id;
+        })
+      });
 
     let chatMessages = firebase
       .firestore()
