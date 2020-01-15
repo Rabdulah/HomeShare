@@ -2,9 +2,11 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 import config from './firebaseConfig';
 
+import store from '../store';
+
 class PaymentConfig {
   constructor() {
-    this.init();
+    //this.init();
     this.observeAuth();
   }
 
@@ -23,13 +25,27 @@ class PaymentConfig {
       }
     }
   };
-
+  get timestamp() {
+    return firebase.firestore.FieldValue.serverTimestamp();
+  }
   createPayment = () => {
+    console.log('yay')
     firebase
       .firestore()
-      .collection(payments)
+      .collection('payments')
       .add({
-          cost
+        cost: 10,
+        date: this.timestamp,
+        group: store.getState().auth.group,
+        name: 'food',
+        owner: 'ramzi',
+        payees: [
+          { amount: 4, isPaid: false, user: 'matt' }
+        ]
       });
   };
 }
+
+PaymentConfig.shared = new PaymentConfig();
+
+export default PaymentConfig;

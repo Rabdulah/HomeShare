@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
+import PaymentConfig from '../configs/paymentConfig';
 
 class HomeScreen extends Component {
+  onButtonPress = () => {
+    PaymentConfig.shared.createPayment();
+  };
   render() {
     return (
       <View>
@@ -11,6 +15,10 @@ class HomeScreen extends Component {
         <Text>HomeScreen</Text>
         <Text>HomeScreen</Text>
         <Text>HomeScreen</Text>
+        <Button
+          title="add"
+          onPress={this.onButtonPress}
+        />
       </View>
     );
   }
