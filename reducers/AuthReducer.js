@@ -22,7 +22,8 @@ const INITIAL_STATE = {
   firstName: '',
   lastName: '',
   username: '',
-  group: ''
+  group: '',
+  groupInfo: null
 };
 
 export default (state = INITIAL_STATE, action) => {

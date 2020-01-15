@@ -14,6 +14,25 @@ import {
   GET_USER_GROUP
 } from './types';
 
+export const getUserGroup = userId => {
+  return async dispatch => {
+    try {
+      const response = await firebase
+        .firestore()
+        .collection('users')
+        .doc(userId)
+        .get()
+        .then(doc => {
+          return doc.data().group;
+        });
+      dispatch({ type: GET_USER_GROUP, payload: response });
+    } catch (error) {
+      console.log(error);
+      // TODO: Handle case where user is not in a group yet
+    }
+  };
+};
+
 const insertNewUser = async (firstName, lastName, username, email, uid) => {
   firebase
     .firestore()
@@ -72,18 +91,24 @@ export const loginUser = ({ email, password }) => {
 
     try {
       const response = await firebase.auth().signInWithEmailAndPassword(email, password);
-      const user = await firebase
+      const userSnapshot = await firebase
         .firestore()
         .collection('users')
         .doc(response.user.uid)
         .get();
 
+      const user = userSnapshot.data();
+      const groupSnapshot = await user.group.get();
+      const group = groupSnapshot.data();
+      console.log('snapshot data()', group);
+
       const userPayload = {
-        email: user.data().email,
-        firstName: user.data().name.firstName,
-        lastName: user.data().name.lastName,
-        username: user.data().username,
-        user: response.user.uid
+        email: user.email,
+        firstName: user.name.firstName,
+        lastName: user.name.lastName,
+        username: user.username,
+        user: response.user.uid,
+        groupInfo: group
       };
       dispatch({ type: LOGIN_USER_SUCCESS, payload: userPayload });
     } catch (error) {
@@ -105,26 +130,6 @@ export const signupUser = ({ firstName, lastName, username, email, password }) =
     } catch (error) {
       console.log(error);
       dispatch({ type: SIGNUP_USER_FAIL });
-    }
-  };
-};
-
-export const getUserGroup = userId => {
-  return async dispatch => {
-    try {
-      const response = await firebase
-        .firestore()
-        .collection('users')
-        .doc(userId)
-        .get()
-        .then(doc => {
-          return doc.data().group;
-        });
-
-      dispatch({ type: GET_USER_GROUP, payload: response });
-    } catch (error) {
-      console.log(error);
-      // TODO: Handle case where user is not in a group yet
     }
   };
 };
