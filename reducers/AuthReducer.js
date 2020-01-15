@@ -50,7 +50,7 @@ export default (state = INITIAL_STATE, action) => {
     case LOGIN_USER_FAIL:
       return { ...state, error: 'Authentication Failed.', loading: false };
     case SIGNUP_USER_FAIL:
-      return { ...state, error: 'Signup Failed.', loading: false };
+      return { ...state, error: action.payload.message, loading: false };
       case GET_USER_GROUP:
         return { ...state, group: action.payload };
     default:

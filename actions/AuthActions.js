@@ -101,7 +101,7 @@ export const signupUser = ({
       dispatch({ type: SIGNUP_USER_SUCCESS, payload: response.user.uid });
     } catch (error) {
       console.log(error);
-      dispatch({ type: SIGNUP_USER_FAIL });
+      dispatch({ type: SIGNUP_USER_FAIL, payload: error });
     }
   };
 };
