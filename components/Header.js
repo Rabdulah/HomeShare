@@ -4,7 +4,8 @@ import { View, Text, StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   headerContainer: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 25
   },
   text: {
     fontWeight: 'bold'

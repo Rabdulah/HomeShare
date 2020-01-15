@@ -8,8 +8,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#191919'
+    borderWidth: 1.5,
+    borderColor: '#191919',
+    marginRight: 7
   }
 });
 const Avatar = ({ initials }) => {
