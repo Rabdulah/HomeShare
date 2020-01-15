@@ -17,14 +17,6 @@ import Input from '../components/Input';
 import { DARK_BLUE } from '../styles/colours';
 import AuthStyles from '../styles/auth';
 
-const styles = StyleSheet.create({
-  errorTextStyle: {
-    color: 'red',
-    fontSize: 14,
-    textAlign: 'left'
-  }
-});
-
 class SignupScreen extends Component {
   onEmailChange = text => {
     this.props.emailChanged(text);
@@ -72,7 +64,9 @@ class SignupScreen extends Component {
     if (this.props.errorSignUp) {
       return (
         <View style={{ backgroundColor: 'white' }}>
-          <Text style={styles.errorTextStyle}>{this.props.errorSignUp}</Text>
+          <Text style={AuthStyles.errorTextStyle}>
+            {this.props.errorSignUp}
+          </Text>
         </View>
       );
     }
