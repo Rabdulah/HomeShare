@@ -3,8 +3,11 @@ import { View, Text, Button } from 'react-native';
 import PaymentConfig from '../configs/paymentConfig';
 
 class HomeScreen extends Component {
-  onButtonPress = () => {
+  create = () => {
     PaymentConfig.shared.createPayment();
+  };
+  read = () => {
+    PaymentConfig.shared.getPayments();
   };
   render() {
     return (
@@ -15,10 +18,8 @@ class HomeScreen extends Component {
         <Text>HomeScreen</Text>
         <Text>HomeScreen</Text>
         <Text>HomeScreen</Text>
-        <Button
-          title="add"
-          onPress={this.onButtonPress}
-        />
+        <Button title="add" onPress={this.create} />
+        <Button title="read" onPress={this.read} />
       </View>
     );
   }

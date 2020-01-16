@@ -28,21 +28,66 @@ class PaymentConfig {
   get timestamp() {
     return firebase.firestore.FieldValue.serverTimestamp();
   }
-  createPayment = () => {
-    console.log('yay')
+
+  get usersGroup() {
+    return store.getState().auth.group;
+  }
+
+  createPayment = async () => {
+    console.log('creating payment');
+    let docID = null;
+    await firebase
+      .firestore()
+      .collection('payments')
+      .where('group', '==', this.usersGroup)
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          docID = doc.id;
+        });
+      });
     firebase
       .firestore()
       .collection('payments')
+      .doc(docID)
+      .collection('groupPayments')
       .add({
         cost: 10,
         date: this.timestamp,
-        group: store.getState().auth.group,
+        group: this.usersGroup,
         name: 'food',
-        owner: 'ramzi',
-        payees: [
-          { amount: 4, isPaid: false, user: 'matt' }
-        ]
+        owner: 'new boi',
+        payees: [{ amount: 4, isPaid: false, user: 'matt' }]
       });
+  };
+
+  getPayments = () => {
+    console.log('reading payments');
+    var payments = firebase
+      .firestore()
+      .collection('payments')
+      .where('group', '==', this.usersGroup)
+      .onSnapshot(snapshot => {
+        snapshot.forEach(doc => {
+          console.log(doc.groupPayments);
+
+          console.log(this.parse(doc));
+        });
+      });
+  };
+
+  // We parse the payment snapshot for the information we're interested
+  parse = doc => {
+    console.log('parse');
+    const { cost, date, name, owner, payees } = doc.data();
+    const payment = {
+      cost,
+      date,
+      name,
+      owner,
+      payees
+    };
+    return payment;
   };
 }
 
