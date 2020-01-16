@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { FlatGrid, SectionGrid } from 'react-native-super-grid';
+import { FlatGrid } from 'react-native-super-grid';
 import { Ionicons } from '@expo/vector-icons';
 
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getUserGroup } from '../actions';
 import Header from '../components/Header';
-import Avatar from '../components/Avatar';
 import HomeOccupancy from '../components/HomeOccupancy';
 import { PEWTER_BLUE, DARK_BLUE, MOONSTONE_BLUE } from '../styles/colours';
 
 const styles = StyleSheet.create({
   container: {
-    // paddingVertical: 20,
-    // paddingHorizontal: 10
+    flex: 1
   },
   itemContainer: {
-    // justifyContent: 'flex-end',
     borderRadius: 5,
     padding: 10,
-    height: 150
+    height: 150,
+    backgroundColor: 'white'
   },
   itemName: {
     fontSize: 16,
@@ -33,6 +32,7 @@ const styles = StyleSheet.create({
   }
 });
 
+// MOVE TO UTILS FOLDER
 function lightenDarkenColor(col, amt) {
   const num = parseInt(col, 16);
   const r = (num >> 16) + amt;
@@ -47,58 +47,78 @@ const items = [
     name: 'Errands',
     icon: 'md-calendar',
     code: '#f39c12',
-    numItems: '4 upcoming'
+    numItems: '4 upcoming',
+    route: ''
   },
   {
     name: 'Utilities',
     icon: 'md-outlet',
     code: '#f542f2',
-    numItems: '4 items due'
+    numItems: '4 items due',
+    route: 'utilities'
   },
   {
     name: 'Payments',
     icon: 'md-cash',
     code: '#2ecc71',
-    numItems: '4 items due'
+    numItems: '4 items due',
+    route: 'payments'
   },
   {
     name: 'Chores',
     icon: 'md-trash',
     code: MOONSTONE_BLUE,
-    numItems: '4 items due'
+    numItems: '4 items due',
+    routes: 'chores'
   }
 ];
 
 class HomeScreen extends Component {
+  static navigationOptions = ({ navigation }) => {
+    const { params } = navigation.state;
+    const firstName = params ? params.firstName : null;
+    const lastName = params ? params.lastName : null;
+    const address = params ? params.address : null;
+    return {
+      header: () => {
+        return <Header name={`${firstName} ${lastName}`} address={`${address}`} />;
+      }
+    };
+  };
+
   componentDidMount() {
     this.props.getUserGroup(this.props.user);
+    this.props.navigation.setParams({
+      firstName: this.props.firstName,
+      lastName: this.props.lastName,
+      address: this.props.groupInfo.address
+    });
   }
 
-  getHomeOccupancy = () => {
-    // TODO
-    return ['RA', 'SF', 'DP', 'MC', 'SD', 'SZ', 'MV', 'SP'];
-  };
-
-  // helper function to render a list of people who are home
-  renderAvatars = () => {
-    return this.getHomeOccupancy().map(user => {
-      return <Avatar key={user} initials={user} />;
-    });
-  };
+  // componentDidUpdate(prevProps) {
+  //   if (this.props.firstName && !this.props.navigation.state.params) {
+  //     this.props.navigation.setParams({ firstName: this.props.firstName });
+  //   }
+  // }
 
   render() {
-    const { groupInfo, firstName, lastName } = this.props;
+    const { groupInfo, firstName, lastName, navigation } = this.props;
     const lighterPewterBlue = `#${lightenDarkenColor(PEWTER_BLUE.slice(1), 55)}`;
     return (
-      <View style={[styles.container, { flex: 1 }]}>
-        <Header name={`${firstName} ${lastName}`} address={groupInfo.address} />
+      <View style={styles.container}>
+        {/* <Header name={`${firstName} ${lastName}`} address={groupInfo.address} /> */}
         <HomeOccupancy />
         <View style={{ backgroundColor: lighterPewterBlue, flex: 1 }}>
           <FlatGrid
             itemDimension={130}
             items={items}
             renderItem={({ item }) => (
-              <View style={[styles.itemContainer, { backgroundColor: 'white' }]}>
+              <TouchableOpacity
+                style={styles.itemContainer}
+                onPress={() => {
+                  navigation.navigate(item.route);
+                }}
+              >
                 <View style={{ flex: 1, justifyContent: 'flex-start' }}>
                   <Ionicons name={item.icon} size={32} color={item.code} />
                 </View>
@@ -106,7 +126,7 @@ class HomeScreen extends Component {
                   <Text style={styles.itemName}>{item.name}</Text>
                   <Text style={styles.itemCode}>{item.numItems}</Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             )}
           />
         </View>

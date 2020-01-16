@@ -5,7 +5,8 @@ const styles = StyleSheet.create({
   headerContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 25
+    paddingTop: 25,
+    paddingBottom: 10
   },
   text: {
     fontWeight: 'bold'
