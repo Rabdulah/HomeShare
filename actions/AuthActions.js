@@ -100,7 +100,6 @@ export const loginUser = ({ email, password }) => {
       const user = userSnapshot.data();
       const groupSnapshot = await user.group.get();
       const group = groupSnapshot.data();
-      console.log('snapshot data()', group);
 
       const userPayload = {
         email: user.email,
