@@ -14,8 +14,8 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  email: 'matt@uwo.ca',
-  password: 'password',
+  email: '',
+  password: '',
   user: null,
   error: '',
   loading: false,
