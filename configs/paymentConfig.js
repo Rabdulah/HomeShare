@@ -33,24 +33,22 @@ class PaymentConfig {
     return store.getState().auth.group;
   }
 
-  createPayment = async () => {
+  createPayment = () => {
     console.log('creating payment');
     let docID = null;
-    await firebase
-      .firestore()
-      .collection('payments')
-      .where('group', '==', this.usersGroup)
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          docID = doc.id;
-        });
-      });
+    // await firebase
+    //   .firestore()
+    //   .collection('payments')
+    //   .where('group', '==', this.usersGroup)
+    //   .get()
+    //   .then(snapshot => {
+    //     snapshot.forEach(doc => {
+    //       docID = doc.id;
+    //     });
+    //   });
     firebase
       .firestore()
       .collection('payments')
-      .doc(docID)
-      .collection('groupPayments')
       .add({
         cost: 10,
         date: this.timestamp,
@@ -68,10 +66,8 @@ class PaymentConfig {
       .collection('payments')
       .where('group', '==', this.usersGroup)
       .onSnapshot(snapshot => {
-        snapshot.forEach(doc => {
-          console.log(doc.groupPayments);
-
-          console.log(this.parse(doc));
+        snapshot.docChanges().forEach(change => {
+          console.log(this.parse(change.doc));
         });
       });
   };
