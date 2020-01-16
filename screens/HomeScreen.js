@@ -95,7 +95,6 @@ class HomeScreen extends Component {
 
   componentDidMount() {
     const { firstName, lastName, groupInfo, getUserGroup, user, navigation } = this.props;
-    console.log('woof', firstName);
     getUserGroup(user);
     navigation.setParams({
       firstName,
