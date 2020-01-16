@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { FlatGrid, SectionGrid } from 'react-native-super-grid';
 import { Ionicons } from '@expo/vector-icons';
@@ -41,7 +41,7 @@ function lightenDarkenColor(col, amt) {
   return newColor.toString(16);
 }
 
-const usersAtHome = ['RA', 'SF', 'DP'];
+const usersAtHome = ['RA', 'SF', 'DP', 'MC', 'SD', 'SZ', 'MV', 'SP'];
 
 const items = [
   {
@@ -93,7 +93,9 @@ class HomeScreen extends Component {
           {/* will need to map over list of user's who are home;
               initials should by dynamic ofc. via .map() eventually
            */}
-          <View style={{ flexDirection: 'row' }}>{this.renderAvatars()}</View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {this.renderAvatars()}
+          </ScrollView>
         </View>
 
         <View style={{ backgroundColor: lighterPewterBlue, flex: 1 }}>
