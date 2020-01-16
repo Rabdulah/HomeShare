@@ -74,6 +74,7 @@ const items = [
 ];
 
 class HomeScreen extends Component {
+  // specify custom header in navigationOptions
   static navigationOptions = ({ navigation }) => {
     const { params } = navigation.state;
     const firstName = params ? params.firstName : null;
@@ -81,35 +82,37 @@ class HomeScreen extends Component {
     const address = params ? params.address : null;
     return {
       header: () => {
-        return <Header name={`${firstName} ${lastName}`} address={`${address}`} />;
+        return (
+          <Header
+            style={{ backgroundColor: 'white' }}
+            title={`${firstName} ${lastName}`}
+            subtitle={`${address}`}
+          />
+        );
       }
     };
   };
 
   componentDidMount() {
-    this.props.getUserGroup(this.props.user);
-    this.props.navigation.setParams({
-      firstName: this.props.firstName,
-      lastName: this.props.lastName,
-      address: this.props.groupInfo.address
+    const { firstName, lastName, groupInfo, getUserGroup, user, navigation } = this.props;
+    console.log('woof', firstName);
+    getUserGroup(user);
+    navigation.setParams({
+      firstName,
+      lastName,
+      address: groupInfo.address
     });
   }
-
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.firstName && !this.props.navigation.state.params) {
-  //     this.props.navigation.setParams({ firstName: this.props.firstName });
-  //   }
-  // }
 
   render() {
     const { groupInfo, firstName, lastName, navigation } = this.props;
     const lighterPewterBlue = `#${lightenDarkenColor(PEWTER_BLUE.slice(1), 55)}`;
     return (
       <View style={styles.container}>
-        {/* <Header name={`${firstName} ${lastName}`} address={groupInfo.address} /> */}
         <HomeOccupancy />
         <View style={{ backgroundColor: lighterPewterBlue, flex: 1 }}>
           <FlatGrid
+            scrollEnabled={false}
             itemDimension={130}
             items={items}
             renderItem={({ item }) => (

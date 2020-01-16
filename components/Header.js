@@ -6,17 +6,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 25,
-    paddingBottom: 10
+    paddingBottom: 10,
+    backgroundColor: 'white'
   },
   text: {
     fontWeight: 'bold'
   }
 });
-const Header = ({ name, address }) => {
+const Header = ({ title, subtitle }) => {
   return (
     <View style={styles.headerContainer}>
-      <Text style={styles.text}>{name}</Text>
-      <Text style={styles.text}>{address}</Text>
+      <Text style={styles.text}>{title}</Text>
+      <Text style={styles.text}>{subtitle}</Text>
     </View>
   );
 };
