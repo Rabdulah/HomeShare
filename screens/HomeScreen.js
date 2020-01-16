@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { getUserGroup } from '../actions';
 import Header from '../components/Header';
 import Avatar from '../components/Avatar';
+import HomeOccupancy from '../components/HomeOccupancy';
 import { PEWTER_BLUE, DARK_BLUE, MOONSTONE_BLUE } from '../styles/colours';
 
 const styles = StyleSheet.create({
@@ -41,8 +42,6 @@ function lightenDarkenColor(col, amt) {
   return newColor.toString(16);
 }
 
-const usersAtHome = ['RA', 'SF', 'DP', 'MC', 'SD', 'SZ', 'MV', 'SP'];
-
 const items = [
   {
     name: 'Errands',
@@ -75,9 +74,14 @@ class HomeScreen extends Component {
     this.props.getUserGroup(this.props.user);
   }
 
+  getHomeOccupancy = () => {
+    // TODO
+    return ['RA', 'SF', 'DP', 'MC', 'SD', 'SZ', 'MV', 'SP'];
+  };
+
   // helper function to render a list of people who are home
   renderAvatars = () => {
-    return usersAtHome.map(user => {
+    return this.getHomeOccupancy().map(user => {
       return <Avatar key={user} initials={user} />;
     });
   };
@@ -88,16 +92,7 @@ class HomeScreen extends Component {
     return (
       <View style={[styles.container, { flex: 1 }]}>
         <Header name={`${firstName} ${lastName}`} address={groupInfo.address} />
-        <View style={{ padding: 10 }}>
-          <Text style={{ paddingBottom: 5, fontWeight: 'bold' }}>Who's Home</Text>
-          {/* will need to map over list of user's who are home;
-              initials should by dynamic ofc. via .map() eventually
-           */}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {this.renderAvatars()}
-          </ScrollView>
-        </View>
-
+        <HomeOccupancy />
         <View style={{ backgroundColor: lighterPewterBlue, flex: 1 }}>
           <FlatGrid
             itemDimension={130}
