@@ -8,6 +8,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import ChatScreen from '../screens/ChatScreen';
 import HomeScreen from '../screens/HomeScreen';
+import PaymentScreen from '../screens/PaymentScreen';
 
 /*
   big gotcha: for any navigator, when it is rendered, react
@@ -22,40 +23,42 @@ const AppNavigator = createBottomTabNavigator(
     the TabNavigator to show; do so by specifying a
     key-value pair (allows for programmatic navigation)
   */
-    welcome: { screen: WelcomeScreen },
     auth: {
       screen: createStackNavigator(
         {
-          signup: { screen: SignupScreen },
           login: { screen: LoginScreen },
+          signup: { screen: SignupScreen }
         },
         {
           defaultNavigationOptions: {
-            headerShown: false,
-          },
+            headerShown: false
+          }
         }
-      ),
+      )
     },
+    welcome: { screen: WelcomeScreen },
+
     main: {
       // nested nav
       screen: createBottomTabNavigator({
         home: { screen: HomeScreen },
         chat: { screen: ChatScreen },
+        payment: { screen: PaymentScreen }
         // review: {
         //   screen: createStackNavigator({
         //     review: { screen: ReviewScreen },
         //     settings: { screen: SettingsScreen }
         //   })
         // }
-      }),
-    },
+      })
+    }
   },
   {
     // nav configuration options for initial tab navigator
     lazy: true,
     defaultNavigationOptions: {
-      tabBarVisible: true, // hide all initial tabs
-    },
+      tabBarVisible: true // hide all initial tabs
+    }
   }
 );
 
