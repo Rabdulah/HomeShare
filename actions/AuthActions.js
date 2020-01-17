@@ -11,7 +11,8 @@ import {
   SIGNUP_USER,
   SIGNUP_USER_FAIL,
   SIGNUP_USER_SUCCESS,
-  GET_USER_GROUP
+  GET_USER_GROUP,
+  CLEAR_ERRORS
 } from './types';
 
 export const getUserGroup = userId => {
@@ -83,6 +84,12 @@ export const usernameChanged = text => {
   };
 };
 
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
+  };
+};
+
 export const loginUser = ({ email, password }) => {
   // async req
   return async dispatch => {
@@ -128,7 +135,7 @@ export const signupUser = ({ firstName, lastName, username, email, password }) =
       dispatch({ type: SIGNUP_USER_SUCCESS, payload: response.user.uid });
     } catch (error) {
       console.log(error);
-      dispatch({ type: SIGNUP_USER_FAIL });
+      dispatch({ type: SIGNUP_USER_FAIL, payload: error });
     }
   };
 };

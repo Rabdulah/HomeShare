@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -10,7 +10,8 @@ import {
   fnameChanged,
   lnameChanged,
   usernameChanged,
-  signupUser
+  signupUser,
+  clearErrors
 } from '../actions';
 import Input from '../components/Input';
 import { DARK_BLUE } from '../styles/colours';
@@ -59,6 +60,18 @@ class SignupScreen extends Component {
     }
   };
 
+  renderError = () => {
+    if (this.props.errorSignUp) {
+      return (
+        <View style={{ backgroundColor: 'white' }}>
+          <Text style={AuthStyles.errorTextStyle}>
+            {this.props.errorSignUp}
+          </Text>
+        </View>
+      );
+    }
+  };
+
   componentDidUpdate() {
     this.onSignupComplete(this.props);
   }
@@ -97,7 +110,8 @@ class SignupScreen extends Component {
             value={this.props.password}
           />
 
-          {/* {this.renderError()} */}
+          {this.renderError()}
+
           <View
             style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
           >
@@ -139,7 +153,7 @@ const mapStateToProps = ({ auth }) => {
   const {
     email,
     password,
-    error,
+    errorSignUp,
     loading,
     firstName,
     lastName,
@@ -150,7 +164,7 @@ const mapStateToProps = ({ auth }) => {
   return {
     email,
     password,
-    error,
+    errorSignUp,
     loading,
     firstName,
     lastName,
@@ -164,5 +178,6 @@ export default connect(mapStateToProps, {
   fnameChanged,
   lnameChanged,
   usernameChanged,
-  signupUser
+  signupUser,
+  clearErrors
 })(SignupScreen);

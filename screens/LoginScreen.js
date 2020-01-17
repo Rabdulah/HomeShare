@@ -3,7 +3,14 @@ import { connect } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import { emailChanged, passwordChanged, loginUser, getUserGroup } from '../actions';
+import {
+  emailChanged,
+  passwordChanged,
+  loginUser,
+  getUserGroup,
+  clearErrors
+} from '../actions';
+
 import Input from '../components/Input';
 import Spinner from '../components/Spinner';
 import { DARK_BLUE } from '../styles/colours';
@@ -28,6 +35,15 @@ const styles = StyleSheet.create({
 });
 
 class LoginScreen extends Component {
+  /*
+    componentDidMount => Lifecycle hook for whenever the user navigates to this screen.
+    We are making sure to clear the global error states whenever they get to this screen,
+    so no previous errors are shown.
+  */
+  componentDidMount() {
+    this.props.clearErrors();
+  }
+
   /*
     case where user successfully logs in.
   */
@@ -137,7 +153,7 @@ const mapStateToProps = state => {
   return {
     email: state.auth.email,
     password: state.auth.password,
-    error: state.auth.error,
+    error: state.auth.errorLogin,
     loading: state.auth.loading,
     user: state.auth.user
   };
@@ -146,5 +162,6 @@ export default connect(mapStateToProps, {
   emailChanged,
   passwordChanged,
   loginUser,
-  getUserGroup
+  getUserGroup,
+  clearErrors
 })(LoginScreen);
