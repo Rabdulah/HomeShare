@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo/vector-icons": "^10.0.6",
     "@firebase/firestore": "^1.7.0",
     "@types/react-native-app-intro-slider": "^3.0.0",
     "expo": "~36.0.0",
@@ -25,6 +26,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-reanimated": "~1.4.0",
+    "react-native-super-grid": "^3.1.2",
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.0.10",
     "react-navigation-stack": "^1.10.3",

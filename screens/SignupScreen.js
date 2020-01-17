@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -11,6 +11,7 @@ import {
   lnameChanged,
   usernameChanged,
   signupUser,
+  clearErrors
 } from '../actions';
 import Input from '../components/Input';
 import { DARK_BLUE } from '../styles/colours';
@@ -49,13 +50,25 @@ class SignupScreen extends Component {
       lastName,
       username,
       email,
-      password,
+      password
     });
   };
 
   onSignupComplete = props => {
     if (props.user) {
       this.props.navigation.navigate('home');
+    }
+  };
+
+  renderError = () => {
+    if (this.props.errorSignUp) {
+      return (
+        <View style={{ backgroundColor: 'white' }}>
+          <Text style={AuthStyles.errorTextStyle}>
+            {this.props.errorSignUp}
+          </Text>
+        </View>
+      );
     }
   };
 
@@ -97,13 +110,16 @@ class SignupScreen extends Component {
             value={this.props.password}
           />
 
-          {/* {this.renderError()} */}
-          <View style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}>
+          {this.renderError()}
+
+          <View
+            style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
+          >
             <Text style={{ marginBottom: 14 }}>
               Already have an account?{' '}
               <Text
                 style={{
-                  color: DARK_BLUE,
+                  color: DARK_BLUE
                 }}
                 onPress={this.navigateToLogin}
               >
@@ -112,15 +128,15 @@ class SignupScreen extends Component {
               .
             </Text>
             <Button
-              title="Log In"
+              title="Sign Up"
               buttonStyle={{
                 borderRadius: 5,
                 padding: 10,
-                backgroundColor: DARK_BLUE,
+                backgroundColor: DARK_BLUE
               }}
               titleStyle={{
                 width: '90%',
-                fontSize: 20,
+                fontSize: 20
               }}
               onPress={this.onButtonPress}
             />
@@ -134,17 +150,26 @@ class SignupScreen extends Component {
 // note: first argument is "state";
 // ({ auth }) gets you state.auth
 const mapStateToProps = ({ auth }) => {
-  const { email, password, error, loading, firstName, lastName, username, user } = auth;
-
-  return {
+  const {
     email,
     password,
-    error,
+    errorSignUp,
     loading,
     firstName,
     lastName,
     username,
-    user,
+    user
+  } = auth;
+
+  return {
+    email,
+    password,
+    errorSignUp,
+    loading,
+    firstName,
+    lastName,
+    username,
+    user
   };
 };
 export default connect(mapStateToProps, {
@@ -154,4 +179,5 @@ export default connect(mapStateToProps, {
   lnameChanged,
   usernameChanged,
   signupUser,
+  clearErrors
 })(SignupScreen);

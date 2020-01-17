@@ -13,7 +13,6 @@ class PaymentScreen extends Component {
   };
   read = () => {
     PaymentFunctions.shared.getPayments(payment => {
-      console.log('homeascreen', payment);
       this.setState(previousState => {
         return {
           payments: [...previousState.payments, payment]
@@ -56,7 +55,6 @@ class PaymentScreen extends Component {
 
   componentDidMount() {
     PaymentFunctions.shared.getPayments(payment => {
-      console.log('homeascreen', payment);
       this.setState(previousState => {
         return {
           payments: [...previousState.payments, payment]

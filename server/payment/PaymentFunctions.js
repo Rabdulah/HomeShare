@@ -1,16 +1,13 @@
 import firebase from 'firebase';
 import 'firebase/firestore';
-import config from '../../configs/firebaseConfig';
 
 import store from '../../store';
 
 class PaymentFunctions {
   constructor() {
-    //this.init();
     this.observeAuth();
   }
 
-  init = () => firebase.initializeApp(config);
 
   observeAuth = () =>
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
