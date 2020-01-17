@@ -24,7 +24,8 @@ const INITIAL_STATE = {
   firstName: '',
   lastName: '',
   username: '',
-  group: ''
+  group: '',
+  groupInfo: null
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -45,7 +46,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true, error: '' };
     case LOGIN_USER_SUCCESS:
       // add the new user model to our application state
-      return { ...state, ...INITIAL_STATE, user: action.payload };
+      return { ...state, ...INITIAL_STATE, ...action.payload };
     case SIGNUP_USER_SUCCESS:
       // add the new user model to our application state
       return { ...state, ...INITIAL_STATE, user: action.payload };

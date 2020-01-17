@@ -111,6 +111,7 @@ class SignupScreen extends Component {
           />
 
           {this.renderError()}
+
           <View
             style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
           >
@@ -127,7 +128,7 @@ class SignupScreen extends Component {
               .
             </Text>
             <Button
-              title="Log In"
+              title="Sign Up"
               buttonStyle={{
                 borderRadius: 5,
                 padding: 10,

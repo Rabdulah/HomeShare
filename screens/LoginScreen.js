@@ -10,6 +10,7 @@ import {
   getUserGroup,
   clearErrors
 } from '../actions';
+
 import Input from '../components/Input';
 import Spinner from '../components/Spinner';
 import { DARK_BLUE } from '../styles/colours';
@@ -124,9 +125,7 @@ class LoginScreen extends Component {
         />
 
         {this.renderError()}
-        <View
-          style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
-        >
+        <View style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}>
           {this.renderButton()}
         </View>
       </View>

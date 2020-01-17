@@ -8,7 +8,8 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import ChatScreen from '../screens/ChatScreen';
 import HomeScreen from '../screens/HomeScreen';
-
+import ProfileScreen from '../screens/ProfileScreen';
+import PaymentsScreen from '../screens/PaymentsScreen';
 /*
   big gotcha: for any navigator, when it is rendered, react
   native will try / does render all screens for that navigator.
@@ -27,35 +28,48 @@ const AppNavigator = createBottomTabNavigator(
       screen: createStackNavigator(
         {
           signup: { screen: SignupScreen },
-          login: { screen: LoginScreen },
+          login: { screen: LoginScreen }
         },
         {
           defaultNavigationOptions: {
-            headerShown: false,
-          },
+            headerShown: false
+          }
         }
-      ),
+      )
     },
     main: {
       // nested nav
       screen: createBottomTabNavigator({
-        home: { screen: HomeScreen },
-        chat: { screen: ChatScreen },
+        profile: { screen: ProfileScreen },
+        home: createStackNavigator(
+          {
+            home: { screen: HomeScreen },
+            payments: { screen: PaymentsScreen }
+          },
+          {
+            defaultNavigationOptions: {
+              headerStyle: {
+                backgroundColor: 'transparent'
+              }
+            }
+          }
+        ),
+        chat: { screen: ChatScreen }
         // review: {
         //   screen: createStackNavigator({
         //     review: { screen: ReviewScreen },
         //     settings: { screen: SettingsScreen }
         //   })
         // }
-      }),
-    },
+      })
+    }
   },
   {
     // nav configuration options for initial tab navigator
     lazy: true,
     defaultNavigationOptions: {
-      tabBarVisible: true, // hide all initial tabs
-    },
+      tabBarVisible: false // hide all initial tabs
+    }
   }
 );
 
