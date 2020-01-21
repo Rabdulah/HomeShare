@@ -1,10 +1,10 @@
 import firebase from 'firebase';
 import 'firebase/firestore';
-import config from './firebaseConfig';
+import config from '../../configs/firebaseConfig';
 
-import store from '../store';
+import store from '../../store';
 
-class ChatConfig {
+class ChatFunctions {
   constructor() {
     this.init();
     this.observeAuth();
@@ -31,16 +31,17 @@ class ChatConfig {
   }
 
   getChatMessages = async () => {
-    var response = await firebase
+    let docID = null;
+    await firebase
       .firestore()
       .collection('chats')
       .where('group', '==', store.getState().auth.group)
-      .get();
-
-    let docID = null;
-    response.forEach(doc => {
-      docID = doc.id;
-    });
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          docID = doc.id;
+        });
+      });
 
     let chatMessages = firebase
       .firestore()
@@ -106,6 +107,6 @@ class ChatConfig {
   }
 }
 
-ChatConfig.shared = new ChatConfig();
+ChatFunctions.shared = new ChatFunctions();
 
-export default ChatConfig;
+export default ChatFunctions;

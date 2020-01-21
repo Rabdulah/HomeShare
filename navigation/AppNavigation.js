@@ -23,7 +23,6 @@ const AppNavigator = createBottomTabNavigator(
     the TabNavigator to show; do so by specifying a
     key-value pair (allows for programmatic navigation)
   */
-    welcome: { screen: WelcomeScreen },
     auth: {
       screen: createStackNavigator(
         {
@@ -37,6 +36,8 @@ const AppNavigator = createBottomTabNavigator(
         }
       )
     },
+    welcome: { screen: WelcomeScreen },
+
     main: {
       // nested nav
       screen: createBottomTabNavigator({

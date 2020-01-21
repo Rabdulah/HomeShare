@@ -2,7 +2,7 @@ import React from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { StyleSheet, YellowBox, View, Platform } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import ChatConfig from '../configs/chatConfig';
+import ChatFunctions from '../server/chat/ChatFunctions';
 import _ from 'lodash';
 
 /*------------------------------------------------------------*/
@@ -31,7 +31,7 @@ class ChatScreen extends React.Component {
   get user() {
     return {
       name: 'ramzi',
-      _id: ChatConfig.shared.uid
+      _id: ChatFunctions.shared.uid
     };
   }
 
@@ -40,7 +40,7 @@ class ChatScreen extends React.Component {
       <View style={{ flex: 1 }}>
         <GiftedChat
           messages={this.state.messages}
-          onSend={ChatConfig.shared.send}
+          onSend={ChatFunctions.shared.send}
           user={this.user}
         />
         {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
@@ -49,14 +49,14 @@ class ChatScreen extends React.Component {
   }
 
   componentDidMount() {
-    ChatConfig.shared.on(message => {
+    ChatFunctions.shared.on(message => {
       this.setState(previousState => ({
         messages: GiftedChat.append(previousState.messages, message)
       }));
     });
   }
   componentWillUnmount() {
-    ChatConfig.shared.off();
+    ChatFunctions.shared.off();
   }
 }
 

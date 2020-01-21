@@ -135,6 +135,9 @@ class HomeScreen extends Component {
       </View>
     );
   }
+
+  componentDidMount() {}
+  componentWillUnmount() {}
 }
 
 const mapStateToProps = ({ auth }) => {
