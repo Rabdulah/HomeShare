@@ -27,7 +27,14 @@ class UtilitiesScreen extends Component {
     });
   };
   delete = () => {
-    UtilityFunctions.shared.deleteUtility('mFePKDFq4YhR0MBzV9ec');
+    UtilityFunctions.shared.deleteUtility('YSDlRiV8x13uEXTfJmzJ');
+    this.setState(previousState => {
+      return {
+        utilities: previousState.utilities.filter(
+          previousUtility => previousUtility._id != 'YSDlRiV8x13uEXTfJmzJ'
+        )
+      };
+    });
   };
 
   render() {
@@ -58,7 +65,7 @@ class UtilitiesScreen extends Component {
     UtilityFunctions.shared.getUtilities(utility => {
       this.setState(previousState => {
         // The filter is to deal with rendering a new item when it should be updating an existing one instead.
-        // The filter deletes the existing item in the list that has been modfied, and replaces it with the 
+        // The filter deletes the existing item in the list that has been modfied, and replaces it with the
         // same but newly modifed item.
         return {
           utilities: [

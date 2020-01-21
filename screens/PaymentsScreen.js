@@ -28,6 +28,13 @@ class PaymentScreen extends Component {
   };
   delete = () => {
     PaymentFunctions.shared.deletePayment('BDIcNDEcaIsd4lJhLulA');
+    this.setState(previousState => {
+      return {
+        payments: previousState.payments.filter(
+          previousPayment => previousPayment._id != 'BDIcNDEcaIsd4lJhLulA'
+        )
+      };
+    });
   };
   render() {
     return (
