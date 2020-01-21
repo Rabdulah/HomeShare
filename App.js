@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
+import { ApplicationProvider, Layout, Text, IconRegistry } from '@ui-kitten/components';
+import { mapping, light as lightTheme } from '@eva-design/eva';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import AppNavigation from './navigation/AppNavigation';
 import store from './store';
 
@@ -18,7 +21,12 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <AppNavigation />
+        <>
+          <IconRegistry icons={EvaIconsPack} />
+          <ApplicationProvider mapping={mapping} theme={lightTheme}>
+            <AppNavigation />
+          </ApplicationProvider>
+        </>
       </Provider>
     );
   }
