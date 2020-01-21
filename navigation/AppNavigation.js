@@ -27,8 +27,8 @@ const AppNavigator = createBottomTabNavigator(
     auth: {
       screen: createStackNavigator(
         {
-          login: { screen: LoginScreen },
-          signup: { screen: SignupScreen }
+          signup: { screen: SignupScreen },
+          login: { screen: LoginScreen }
         },
         {
           defaultNavigationOptions: {

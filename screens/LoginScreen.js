@@ -70,9 +70,8 @@ class LoginScreen extends Component {
   };
 
   onButtonPress = () => {
-    //const { email, password } = this.props;
-    email = 'ramzi@uwo.ca'
-    password = 'password'
+    const { email, password } = this.props;
+
     this.props.loginUser({ email, password });
   };
 
@@ -127,7 +126,9 @@ class LoginScreen extends Component {
         />
 
         {this.renderError()}
-        <View style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}>
+        <View
+          style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
+        >
           {this.renderButton()}
         </View>
       </View>

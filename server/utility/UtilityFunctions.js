@@ -99,6 +99,7 @@ class UtilityFunctions {
     // interval: ENUM {WEEKLY, BI_WEEKLY, MONTHLY}
     const utility = {
       _id,
+      active,
       cost,
       date,
       interval,
