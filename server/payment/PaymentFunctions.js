@@ -8,7 +8,6 @@ class PaymentFunctions {
     this.observeAuth();
   }
 
-
   observeAuth = () =>
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
 

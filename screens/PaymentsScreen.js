@@ -21,13 +21,13 @@ class PaymentScreen extends Component {
     });
   };
   update = () => {
-    PaymentFunctions.shared.updatePayment('vmZ2ZeGtzgxotVar4CXz', {
-      cost: 4,
+    PaymentFunctions.shared.updatePayment('MdoBVvvqn2ANTWwzXfM3', {
+      cost: 324,
       name: 'updatedfood'
     });
   };
   delete = () => {
-    PaymentFunctions.shared.deletePayment('vECUNTlwFY87pTK1ndqF');
+    PaymentFunctions.shared.deletePayment('BDIcNDEcaIsd4lJhLulA');
   };
   render() {
     return (
@@ -57,7 +57,12 @@ class PaymentScreen extends Component {
     PaymentFunctions.shared.getPayments(payment => {
       this.setState(previousState => {
         return {
-          payments: [...previousState.payments, payment]
+          payments: [
+            ...previousState.payments.filter(
+              previousPayment => previousPayment._id != payment._id
+            ),
+            payment
+          ]
         };
       });
     });
