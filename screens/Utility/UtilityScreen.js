@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
-import UtilityFunctions from '../server/utility/UtilityFunctions';
+import UtilityFunctions from '../../server/utility/UtilityFunctions';
 
 class UtilityScreen extends Component {
   constructor() {

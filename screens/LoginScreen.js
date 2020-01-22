@@ -70,9 +70,7 @@ class LoginScreen extends Component {
   };
 
   onButtonPress = () => {
-    //const { email, password } = this.props;
-    var email =  'ramzi@uwo.ca'
-    var password = 'password'
+    const { email, password } = this.props;
     this.props.loginUser({ email, password });
   };
 
