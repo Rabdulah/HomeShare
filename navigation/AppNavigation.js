@@ -9,7 +9,9 @@ import SignupScreen from '../screens/SignupScreen';
 import ChatScreen from '../screens/ChatScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import PaymentsScreen from '../screens/PaymentsScreen';
+import PaymentScreen from '../screens/Payment/PaymentScreen';
+import CreatePaymentScreen from '../screens/Payment/CreatePaymentScreen';
+import ReadPaymentScreen from '../screens/Payment/ReadPaymentScreen';
 /*
   big gotcha: for any navigator, when it is rendered, react
   native will try / does render all screens for that navigator.
@@ -45,7 +47,9 @@ const AppNavigator = createBottomTabNavigator(
         home: createStackNavigator(
           {
             home: { screen: HomeScreen },
-            payments: { screen: PaymentsScreen }
+            payments: { screen: PaymentScreen },
+            createPayment: { screen: CreatePaymentScreen },
+            readPayment: { screen: ReadPaymentScreen }
           },
           {
             defaultNavigationOptions: {
