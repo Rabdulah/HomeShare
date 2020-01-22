@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
 import UtilityFunctions from '../server/utility/UtilityFunctions';
 
-class UtilitiesScreen extends Component {
+class UtilityScreen extends Component {
   constructor() {
     super();
     this.state = { utilities: [] };
@@ -84,4 +84,4 @@ class UtilitiesScreen extends Component {
   }
 }
 
-export default UtilitiesScreen;
+export default UtilityScreen;

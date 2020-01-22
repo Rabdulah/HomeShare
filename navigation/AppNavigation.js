@@ -10,7 +10,7 @@ import ChatScreen from '../screens/ChatScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import PaymentsScreen from '../screens/PaymentsScreen';
-import UtilitiesScreen from '../screens/UtilitiesScreen';
+import UtilitiesScreen from '../screens/UtilityScreen';
 /*
   big gotcha: for any navigator, when it is rendered, react
   native will try / does render all screens for that navigator.
@@ -27,8 +27,8 @@ const AppNavigator = createBottomTabNavigator(
     auth: {
       screen: createStackNavigator(
         {
-          signup: { screen: SignupScreen },
-          login: { screen: LoginScreen }
+          login: { screen: LoginScreen },
+          signup: { screen: SignupScreen }
         },
         {
           defaultNavigationOptions: {
