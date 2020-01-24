@@ -78,60 +78,6 @@ import { viewPayment } from '../../actions';
 
 // export default PaymentScreen;
 
-const payments = [
-  {
-    _id: 0,
-    cost: 30,
-    name: 'Internet',
-    payees: [
-      {
-        amount: 10,
-        isPaid: false,
-        user: 'matt'
-      },
-      {
-        amount: 10,
-        isPaid: false,
-        user: 'spencer'
-      }
-    ]
-  },
-  {
-    _id: 1,
-    cost: 36,
-    name: 'Furnace',
-    payees: [
-      {
-        amount: 10,
-        isPaid: false,
-        user: 'spencer'
-      },
-      {
-        amount: 10,
-        isPaid: false,
-        user: 'ramzi'
-      }
-    ]
-  },
-  {
-    _id: 2,
-    cost: 18,
-    name: 'Hydro',
-    payees: [
-      {
-        amount: 10,
-        isPaid: false,
-        user: 'matt'
-      },
-      {
-        amount: 10,
-        isPaid: false,
-        user: 'ramzi'
-      }
-    ]
-  }
-];
-
 class PaymentScreen extends Component {
   componentDidMount() {
     // get list of payments from backend
@@ -139,6 +85,7 @@ class PaymentScreen extends Component {
 
   onPaymentPress = paymentId => {
     // get payment
+    const { payments } = this.props;
     const selectedPayment = payments.find(payment => payment._id === paymentId);
 
     // dispatch action to set current payment being viewed
@@ -149,6 +96,7 @@ class PaymentScreen extends Component {
   };
 
   renderPayments = () => {
+    const { payments } = this.props;
     return payments.map((payment, index) => {
       return (
         <ItemCard
@@ -170,7 +118,7 @@ class PaymentScreen extends Component {
         <Button
           status="success"
           onPress={() => {
-            this.props.navigation.navigate('addPayment');
+            this.props.navigation.navigate('createPayment');
           }}
         >
           Add a payment
@@ -180,4 +128,9 @@ class PaymentScreen extends Component {
   }
 }
 
-export default connect(null, { viewPayment })(PaymentScreen);
+const mapStateToProps = ({ payment }) => {
+  const { payments } = payment;
+
+  return { payments };
+};
+export default connect(mapStateToProps, { viewPayment })(PaymentScreen);

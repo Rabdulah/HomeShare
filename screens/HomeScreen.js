@@ -94,7 +94,14 @@ class HomeScreen extends Component {
   };
 
   componentDidMount() {
-    const { firstName, lastName, groupInfo, getUserGroup, user, navigation } = this.props;
+    const {
+      firstName,
+      lastName,
+      groupInfo,
+      getUserGroup,
+      user,
+      navigation
+    } = this.props;
     getUserGroup(user);
     navigation.setParams({
       firstName,
@@ -105,7 +112,10 @@ class HomeScreen extends Component {
 
   render() {
     const { groupInfo, firstName, lastName, navigation } = this.props;
-    const lighterPewterBlue = `#${lightenDarkenColor(PEWTER_BLUE.slice(1), 55)}`;
+    const lighterPewterBlue = `#${lightenDarkenColor(
+      PEWTER_BLUE.slice(1),
+      55
+    )}`;
     return (
       <View style={styles.container}>
         <HomeOccupancy />
@@ -136,7 +146,6 @@ class HomeScreen extends Component {
     );
   }
 
-  componentDidMount() {}
   componentWillUnmount() {}
 }
 
