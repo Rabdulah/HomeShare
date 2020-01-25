@@ -3,7 +3,7 @@ import 'firebase/firestore';
 
 import store from '../../store';
 
-class PaymentFunctions {
+class UtilityFunctions {
   constructor() {
     this.observeAuth();
   }
@@ -21,6 +21,7 @@ class PaymentFunctions {
       }
     }
   };
+
   get timestamp() {
     return new Date();
   }
@@ -29,20 +30,21 @@ class PaymentFunctions {
     return store.getState().auth.group;
   }
 
-  get paymentRefs() {
-    return firebase.firestore().collection('payments');
+  get utilityRefs() {
+    return firebase.firestore().collection('utilities');
   }
 
-  createPayment = () => {
+  createUtility = () => {
     console.log('creating payment');
-    this.paymentRefs
+    this.utilityRefs
       .add({
+        active: true,
         cost: 12,
         date: this.timestamp,
         group: this.usersGroup,
-        name: 'food',
-        owner: 'new boi',
-        payees: [{ amount: 4, isPaid: false, user: 'matt' }]
+        interval: ['MONTHLY'],
+        name: 'water',
+        recurring: true
       })
       .then(() => {
         console.log('Document successfully added!');
@@ -52,21 +54,9 @@ class PaymentFunctions {
       });
   };
 
-  /* 
-  We pass in a callabck function for two reasons:
-  1. JavaScript forEach() does not return anything
-  2. Well couldn't we push each result from the forEach() into an array then return the array? 
-    For that to work you'd have to await the function until it's done, then return that array 
-    (or else the array will be empty). The issue with that approach is that you can't 
-    async/await a function that utilizes the onSnapshot() method. This makes sense
-    as onSnapshot() is a listener for new updates. You can't have a function wait on it forever.
-    Thus, the best way to get information out of here is to pass in a callback function. 
-    A trivial one to make sure data is being received: getPayments(message => console.log(message));
-    But it's more likely you'd want to pass in a React setState() function from the component.
-  */
-  getPayments = async callback => {
-    console.log('reading payments');
-    unsubscribe = this.paymentRefs
+  getUtilities = async callback => {
+    console.log('reading utilities');
+    unsubscribe = this.utilityRefs
       .where('group', '==', this.usersGroup)
       .onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
@@ -78,8 +68,8 @@ class PaymentFunctions {
   };
 
   // updatedFields is object shaped like this: { field: 'updatedValue', cost: 4, name: 'updatedfood' }
-  updatePayment = (docID, updatedFields) => {
-    this.paymentRefs
+  updateUtility = (docID, updatedFields) => {
+    this.utilityRefs
       .doc(docID)
       .update(updatedFields)
       .then(() => {
@@ -90,8 +80,8 @@ class PaymentFunctions {
       });
   };
 
-  deletePayment = docID => {
-    this.paymentRefs
+  deleteUtility = docID => {
+    this.utilityRefs
       .doc(docID)
       .delete()
       .then(() => {
@@ -102,19 +92,21 @@ class PaymentFunctions {
       });
   };
 
-  // We parse the payment snapshot for the information we're interested
+  // We parse the utility snapshot for the information we're interested
   parse = doc => {
-    const { cost, date, name, owner, payees } = doc.data();
+    const { active, cost, date, interval, name, recurring } = doc.data();
     const { id: _id } = doc;
-    const payment = {
+    // interval: ENUM {WEEKLY, BI_WEEKLY, MONTHLY}
+    const utility = {
       _id,
+      active,
       cost,
       date,
+      interval,
       name,
-      owner,
-      payees
+      recurring
     };
-    return payment;
+    return utility;
   };
 
   // close the connection to the Backend
@@ -123,6 +115,6 @@ class PaymentFunctions {
   }
 }
 
-PaymentFunctions.shared = new PaymentFunctions();
+UtilityFunctions.shared = new UtilityFunctions();
 
-export default PaymentFunctions;
+export default UtilityFunctions;

@@ -55,7 +55,7 @@ const items = [
     icon: 'md-outlet',
     code: '#f542f2',
     numItems: '4 items due',
-    route: 'utilities'
+    route: 'utility'
   },
   {
     name: 'Payments',

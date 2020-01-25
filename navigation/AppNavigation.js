@@ -9,6 +9,9 @@ import SignupScreen from '../screens/SignupScreen';
 import ChatScreen from '../screens/ChatScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import UtilityScreen from '../screens/Utility/UtilityScreen';
+import CreateUtilityScreen from '../screens/Utility/CreateUtilityScreen';
+import ReadUtilityScreen from '../screens/Utility/ReadUtilityScreen';
 import PaymentScreen from '../screens/Payment/PaymentScreen';
 import CreatePaymentScreen from '../screens/Payment/CreatePaymentScreen';
 import ReadPaymentScreen from '../screens/Payment/ReadPaymentScreen';
@@ -29,8 +32,8 @@ const AppNavigator = createBottomTabNavigator(
     auth: {
       screen: createStackNavigator(
         {
-          signup: { screen: SignupScreen },
-          login: { screen: LoginScreen }
+          login: { screen: LoginScreen },
+          signup: { screen: SignupScreen }
         },
         {
           defaultNavigationOptions: {
@@ -47,6 +50,9 @@ const AppNavigator = createBottomTabNavigator(
         home: createStackNavigator(
           {
             home: { screen: HomeScreen },
+            utility: { screen: UtilityScreen },
+            createUtility: { screen: CreateUtilityScreen },
+            readUtility: { screen: ReadUtilityScreen },
             payments: { screen: PaymentScreen },
             createPayment: { screen: CreatePaymentScreen },
             readPayment: { screen: ReadPaymentScreen }
