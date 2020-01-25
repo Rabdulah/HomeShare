@@ -12,6 +12,7 @@ export const SIGNUP_USER_SUCCESS = 'signup_user_success';
 export const SIGNUP_USER_FAIL = 'signup_user_fail';
 export const GET_USER_GROUP = 'get_user_group';
 export const CLEAR_ERRORS = 'clear_errors';
+export const GET_ALL_USERS_IN_GROUP = 'get_all_users_in_group';
 
 // payments
 export const VIEW_PAYMENT = 'view_payment';
@@ -19,4 +20,3 @@ export const CREATE_PAYMENT = 'create_payment';
 
 // utilities
 export const VIEW_UTILITY = 'view_utility';
-
