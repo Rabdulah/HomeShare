@@ -15,6 +15,8 @@ export const CLEAR_ERRORS = 'clear_errors';
 
 // payments
 export const VIEW_PAYMENT = 'view_payment';
+export const CREATE_PAYMENT = 'create_payment';
 
 // utilities
 export const VIEW_UTILITY = 'view_utility';
+
