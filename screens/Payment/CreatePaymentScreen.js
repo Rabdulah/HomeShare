@@ -73,12 +73,13 @@ class CreatePaymentScreen extends Component {
   onCheckmarkPress = () => {
     this.setState({ loading: true });
     const { paymentDescription, cost } = this.state;
+    const { user } = this.props;
     const costPerPerson = cost / this.props.allUsersInGroup.length;
-    const payees = this.props.allUsersInGroup.map(user => {
+    const payees = this.props.allUsersInGroup.map(userInGroup => {
       return {
-        isPaid: false,
+        isPaid: user === userInGroup.id,
         amount: costPerPerson,
-        user
+        userInGroup
       };
     });
 
