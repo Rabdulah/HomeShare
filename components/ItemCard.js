@@ -10,7 +10,7 @@ const ItemCard = ({ cost, name, onPress, _id }) => {
       }}
     >
       <Card style={{ marginBottom: 10 }}>
-        <Text>{cost}</Text>
+        <Text>${cost}</Text>
         <Text>{name}</Text>
       </Card>
     </TouchableOpacity>

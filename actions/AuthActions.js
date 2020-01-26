@@ -38,7 +38,7 @@ export const getUserGroup = userId => {
         .then(snapshot => {
           snapshot.docs.forEach(doc => {
             const { email, name, username } = doc.data();
-            users.push({ email, name, username });
+            users.push({ email, name, username, id: doc.id });
           });
         });
 
