@@ -8,7 +8,7 @@ import HeaderCard from '../../components/HeaderCard';
 import ItemCard from '../../components/ItemCard';
 import Spinner from '../../components/Spinner';
 import { viewPayment, retrievePayments } from '../../actions';
-import { PEWTER_BLUE, DARK_BLUE, MOONSTONE_BLUE } from '../../styles/colours';
+import { DARK_BLUE } from '../../styles/colours';
 
 // import React, { Component } from 'react';
 // import { View, Text, Button, FlatList } from 'react-native';
@@ -94,8 +94,22 @@ class PaymentScreen extends Component {
           };
         });
         payments = payments.sort((a, b) => b.date - a.date);
+        this.calculateBalance(payments);
         retrievePayments(payments);
       });
+  };
+
+  calculateBalance = payments => {
+    const balance = payments.reduce((totalBalance, currentPayment) => {
+      const currentPaymentBalance = currentPayment.payees.reduce(
+        (currPaymentBalance, payee) => {
+          return (payee.isPaid ? 0 : payee.amount) + currPaymentBalance;
+        },
+        0
+      );
+
+      return totalBalance + currentPaymentBalance;
+    }, 0);
   };
 
   onPaymentPress = paymentId => {
@@ -118,10 +132,10 @@ class PaymentScreen extends Component {
     return payments.map((payment, index) => {
       return (
         <ItemCard
-          key={payment._id}
+          key={payment.id}
           cost={payment.cost}
           name={payment.name}
-          _id={payment._id}
+          _id={payment.id}
           onPress={this.onPaymentPress}
         />
       );
@@ -133,10 +147,10 @@ class PaymentScreen extends Component {
     return (
       <Layout style={{ padding: 16, flex: 1, flexDirection: 'column' }}>
         <NavigationEvents onDidFocus={this.retrievePaymentsHelper} />
-        <HeaderCard />
+        <HeaderCard title="$90" subtitle="is owed to you." />
         <ScrollView
           vertical
-          style={[
+          contentContainerStyle={[
             payments.length === 0
               ? { justifyContent: 'center', alignItems: 'center' }
               : {}
@@ -159,9 +173,9 @@ class PaymentScreen extends Component {
 
 const mapStateToProps = ({ payment, auth }) => {
   const { payments } = payment;
-  const { group } = auth;
+  const { group, user } = auth;
 
-  return { payments, group };
+  return { payments, group, user };
 };
 export default connect(mapStateToProps, { viewPayment, retrievePayments })(
   PaymentScreen

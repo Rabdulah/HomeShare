@@ -18,15 +18,15 @@ import {
 const INITIAL_STATE = {
   email: 'matt@uwo.ca',
   password: 'password',
-  user: null,
+  user: null, // user id assigned from firebase
   errorLogin: '',
   errorSignUp: '',
   loading: false,
   firstName: '',
   lastName: '',
   username: '',
-  group: '',
-  groupInfo: null,
+  group: '', // actual group reference
+  groupInfo: null, // group info such as address, etc.
   allUsersInGroup: []
 };
 

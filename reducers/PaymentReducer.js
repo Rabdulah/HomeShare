@@ -22,7 +22,6 @@ export default (state = INITIAL_STATE, action) => {
       clonedPayments.push(payment);
       return { ...state, payments: clonedPayments };
     case RETRIEVE_PAYMENTS:
-      console.log('in reducer, RETRIEVE_PAYMENTS', action.payload);
       return { ...state, payments: action.payload };
     default:
       return state;
