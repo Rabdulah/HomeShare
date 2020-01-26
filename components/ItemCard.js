@@ -2,11 +2,11 @@ import React from 'react';
 import { Card, Text } from '@ui-kitten/components';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const ItemCard = ({ cost, name, onPress, _id }) => {
+const ItemCard = ({ cost, name, onPress, id }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        onPress(_id);
+        onPress(id);
       }}
     >
       <Card style={{ marginBottom: 10 }}>

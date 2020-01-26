@@ -127,7 +127,7 @@ class PaymentScreen extends Component {
   onPaymentPress = paymentId => {
     // get payment
     const { payments, viewPayment, navigation } = this.props;
-    const selectedPayment = payments.find(payment => payment._id === paymentId);
+    const selectedPayment = payments.find(payment => payment.id === paymentId);
 
     // dispatch action to set current payment being viewed
     viewPayment(selectedPayment);
@@ -147,7 +147,7 @@ class PaymentScreen extends Component {
           key={payment.id}
           cost={payment.cost}
           name={payment.name}
-          _id={payment.id}
+          id={payment.id}
           onPress={this.onPaymentPress}
         />
       );
