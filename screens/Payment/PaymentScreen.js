@@ -70,6 +70,14 @@ import { DARK_BLUE } from '../../styles/colours';
 // export default PaymentScreen;
 
 class PaymentScreen extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      balance: 0
+    };
+  }
+
   componentDidMount() {
     this.retrievePaymentsHelper();
   }
@@ -100,7 +108,10 @@ class PaymentScreen extends Component {
   };
 
   calculateBalance = payments => {
+    const { user } = this.props;
     const balance = payments.reduce((totalBalance, currentPayment) => {
+      // check if the currentPayment belongs to the logged in user
+      const sign = currentPayment.owner === user ? 1 : -1;
       const currentPaymentBalance = currentPayment.payees.reduce(
         (currPaymentBalance, payee) => {
           return (payee.isPaid ? 0 : payee.amount) + currPaymentBalance;
@@ -108,8 +119,9 @@ class PaymentScreen extends Component {
         0
       );
 
-      return totalBalance + currentPaymentBalance;
+      return totalBalance + currentPaymentBalance * sign;
     }, 0);
+    this.setState({ balance });
   };
 
   onPaymentPress = paymentId => {
@@ -144,10 +156,17 @@ class PaymentScreen extends Component {
 
   render() {
     const { payments, navigation } = this.props;
+    const { balance } = this.state;
+    const headerCardSubtitle =
+      balance >= 0 ? 'is owed to you.' : 'is the total you owe.';
+
     return (
       <Layout style={{ padding: 16, flex: 1, flexDirection: 'column' }}>
         <NavigationEvents onDidFocus={this.retrievePaymentsHelper} />
-        <HeaderCard title="$90" subtitle="is owed to you." />
+        <HeaderCard
+          title={`$${Math.abs(balance)}`}
+          subtitle={headerCardSubtitle}
+        />
         <ScrollView
           vertical
           contentContainerStyle={[

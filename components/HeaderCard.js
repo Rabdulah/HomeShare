@@ -1,8 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Icon, Button, Layout, Card, Text } from '@ui-kitten/components';
+import { Card, Text } from '@ui-kitten/components';
 
-const HeaderCard = () => {
+const HeaderCard = ({ title, subtitle }) => {
   return (
     <Card
       style={{
@@ -11,8 +10,8 @@ const HeaderCard = () => {
         justifyContent: 'center'
       }}
     >
-      <Text category="h1">$90</Text>
-      <Text>is owed to you.</Text>
+      <Text category="h1">{title}</Text>
+      <Text>{subtitle}</Text>
     </Card>
   );
 };
