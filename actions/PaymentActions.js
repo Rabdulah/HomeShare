@@ -1,4 +1,5 @@
-import { VIEW_PAYMENT, CREATE_PAYMENT } from './types';
+import firebase from 'firebase';
+import { VIEW_PAYMENT, CREATE_PAYMENT, RETRIEVE_PAYMENTS } from './types';
 
 export const viewPayment = payment => {
   return {
@@ -7,9 +8,9 @@ export const viewPayment = payment => {
   };
 };
 
-export const createPayment = payment => {
+export const retrievePayments = payments => {
   return {
-    type: CREATE_PAYMENT,
-    payload: payment
+    type: RETRIEVE_PAYMENTS,
+    payload: payments
   };
 };

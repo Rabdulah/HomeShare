@@ -4,9 +4,11 @@ import { Layout, Input as KittenInput, Text } from '@ui-kitten/components';
 import { Ionicons } from '@expo/vector-icons';
 import { ScrollView, View, KeyboardAvoidingView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import firebase from 'firebase';
 import { createPayment } from '../../actions';
 import Header from '../../components/Header';
 import Spinner from '../../components/Spinner';
+import { DARK_BLUE } from '../../styles/colours';
 
 class CreatePaymentScreen extends Component {
   // specify custom header in navigationOptions
@@ -33,7 +35,8 @@ class CreatePaymentScreen extends Component {
     this.secondInput = React.createRef();
     this.state = {
       paymentDescription: '',
-      cost: ''
+      cost: '',
+      loading: false
     };
   }
 
@@ -54,14 +57,42 @@ class CreatePaymentScreen extends Component {
     this.setState({ cost: num });
   };
 
+  createPayment = payment => {
+    const paymentsRef = firebase.firestore().collection('payments');
+    paymentsRef
+      .add(payment)
+      .then(() => {
+        this.props.navigation.navigate('payments');
+      })
+      .catch(err => {
+        this.setState({ loading: false });
+        console.log('err', err);
+      });
+  };
+
   onCheckmarkPress = () => {
+    this.setState({ loading: true });
     const { paymentDescription, cost } = this.state;
+    const { user } = this.props;
+    const costPerPerson = cost / this.props.allUsersInGroup.length;
+    const payees = this.props.allUsersInGroup.map(userInGroup => {
+      return {
+        isPaid: user === userInGroup.id,
+        amount: costPerPerson,
+        userInGroup
+      };
+    });
+
+    // ADD OWNER PROPERTY
     const payment = {
-      name: paymentDescription,
       cost,
-      payees: []
+      date: new Date().getTime(),
+      group: this.props.group,
+      name: paymentDescription,
+      payees,
+      owner: this.props.user
     };
-    this.props.createPayment(payment);
+    this.createPayment(payment);
   };
 
   numToTwoDecimalPlaces = num => {
@@ -69,7 +100,8 @@ class CreatePaymentScreen extends Component {
   };
 
   renderCostPerPerson = totalCost => {
-    const costPerPerson = totalCost / 3; // hard coded, should be fixed later
+    const { allUsersInGroup } = this.props;
+    const costPerPerson = totalCost / allUsersInGroup.length; // hard coded, should be fixed later
     return `($${this.numToTwoDecimalPlaces(costPerPerson)}/person)`;
   };
 
@@ -119,7 +151,6 @@ class CreatePaymentScreen extends Component {
               returnKeyType="go"
             />
             <Text style={{ margin: 10 }}>{this.renderCostPerPerson(cost)}</Text>
-            <Text>{this.props.payments.length}</Text>
             <Layout
               style={{
                 display: 'flex',
@@ -144,9 +175,9 @@ class CreatePaymentScreen extends Component {
 }
 
 const mapStateToProps = ({ auth, payment }) => {
-  const { user, groupInfo } = auth;
+  const { user, groupInfo, allUsersInGroup, group } = auth;
   const { payments } = payment;
 
-  return { user, groupInfo, payments };
+  return { user, groupInfo, payments, group, allUsersInGroup };
 };
 export default connect(mapStateToProps, { createPayment })(CreatePaymentScreen);
