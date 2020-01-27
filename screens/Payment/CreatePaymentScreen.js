@@ -79,7 +79,7 @@ class CreatePaymentScreen extends Component {
       return {
         isPaid: user === userInGroup.id,
         amount: costPerPerson,
-        userInGroup
+        user: userInGroup
       };
     });
 
