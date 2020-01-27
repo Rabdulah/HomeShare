@@ -1,77 +1,12 @@
-import { VIEW_PAYMENT, CREATE_PAYMENT } from '../actions/types';
+import {
+  VIEW_PAYMENT,
+  CREATE_PAYMENT,
+  RETRIEVE_PAYMENTS
+} from '../actions/types';
 
 const INITIAL_STATE = {
   currentPayment: null,
-  payments: [
-    {
-      _id: 0,
-      cost: 30,
-      name: 'Internet',
-      payees: [
-        {
-          amount: 10,
-          isPaid: false,
-          user: 'matt'
-        },
-        {
-          amount: 10,
-          isPaid: false,
-          user: 'spencer'
-        }
-      ]
-    },
-    {
-      _id: 1,
-      cost: 36,
-      name: 'Furnace',
-      payees: [
-        {
-          amount: 10,
-          isPaid: false,
-          user: 'spencer'
-        },
-        {
-          amount: 10,
-          isPaid: false,
-          user: 'ramzi'
-        }
-      ]
-    },
-    {
-      _id: 2,
-      cost: 18,
-      name: 'Hydro',
-      payees: [
-        {
-          amount: 10,
-          isPaid: false,
-          user: 'matt'
-        },
-        {
-          amount: 10,
-          isPaid: false,
-          user: 'ramzi'
-        }
-      ]
-    },
-    {
-      _id: 3,
-      cost: 21,
-      name: 'Random',
-      payees: [
-        {
-          amount: 10,
-          isPaid: false,
-          user: 'matt'
-        },
-        {
-          amount: 10,
-          isPaid: false,
-          user: 'ramzi'
-        }
-      ]
-    }
-  ]
+  payments: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -86,6 +21,8 @@ export default (state = INITIAL_STATE, action) => {
       payment._id = clonedPayments.length;
       clonedPayments.push(payment);
       return { ...state, payments: clonedPayments };
+    case RETRIEVE_PAYMENTS:
+      return { ...state, payments: action.payload };
     default:
       return state;
   }

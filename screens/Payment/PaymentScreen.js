@@ -1,33 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Icon, Button, Layout, Text, Card } from '@ui-kitten/components';
+import { Button, Layout } from '@ui-kitten/components';
 import { ScrollView } from 'react-native';
+import firebase from 'firebase';
+import { NavigationEvents } from 'react-navigation';
 import HeaderCard from '../../components/HeaderCard';
 import ItemCard from '../../components/ItemCard';
-import { viewPayment } from '../../actions';
+import Spinner from '../../components/Spinner';
+import { viewPayment, retrievePayments } from '../../actions';
+import { DARK_BLUE } from '../../styles/colours';
 
 // import React, { Component } from 'react';
 // import { View, Text, Button, FlatList } from 'react-native';
-// import PaymentFunctions from '../server/payment/PaymentFunctions';
 
 // class PaymentScreen extends Component {
-//   constructor() {
-//     super();
-//     this.state = { payments: [] };
-//   }
 
 //   create = () => {
 //     PaymentFunctions.shared.createPayment();
 //   };
-//   read = () => {
-//     PaymentFunctions.shared.getPayments(payment => {
-//       this.setState(previousState => {
-//         return {
-//           payments: [...previousState.payments, payment]
-//         };
-//       });
-//     });
-//   };
+
 //   update = () => {
 //     PaymentFunctions.shared.updatePayment('vmZ2ZeGtzgxotVar4CXz', {
 //       cost: 4,
@@ -79,31 +70,84 @@ import { viewPayment } from '../../actions';
 // export default PaymentScreen;
 
 class PaymentScreen extends Component {
-  componentDidMount() {
-    // get list of payments from backend
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      balance: 0
+    };
   }
+
+  componentDidMount() {
+    this.retrievePaymentsHelper();
+  }
+
+  retrievePaymentsHelper = () => {
+    const { group, retrievePayments } = this.props;
+    firebase
+      .firestore()
+      .collection('payments')
+      .where('group', '==', group)
+      .get()
+      .then(snapshot => {
+        let payments = snapshot.docs.map(doc => {
+          const { cost, date, name, owner, payees } = doc.data();
+          return {
+            cost,
+            date,
+            name,
+            owner,
+            payees,
+            id: doc.id
+          };
+        });
+        payments = payments.sort((a, b) => b.date - a.date);
+        this.calculateBalance(payments);
+        retrievePayments(payments);
+      });
+  };
+
+  calculateBalance = payments => {
+    const { user } = this.props;
+    const balance = payments.reduce((totalBalance, currentPayment) => {
+      // check if the currentPayment belongs to the logged in user
+      const sign = currentPayment.owner === user ? 1 : -1;
+      const currentPaymentBalance = currentPayment.payees.reduce(
+        (currPaymentBalance, payee) => {
+          return (payee.isPaid ? 0 : payee.amount) + currPaymentBalance;
+        },
+        0
+      );
+
+      return totalBalance + currentPaymentBalance * sign;
+    }, 0);
+    this.setState({ balance });
+  };
 
   onPaymentPress = paymentId => {
     // get payment
-    const { payments } = this.props;
-    const selectedPayment = payments.find(payment => payment._id === paymentId);
+    const { payments, viewPayment, navigation } = this.props;
+    const selectedPayment = payments.find(payment => payment.id === paymentId);
 
     // dispatch action to set current payment being viewed
-    this.props.viewPayment(selectedPayment);
+    viewPayment(selectedPayment);
 
     // navigate to ViewPaymentScreen
-    this.props.navigation.navigate('readPayment');
+    navigation.navigate('readPayment');
   };
 
   renderPayments = () => {
     const { payments } = this.props;
+    if (payments.length === 0) {
+      return <Spinner size="small" colour={DARK_BLUE} />;
+    }
     return payments.map((payment, index) => {
       return (
         <ItemCard
-          key={payment._id}
+          key={payment.id}
           cost={payment.cost}
           name={payment.name}
-          _id={payment._id}
+          id={payment.id}
           onPress={this.onPaymentPress}
         />
       );
@@ -111,14 +155,32 @@ class PaymentScreen extends Component {
   };
 
   render() {
+    const { payments, navigation } = this.props;
+    const { balance } = this.state;
+    const headerCardSubtitle =
+      balance >= 0 ? 'is owed to you.' : 'is the total you owe.';
+
     return (
       <Layout style={{ padding: 16, flex: 1, flexDirection: 'column' }}>
-        <HeaderCard />
-        <ScrollView vertical>{this.renderPayments()}</ScrollView>
+        <NavigationEvents onDidFocus={this.retrievePaymentsHelper} />
+        <HeaderCard
+          title={`$${Math.abs(balance)}`}
+          subtitle={headerCardSubtitle}
+        />
+        <ScrollView
+          vertical
+          contentContainerStyle={[
+            payments.length === 0
+              ? { justifyContent: 'center', alignItems: 'center' }
+              : {}
+          ]}
+        >
+          {this.renderPayments()}
+        </ScrollView>
         <Button
           status="success"
           onPress={() => {
-            this.props.navigation.navigate('createPayment');
+            navigation.navigate('createPayment');
           }}
         >
           Add a payment
@@ -128,9 +190,12 @@ class PaymentScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ payment }) => {
+const mapStateToProps = ({ payment, auth }) => {
   const { payments } = payment;
+  const { group, user } = auth;
 
-  return { payments };
+  return { payments, group, user };
 };
-export default connect(mapStateToProps, { viewPayment })(PaymentScreen);
+export default connect(mapStateToProps, { viewPayment, retrievePayments })(
+  PaymentScreen
+);

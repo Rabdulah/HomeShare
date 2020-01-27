@@ -11,21 +11,23 @@ import {
   SIGNUP_USER_SUCCESS,
   SIGNUP_USER_FAIL,
   GET_USER_GROUP,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
+  GET_ALL_USERS_IN_GROUP
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  email: '',
-  password: '',
-  user: null,
+  email: 'matt@uwo.ca',
+  password: 'password',
+  user: null, // user id assigned from firebase
   errorLogin: '',
   errorSignUp: '',
   loading: false,
   firstName: '',
   lastName: '',
   username: '',
-  group: '',
-  groupInfo: null
+  group: '', // actual group reference
+  groupInfo: null, // group info such as address, etc.
+  allUsersInGroup: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -58,6 +60,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, group: action.payload };
     case CLEAR_ERRORS:
       return { ...state, errorLogin: '', errorSignUp: '' };
+    case GET_ALL_USERS_IN_GROUP:
+      return { ...state, allUsersInGroup: action.payload };
     default:
       return state;
   }

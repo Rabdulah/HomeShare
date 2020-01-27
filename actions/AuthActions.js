@@ -12,7 +12,8 @@ import {
   SIGNUP_USER_FAIL,
   SIGNUP_USER_SUCCESS,
   GET_USER_GROUP,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
+  GET_ALL_USERS_IN_GROUP
 } from './types';
 
 export const getUserGroup = userId => {
@@ -26,6 +27,22 @@ export const getUserGroup = userId => {
         .then(doc => {
           return doc.data().group;
         });
+
+      // get all users in a group too
+      const users = [];
+      await firebase
+        .firestore()
+        .collection('users')
+        .where('group', '==', response)
+        .get()
+        .then(snapshot => {
+          snapshot.docs.forEach(doc => {
+            const { email, name, username } = doc.data();
+            users.push({ email, name, username, id: doc.id });
+          });
+        });
+
+      dispatch({ type: GET_ALL_USERS_IN_GROUP, payload: users });
       dispatch({ type: GET_USER_GROUP, payload: response });
     } catch (error) {
       console.log(error);
@@ -97,7 +114,9 @@ export const loginUser = ({ email, password }) => {
     dispatch({ type: LOGIN_USER });
 
     try {
-      const response = await firebase.auth().signInWithEmailAndPassword(email, password);
+      const response = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
       const userSnapshot = await firebase
         .firestore()
         .collection('users')
@@ -124,12 +143,20 @@ export const loginUser = ({ email, password }) => {
   };
 };
 
-export const signupUser = ({ firstName, lastName, username, email, password }) => {
+export const signupUser = ({
+  firstName,
+  lastName,
+  username,
+  email,
+  password
+}) => {
   return async dispatch => {
     dispatch({ type: SIGNUP_USER });
 
     try {
-      const response = await firebase.auth().createUserWithEmailAndPassword(email, password);
+      const response = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
 
       insertNewUser(firstName, lastName, username, email, response.user.uid);
       dispatch({ type: SIGNUP_USER_SUCCESS, payload: response.user.uid });
