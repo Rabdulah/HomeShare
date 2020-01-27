@@ -4,6 +4,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import { Button } from '@ui-kitten/components';
 import Swiper from 'react-native-swiper';
 import Firebase from 'firebase';
+import LottieView from 'lottie-react-native';
 
 import config from '../configs/firebaseConfig';
 import Slides from '../components/Slides';
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#9DD6EB'
+    backgroundColor: '#9DD6Eb'
   },
   slide2: {
     flex: 1,
@@ -44,9 +45,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#92BBD9'
   },
   text: {
-    color: '#fff',
+    color: '#191919',
     fontSize: 30,
-    fontWeight: 'bold'
+    textAlign: 'center'
+    // fontWeight: 'bold'
   }
 });
 
@@ -72,12 +74,30 @@ class WelcomeScreen extends Component {
       <Swiper style={styles.wrapper} showsButtons={false} loop={false}>
         <View style={styles.slide1}>
           <Text style={styles.text}>Welcome to HomeShare</Text>
+          <LottieView
+            source={require('../assets/6936-class-ninjas-floating-ninja.json')}
+            loop
+            autoPlay
+            style={{ height: 300, width: 300 }}
+          />
         </View>
         <View style={styles.slide2}>
           <Text style={styles.text}>Track chores, bills, and errands</Text>
+          <LottieView
+            source={require('../assets/3164-coinfall.json')}
+            loop
+            autoPlay
+            style={{ height: 300, width: 300 }}
+          />
         </View>
         <View style={styles.slide3}>
           <Text style={styles.text}>Organize your home life!</Text>
+          <LottieView
+            source={require('../assets/6052-checklist.json')}
+            loop
+            autoPlay
+            style={{ height: 300, width: 300 }}
+          />
           <Button onPress={this.onSlidesComplete}>Continue!</Button>
         </View>
       </Swiper>
