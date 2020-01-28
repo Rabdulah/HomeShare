@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Text, Layout, List, ListItem, Button } from '@ui-kitten/components';
 
-import { ScrollView } from 'react-native';
 import { viewPayment } from '../../actions';
 import Header from '../../components/Header';
 import HeaderCard from '../../components/HeaderCard';
@@ -46,7 +45,7 @@ class ReadPaymentScreen extends Component {
       <ListItem
         title={`${item.user.name.firstName}`}
         style={{
-          paddingVertical: 20,
+          paddingVertical: 15,
           borderBottomColor: '#e3e3e3',
           borderBottomWidth: 1
         }}
@@ -68,7 +67,6 @@ class ReadPaymentScreen extends Component {
 
   renderButtonText = () => {
     const { currentPayment, user } = this.props;
-    const { payees } = currentPayment;
     if (currentPayment.owner === user) {
       return 'Go get your money!';
     }
@@ -89,7 +87,7 @@ class ReadPaymentScreen extends Component {
   };
 
   render() {
-    const { currentPayment, user } = this.props;
+    const { currentPayment, navigation } = this.props;
     const { payees } = currentPayment;
 
     // // filter payees to remove the owner of
@@ -121,7 +119,13 @@ class ReadPaymentScreen extends Component {
           renderItem={this.renderPayeeList}
           style={{ backgroundColor: 'white' }}
         />
-        <Button status="success" disabled={this.doesLoggedInUserOweMoney()}>
+        <Button
+          status="success"
+          disabled={this.doesLoggedInUserOweMoney()}
+          onPress={() => {
+            navigation.navigate('payback');
+          }}
+        >
           {this.renderButtonText()}
         </Button>
       </Layout>
