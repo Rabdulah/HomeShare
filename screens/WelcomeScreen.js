@@ -1,61 +1,65 @@
 import React, { Component } from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { Button } from '@ui-kitten/components';
-import Swiper from 'react-native-swiper';
+import { View, Text, StyleSheet } from 'react-native';
+import { Layout } from '@ui-kitten/components';
 import Firebase from 'firebase';
+import LottieView from 'lottie-react-native';
 
+import AppIntroSlider from 'react-native-app-intro-slider';
 import config from '../configs/firebaseConfig';
-import Slides from '../components/Slides';
-import { LIGHT_SEA_GREEN, ORANGE, MOONSTONE_BLUE } from '../styles/colours';
-
-const COLOURS = {
-  lightSeaGreen: '#1b9aaa',
-  darkBlue: '#26547c',
-  greyBlue: '#95afba',
-  moonStoneBlue: '#64a6bd',
-  orange: '#FF5700'
-};
-
-const SLIDE_DATA = [
-  { text: 'Welcome to HomeShare', colour: LIGHT_SEA_GREEN },
-  { text: 'Track chores, bills, and errands', colour: ORANGE },
-  { text: 'Organize your home life!', colour: MOONSTONE_BLUE }
-];
 
 const styles = StyleSheet.create({
-  wrapper: {},
-  slide1: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#9DD6EB'
-  },
-  slide2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#97CAE5'
-  },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9'
+  image: {
+    width: 200,
+    height: 200
   },
   text: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold'
+    color: '#FFFFFF',
+    fontSize: 20
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: 'white',
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    marginTop: 16
   }
 });
 
+const slides = [
+  {
+    key: 's1',
+    title: 'Welcome To HomeShare',
+    titleStyle: styles.title,
+    textStyle: styles.text,
+    animation: 'one',
+    image: {
+      uri:
+        'http://aboutreact.com/wp-content/uploads/2018/08/mobile_recharge.png'
+    },
+    imageStyle: styles.image,
+    backgroundColor: '#20d2bb'
+  },
+  {
+    key: 's2',
+    title: 'Track chores, bills, and errands',
+    titleStyle: styles.title,
+    animation: 'two',
+    imageStyle: styles.image,
+    backgroundColor: '#febe29'
+  },
+  {
+    key: 's3',
+    title: 'Organize your home!',
+    titleStyle: styles.title,
+    animation: 'three',
+    image: require('../assets/6052-checklist.json'),
+    imageStyle: styles.image,
+    backgroundColor: '#22bcb5'
+  }
+];
+
 class WelcomeScreen extends Component {
-  //   async componentDidMount() {
-  //     await Firebase.auth()
-  //     .signInWithEmailAndPassword('ramzi@email.com', 'password');
-  //     console.log('okay?')
-  // }
   componentDidMount() {
     if (!Firebase.apps.length) {
       Firebase.initializeApp(config);
@@ -63,24 +67,68 @@ class WelcomeScreen extends Component {
   }
 
   onSlidesComplete = () => {
-    this.props.navigation.navigate('signup');
+    const { navigation } = this.props;
+    navigation.navigate('signup');
+  };
+
+  renderItem = ({ item }) => {
+    const helper = animation => {
+      switch (animation) {
+        case 'one':
+          return require('../assets/6936-class-ninjas-floating-ninja.json');
+        case 'two':
+          return require('../assets/3164-coinfall.json');
+        case 'three':
+          return require('../assets/6052-checklist.json');
+      }
+    };
+    return (
+      <Layout
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: item.backgroundColor
+        }}
+      >
+        <View
+          style={{
+            textAlign: 'center',
+            flex: 1,
+            justifyContent: 'center'
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 26,
+              color: 'white',
+              fontWeight: '300',
+              paddingHorizontal: 16
+            }}
+          >
+            {item.title}
+          </Text>
+        </View>
+        <View style={{ flex: 2.5 }}>
+          <LottieView
+            source={helper(item.animation)}
+            autoPlay
+            style={{ height: 300, width: 300 }}
+          />
+        </View>
+      </Layout>
+    );
   };
 
   render() {
-    // return <Slides data={SLIDE_DATA} onComplete={this.onSlidesComplete} />;
     return (
-      <Swiper style={styles.wrapper} showsButtons={false} loop={false}>
-        <View style={styles.slide1}>
-          <Text style={styles.text}>Welcome to HomeShare</Text>
-        </View>
-        <View style={styles.slide2}>
-          <Text style={styles.text}>Track chores, bills, and errands</Text>
-        </View>
-        <View style={styles.slide3}>
-          <Text style={styles.text}>Organize your home life!</Text>
-          <Button onPress={this.onSlidesComplete}>Continue!</Button>
-        </View>
-      </Swiper>
+      <AppIntroSlider
+        slides={slides}
+        renderItem={this.renderItem}
+        onDone={this.onSlidesComplete}
+        showSkipButton
+        onSkip={this.onSlidesComplete}
+      />
     );
   }
 }

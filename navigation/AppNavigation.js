@@ -11,18 +11,26 @@ import {
   LIGHT_SEA_GREEN
 } from '../styles/colours';
 
+// AUTH
 import WelcomeScreen from '../screens/WelcomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import ChatScreen from '../screens/ChatScreen';
+
+// MAIN PAGE
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+
+// UTILITIES
 import UtilityScreen from '../screens/Utility/UtilityScreen';
 import CreateUtilityScreen from '../screens/Utility/CreateUtilityScreen';
 import ReadUtilityScreen from '../screens/Utility/ReadUtilityScreen';
+
+// PAYMENTS
 import PaymentScreen from '../screens/Payment/PaymentScreen';
 import CreatePaymentScreen from '../screens/Payment/CreatePaymentScreen';
 import ReadPaymentScreen from '../screens/Payment/ReadPaymentScreen';
+import PaybackScreen from '../screens/Payment/PaybackScreen';
 /*
   big gotcha: for any navigator, when it is rendered, react
   native will try / does render all screens for that navigator.
@@ -72,7 +80,8 @@ const AppNavigator = createBottomTabNavigator(
               readUtility: { screen: ReadUtilityScreen },
               payments: { screen: PaymentScreen },
               createPayment: { screen: CreatePaymentScreen },
-              readPayment: { screen: ReadPaymentScreen }
+              readPayment: { screen: ReadPaymentScreen },
+              payback: { screen: PaybackScreen }
             },
             {
               defaultNavigationOptions: {
@@ -81,7 +90,7 @@ const AppNavigator = createBottomTabNavigator(
                 }
               },
               navigationOptions: () => ({
-                tabBarColor: '#B0C0BC',
+                tabBarColor: '#D8F6FF',
                 tabBarIcon: ({tintColor})=>(
                   <Ionicons name="ios-home" size={22} color={tintColor} />
                 )
@@ -91,7 +100,7 @@ const AppNavigator = createBottomTabNavigator(
           chat: {
             screen: ChatScreen,
             navigationOptions: () => ({
-              tabBarColor: '#A4A8A7',
+              tabBarColor: '#DFEDC4',
               tabBarIcon: ({tintColor})=>(
                 <Ionicons name="ios-chatboxes" size={22} color={tintColor}/>
               )
