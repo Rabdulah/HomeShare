@@ -49,8 +49,8 @@ const AppNavigator = createBottomTabNavigator(
     auth: {
       screen: createStackNavigator(
         {
-          signup: { screen: SignupScreen },
-          login: { screen: LoginScreen }
+          login: { screen: LoginScreen },
+          signup: { screen: SignupScreen }
         },
         {
           defaultNavigationOptions: {
@@ -68,7 +68,7 @@ const AppNavigator = createBottomTabNavigator(
             screen: ProfileScreen,
             navigationOptions: () => ({
               tabBarColor: '#C1EDCC',
-              tabBarIcon: ({tintColor})=>(
+              tabBarIcon: ({ tintColor }) => (
                 <Ionicons name="ios-person" size={22} color={tintColor} />
               )
             })
@@ -93,7 +93,7 @@ const AppNavigator = createBottomTabNavigator(
               },
               navigationOptions: () => ({
                 tabBarColor: '#D8F6FF',
-                tabBarIcon: ({tintColor})=>(
+                tabBarIcon: ({ tintColor }) => (
                   <Ionicons name="ios-home" size={22} color={tintColor} />
                 )
               })
@@ -103,8 +103,8 @@ const AppNavigator = createBottomTabNavigator(
             screen: ChatScreen,
             navigationOptions: () => ({
               tabBarColor: '#DFEDC4',
-              tabBarIcon: ({tintColor})=>(
-                <Ionicons name="ios-chatboxes" size={22} color={tintColor}/>
+              tabBarIcon: ({ tintColor }) => (
+                <Ionicons name="ios-chatboxes" size={22} color={tintColor} />
               )
             })
           }

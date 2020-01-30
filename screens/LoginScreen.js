@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Layout, Text } from '@ui-kitten/components';
 import { Button } from 'react-native-elements';
 
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   emailChanged,
   passwordChanged,
@@ -108,29 +110,79 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.subTitle}>Login to HomeShare</Text>
-        <Input
-          placeholder="Email"
-          onChangeText={this.onEmailChange}
-          secure={false}
-          value={this.props.email}
-        />
-        <Input
-          secure
-          secureTextEntry
-          placeholder="Password"
-          onChangeText={this.onPasswordChange}
-          value={this.props.password}
-        />
-
-        {this.renderError()}
-        <View
-          style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
+      <Layout style={styles.container}>
+        <Layout
+          style={{
+            flex: 2,
+            justifyContent: 'center'
+          }}
         >
-          {this.renderButton()}
-        </View>
-      </View>
+          <Text
+            style={{
+              fontSize: 32,
+              lineHeight: 32,
+              fontWeight: 'bold',
+              marginVertical: 5
+            }}
+          >
+            Welcome back!
+          </Text>
+          <Text style={{ fontSize: 16, color: 'rgba(0, 0, 0, 0.85)' }}>
+            Sign in to continue
+          </Text>
+        </Layout>
+        <Layout style={{ flex: 3 }}>
+          <Input
+            placeholder="Email"
+            onChangeText={this.onEmailChange}
+            secure={false}
+            value={this.props.email}
+            label="Email"
+            containerStyle={{ marginVertical: 15 }}
+          />
+          <Input
+            secure
+            secureTextEntry
+            placeholder="Password"
+            onChangeText={this.onPasswordChange}
+            value={this.props.password}
+            label="Password"
+            containerStyle={{ marginVertical: 15 }}
+          />
+          <TouchableOpacity>
+            <Text
+              style={{ marginVertical: 15, textAlign: 'right', fontSize: 16 }}
+            >
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
+          {this.renderError()}
+          <View
+            style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
+          >
+            {this.renderButton()}
+          </View>
+          <View
+            style={{
+              marginVertical: 15,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center'
+            }}
+          >
+            <Text style={{ fontSize: 16 }}>New user? </Text>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('signup')}
+            >
+              <Text
+                style={{ color: DARK_BLUE, fontWeight: 'bold', fontSize: 16 }}
+              >
+                Signup
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Layout>
+      </Layout>
     );
   }
 }
