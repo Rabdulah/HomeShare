@@ -130,7 +130,7 @@ class PaymentScreen extends Component {
     const selectedPayment = payments.find(payment => payment.id === paymentId);
 
     // dispatch action to set current payment being viewed
-    viewPayment(selectedPayment);
+    viewPayment(selectedPayment.id);
 
     // navigate to ViewPaymentScreen
     navigation.navigate('readPayment');

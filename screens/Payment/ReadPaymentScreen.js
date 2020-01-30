@@ -1,30 +1,55 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Text, Layout, List, ListItem, Button } from '@ui-kitten/components';
-
-import { viewPayment } from '../../actions';
-import Header from '../../components/Header';
+import { NavigationEvents } from 'react-navigation';
+import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { viewPayment, getCurrentPayment } from '../../actions';
 import HeaderCard from '../../components/HeaderCard';
 import Avatar from '../../components/Avatar';
+import { DARK_BLUE } from '../../styles/colours';
 
 class ReadPaymentScreen extends Component {
   // specify custom header in navigationOptions
-  // static navigationOptions = ({ navigation }) => {
-  //   const { params } = navigation.state;
-  //   return {
-  //     header: () => {
-  //       return (
-  //         <Header
-  //           style={{ backgroundColor: 'white' }}
-  //           title="hello"
-  //           subtitle="world"
-  //         />
-  //       );
-  //     }
-  //   };
-  // };
 
-  componentDidMount() {}
+  static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      paddingHorizontal: 16
+    },
+    headerLeft: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Ionicons
+            name="ios-arrow-back"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
+          />
+        </TouchableOpacity>
+      );
+    },
+    headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Payments</Text>,
+    headerRight: () => {
+      return (
+        <TouchableOpacity>
+          <Ionicons
+            name="md-create"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
+          />
+        </TouchableOpacity>
+      );
+    }
+  });
+
+  componentDidMount() {
+    this.getCurrentPaymentHelper();
+  }
 
   nameToInitials = name => {
     // name = { firstName: '', lastName: '' }
@@ -86,56 +111,74 @@ class ReadPaymentScreen extends Component {
     return loggedInPayee.isPaid;
   };
 
+  getCurrentPaymentHelper = () => {
+    const { getCurrentPayment, currentPaymentId } = this.props;
+    getCurrentPayment(currentPaymentId);
+  };
+
   render() {
     const { currentPayment, navigation } = this.props;
-    const { payees } = currentPayment;
+    const payees = currentPayment ? currentPayment.payees : [];
 
-    // // filter payees to remove the owner of
+    // filter payees to remove the owner of
     // const listOfPayeesWithoutOwner = payees.filter(
     //   payee => payee.user.id !== user
     // );
 
-    // sort by paid, then not paid
-    payees.sort((payeeA, payeeB) => {
-      return payeeB.isPaid - payeeA.isPaid;
-    });
+    if (currentPayment) {
+      // sort by paid, then not paid
+      payees.sort((payeeA, payeeB) => {
+        return payeeB.isPaid - payeeA.isPaid;
+      });
 
-    this.renderButtonText();
+      this.renderButtonText();
+    }
 
     return (
-      <Layout
-        style={{
-          padding: 16,
-          flex: 1,
-          flexDirection: 'column'
-        }}
-      >
-        <HeaderCard
-          title={`$${currentPayment.cost}`}
-          subtitle={currentPayment.name}
-        />
-        <List
-          data={currentPayment.payees}
-          renderItem={this.renderPayeeList}
-          style={{ backgroundColor: 'white' }}
-        />
-        <Button
-          status="success"
-          disabled={this.doesLoggedInUserOweMoney()}
-          onPress={() => {
-            navigation.navigate('payback');
-          }}
-        >
-          {this.renderButtonText()}
-        </Button>
-      </Layout>
+      <>
+        {currentPayment ? (
+          <Layout
+            style={{
+              padding: 16,
+              flex: 1,
+              flexDirection: 'column'
+            }}
+          >
+            <NavigationEvents onDidFocus={this.getCurrentPaymentHelper} />
+            <HeaderCard
+              title={`$${currentPayment.cost}`}
+              subtitle={currentPayment.name}
+            />
+            <List
+              data={currentPayment.payees}
+              renderItem={this.renderPayeeList}
+              style={{ backgroundColor: 'white' }}
+            />
+            <Button
+              status="success"
+              disabled={this.doesLoggedInUserOweMoney()}
+              onPress={() => {
+                navigation.navigate('payback');
+              }}
+            >
+              {this.renderButtonText()}
+            </Button>
+          </Layout>
+        ) : (
+          <Layout>
+            <Text>Loading...</Text>
+          </Layout>
+        )}
+      </>
     );
   }
 }
 
 const mapStateToProps = ({ payment, auth }) => {
-  const { currentPayment } = payment;
+  const { currentPaymentId, currentPayment } = payment;
   const { user } = auth;
-  return { currentPayment, user };
+  return { currentPaymentId, currentPayment, user };
 };
-export default connect(mapStateToProps, { viewPayment })(ReadPaymentScreen);
+export default connect(mapStateToProps, { viewPayment, getCurrentPayment })(
+  ReadPaymentScreen
+);

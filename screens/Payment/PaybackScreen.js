@@ -75,7 +75,6 @@ class PaybackScreen extends Component {
     };
 
     // update firebase
-    console.log(currentPayment);
     firebase
       .firestore()
       .collection('payments')
