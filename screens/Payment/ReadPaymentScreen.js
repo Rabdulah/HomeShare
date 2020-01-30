@@ -13,9 +13,6 @@ class ReadPaymentScreen extends Component {
   // specify custom header in navigationOptions
 
   static navigationOptions = ({ navigation }) => ({
-    headerStyle: {
-      paddingHorizontal: 16
-    },
     headerLeft: () => {
       return (
         <TouchableOpacity
@@ -35,7 +32,11 @@ class ReadPaymentScreen extends Component {
     headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Payments</Text>,
     headerRight: () => {
       return (
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('updatePayment');
+          }}
+        >
           <Ionicons
             name="md-create"
             size={30}
