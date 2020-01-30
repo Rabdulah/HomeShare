@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
+import { Ionicons } from '@expo/vector-icons';
+import {
+  PEWTER_BLUE,
+  DARK_BLUE,
+  MOONSTONE_BLUE,
+  LIGHT_SEA_GREEN
+} from '../styles/colours';
 
 import WelcomeScreen from '../screens/WelcomeScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -45,34 +53,67 @@ const AppNavigator = createBottomTabNavigator(
 
     main: {
       // nested nav
-      screen: createBottomTabNavigator({
-        profile: { screen: ProfileScreen },
-        home: createStackNavigator(
-          {
-            home: { screen: HomeScreen },
-            utility: { screen: UtilityScreen },
-            createUtility: { screen: CreateUtilityScreen },
-            readUtility: { screen: ReadUtilityScreen },
-            payments: { screen: PaymentScreen },
-            createPayment: { screen: CreatePaymentScreen },
-            readPayment: { screen: ReadPaymentScreen }
+      screen: createMaterialBottomTabNavigator(
+        {
+          profile: {
+            screen: ProfileScreen,
+            navigationOptions: () => ({
+              tabBarColor: '#C1EDCC',
+              tabBarIcon: ({tintColor})=>(
+                <Ionicons name="ios-person" size={22} color={tintColor} />
+              )
+            })
           },
-          {
-            defaultNavigationOptions: {
-              headerStyle: {
-                backgroundColor: 'transparent'
-              }
+          home: createStackNavigator(
+            {
+              home: { screen: HomeScreen },
+              utility: { screen: UtilityScreen },
+              createUtility: { screen: CreateUtilityScreen },
+              readUtility: { screen: ReadUtilityScreen },
+              payments: { screen: PaymentScreen },
+              createPayment: { screen: CreatePaymentScreen },
+              readPayment: { screen: ReadPaymentScreen }
+            },
+            {
+              defaultNavigationOptions: {
+                headerStyle: {
+                  backgroundColor: 'transparent'
+                }
+              },
+              navigationOptions: () => ({
+                tabBarColor: '#B0C0BC',
+                tabBarIcon: ({tintColor})=>(
+                  <Ionicons name="ios-home" size={22} color={tintColor} />
+                )
+              })
             }
+          ),
+          chat: {
+            screen: ChatScreen,
+            navigationOptions: () => ({
+              tabBarColor: '#A4A8A7',
+              tabBarIcon: ({tintColor})=>(
+                <Ionicons name="ios-chatboxes" size={22} color={tintColor}/>
+              )
+            })
           }
-        ),
-        chat: { screen: ChatScreen }
-        // review: {
-        //   screen: createStackNavigator({
-        //     review: { screen: ReviewScreen },
-        //     settings: { screen: SettingsScreen }
-        //   })
-        // }
-      })
+          // review: {
+          //   screen: createStackNavigator({
+          //     review: { screen: ReviewScreen },
+          //     settings: { screen: SettingsScreen }
+          //   })
+          // }
+        },
+        {
+          shifting: true,
+          labeled: true,
+          activeColor: LIGHT_SEA_GREEN,
+          inactiveColor: 'grey',
+          barStyle: {
+            backgroundColor: 'white'
+          }
+        }
+      )
     }
   },
   {
