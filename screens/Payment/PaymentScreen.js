@@ -114,7 +114,13 @@ class PaymentScreen extends Component {
       const sign = currentPayment.owner === user ? 1 : -1;
       const currentPaymentBalance = currentPayment.payees.reduce(
         (currPaymentBalance, payee) => {
-          return (payee.isPaid ? 0 : payee.amount) + currPaymentBalance;
+          let amount = 0;
+          if (payee.user.id === user) {
+            if (!payee.isPaid) {
+              amount = payee.amount;
+            }
+          }
+          return currPaymentBalance + amount;
         },
         0
       );
@@ -130,7 +136,7 @@ class PaymentScreen extends Component {
     const selectedPayment = payments.find(payment => payment.id === paymentId);
 
     // dispatch action to set current payment being viewed
-    viewPayment(selectedPayment);
+    viewPayment(selectedPayment.id);
 
     // navigate to ViewPaymentScreen
     navigation.navigate('readPayment');

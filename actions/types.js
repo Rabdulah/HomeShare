@@ -18,6 +18,7 @@ export const GET_ALL_USERS_IN_GROUP = 'get_all_users_in_group';
 export const VIEW_PAYMENT = 'view_payment';
 export const CREATE_PAYMENT = 'create_payment';
 export const RETRIEVE_PAYMENTS = 'retrieve_payments';
+export const GET_CURRENT_PAYMENT = 'get_current_payment';
 
 // utilities
 export const VIEW_UTILITY = 'view_utility';

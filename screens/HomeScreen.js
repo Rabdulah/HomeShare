@@ -80,13 +80,14 @@ class HomeScreen extends Component {
     const firstName = params ? params.firstName : null;
     const lastName = params ? params.lastName : null;
     const address = params ? params.address : null;
+    const shortFormAddress = address ? address.split(',')[0] : '';
     return {
       header: () => {
         return (
           <Header
             style={{ backgroundColor: 'white' }}
             title={`${firstName} ${lastName}`}
-            subtitle={`${address}`}
+            subtitle={`${shortFormAddress}`}
           />
         );
       }
