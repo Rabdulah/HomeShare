@@ -1,20 +1,20 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js install
+  C:\Program Files\nodejs\node.exe C:\Users\Ramzi\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add react-navigation-material-bottom-tabs react-native-paper
 
 PATH: 
-  C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft\Web Platform Installer\;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\HashiCorp\Vagrant\bin;C:\Program Files\MySQL\MySQL Utilities 1.6\;C:\Program Files (x86)\Calibre2\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\nodejs\;C:\Users\Ramzi\AppData\Local\Programs\Python\Python36-32\Scripts\;C:\Users\Ramzi\AppData\Local\Programs\Python\Python36-32\;C:\Users\Ramzi\AppData\Local\Programs\Python\Python35\Scripts\;C:\Users\Ramzi\AppData\Local\Programs\Python\Python35\;C:\Users\Ramzi\AppData\Local\Microsoft\WindowsApps;C:\Users\Ramzi\AppData\Local\atom\bin;C:\Users\Ramzi\AppData\Local\GitHubDesktop\bin;C:\Users\Ramzi\AppData\Local\Microsoft\WindowsApps;C:\Program Files\MySQL\MySQL Server 5.7\bin;C:\Program Files\Microsoft VS Code\bin;C:\Users\Ramzi\AppData\Local\Android\Sdk\platform-tools;C:\Users\Ramzi\AppData\Local\Yarn\bin;c:\Users\Me\RamziData\Roaming\npm\;C:\Program Files\heroku\bin;C:\Users\Ramzi\AppData\Local\Programs\MiKTeX 2.9\miktex\bin\x64\;C:\Users\Ramzi\AppData\Roaming\npm
+  C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\ProgramData\Oracle\Java\javapath;C:\Windows\System32;C:\Windows;C:\Windows\System32\wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\WINDOWS\system32\config\systemprofile\.dnx\bin;C:\Program Files\Microsoft DNX\Dnvm\;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;D:\Program Files (x86)\Yarn\bin\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Users\Ramzi\AppData\Local\Programs\Python\Python37-32\Scripts\;C:\Users\Ramzi\AppData\Local\Programs\Python\Python37-32\;D:\altera\14.0\modelsim_ase\win32aloem;C:\Users\Ramzi\AppData\Local\Microsoft\WindowsApps;C:\Users\Ramzi\AppData\Local\atom\bin;C:\Users\Ramzi\AppData\Local\Microsoft\WindowsApps;C:\Users\Ramzi\AppData\Local\Yarn\bin;C:\ProgramData\Microsoft\Windows\Start Menu\Programs;C:\Users\Ramzi\AppData\Roaming\npm;C:\Users\Ramzi\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\JetBrains\PyCharm 2019.1.1\bin;;C:\Users\Ramzi\AppData\Local\Programs\MiKTeX 2.9\miktex\bin\x64\
 
 Yarn version: 
   1.7.0
 
 Node version: 
-  12.10.0
+  10.15.0
 
 Platform: 
   win32 x64
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'C:\Users\Ramzi\Documents\capstone\homeshare\node_modules\@babel\generator\node_modules\.bin'
+  Error: EPERM: operation not permitted, unlink 'D:\capstone\homeshare\node_modules\@babel\generator\node_modules\.bin'
 
 npm manifest: 
   {
@@ -27,9 +27,12 @@ npm manifest:
       "eject": "expo eject"
     },
     "dependencies": {
+      "@eva-design/eva": "^1.3.2",
       "@expo/vector-icons": "^10.0.6",
       "@firebase/firestore": "^1.7.0",
       "@types/react-native-app-intro-slider": "^3.0.0",
+      "@ui-kitten/components": "^4.3.2",
+      "@ui-kitten/eva-icons": "^4.3.2",
       "expo": "~36.0.0",
       "expo-font": "^8.0.0",
       "expo-linear-gradient": "^8.0.0",
@@ -46,6 +49,8 @@ npm manifest:
       "react-native-keyboard-spacer": "^0.4.1",
       "react-native-reanimated": "~1.4.0",
       "react-native-super-grid": "^3.1.2",
+      "react-native-svg": "^11.0.1",
+      "react-native-swiper": "^1.5.14",
       "react-native-web": "~0.11.7",
       "react-navigation": "^4.0.10",
       "react-navigation-stack": "^1.10.3",
@@ -64,7 +69,7 @@ npm manifest:
       "eslint-plugin-import": "^2.20.0",
       "eslint-plugin-jsx-a11y": "^6.2.3",
       "eslint-plugin-prettier": "^3.1.2",
-      "eslint-plugin-react": "^7.17.0",
+      "eslint-plugin-react": "^7.18.0",
       "prettier": "^1.19.1"
     },
     "private": true
@@ -848,6 +853,18 @@ Lockfile:
       exec-sh "^0.3.2"
       minimist "^1.2.0"
   
+  "@eva-design/dss@^1.3.1":
+    version "1.3.2"
+    resolved "https://registry.yarnpkg.com/@eva-design/dss/-/dss-1.3.2.tgz#e7a7307d5cbffcb18a394774ecf921b85241e7a7"
+  
+  "@eva-design/eva@^1.3.2":
+    version "1.3.2"
+    resolved "https://registry.yarnpkg.com/@eva-design/eva/-/eva-1.3.2.tgz#050b7509cacce79755733ddd859aaa3d2a9bfd44"
+  
+  "@eva-design/processor@^1.3.1":
+    version "1.3.2"
+    resolved "https://registry.yarnpkg.com/@eva-design/processor/-/processor-1.3.2.tgz#a373d355b12bbabc2f4f3eaf3c5f41850f2f8c8e"
+  
   "@expo/react-native-action-sheet@3.4.1":
     version "3.4.1"
     resolved "https://registry.yarnpkg.com/@expo/react-native-action-sheet/-/react-native-action-sheet-3.4.1.tgz#af1397d3b1c446f77b3ece531ce87aab5a8777d2"
@@ -1400,6 +1417,22 @@ Lockfile:
     dependencies:
       "@types/yargs-parser" "*"
   
+  "@ui-kitten/components@^4.3.2":
+    version "4.3.2"
+    resolved "https://registry.yarnpkg.com/@ui-kitten/components/-/components-4.3.2.tgz#58da1df3af9c20c280f061fcc0bb6a4e0d013e9c"
+    dependencies:
+      "@eva-design/dss" "^1.3.1"
+      "@eva-design/processor" "^1.3.1"
+      fecha "3.0.3"
+      hoist-non-react-statics "^3.2.1"
+      lodash.merge "^4.6.1"
+  
+  "@ui-kitten/eva-icons@^4.3.2":
+    version "4.3.2"
+    resolved "https://registry.yarnpkg.com/@ui-kitten/eva-icons/-/eva-icons-4.3.2.tgz#2c6810c9649903b529acf96a3c9c377f7373cf15"
+    dependencies:
+      react-native-eva-icons "1.1.0"
+  
   "@unimodules/core@~5.0.0":
     version "5.0.0"
     resolved "https://registry.yarnpkg.com/@unimodules/core/-/core-5.0.0.tgz#e1e3ca3f91f3d27dbc93c6eebc03a40c711da755"
@@ -1586,7 +1619,7 @@ Lockfile:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/array-find-index/-/array-find-index-1.0.2.tgz#df010aa1287e164bbda6f9723b0a96a1ec4187a1"
   
-  array-includes@^3.0.3:
+  array-includes@^3.0.3, array-includes@^3.1.1:
     version "3.1.1"
     resolved "https://registry.yarnpkg.com/array-includes/-/array-includes-3.1.1.tgz#cdd67e6852bdf9c1215460786732255ed2459348"
     dependencies:
@@ -1781,6 +1814,10 @@ Lockfile:
   blueimp-md5@^2.10.0:
     version "2.12.0"
     resolved "https://registry.yarnpkg.com/blueimp-md5/-/blueimp-md5-2.12.0.tgz#be7367938a889dec3ffbb71138617c117e9c130a"
+  
+  boolbase@^1.0.0, boolbase@~1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   
   bplist-creator@0.0.8:
     version "0.0.8"
@@ -2198,6 +2235,26 @@ Lockfile:
       hyphenate-style-name "^1.0.2"
       isobject "^3.0.1"
   
+  css-select@^2.1.0:
+    version "2.1.0"
+    resolved "https://registry.yarnpkg.com/css-select/-/css-select-2.1.0.tgz#6a34653356635934a81baca68d0255432105dbef"
+    dependencies:
+      boolbase "^1.0.0"
+      css-what "^3.2.1"
+      domutils "^1.7.0"
+      nth-check "^1.0.2"
+  
+  css-tree@^1.0.0-alpha.39:
+    version "1.0.0-alpha.39"
+    resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.0.0-alpha.39.tgz#2bff3ffe1bb3f776cf7eefd91ee5cba77a149eeb"
+    dependencies:
+      mdn-data "2.0.6"
+      source-map "^0.6.1"
+  
+  css-what@^3.2.1:
+    version "3.2.1"
+    resolved "https://registry.yarnpkg.com/css-what/-/css-what-3.2.1.tgz#f4a8f12421064621b456755e34a03a2c22df5da1"
+  
   csstype@^2.2.0:
     version "2.6.8"
     resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.8.tgz#0fb6fc2417ffd2816a418c9336da74d7f07db431"
@@ -2328,9 +2385,31 @@ Lockfile:
     dependencies:
       esutils "^2.0.2"
   
+  dom-serializer@0:
+    version "0.2.2"
+    resolved "https://registry.yarnpkg.com/dom-serializer/-/dom-serializer-0.2.2.tgz#1afb81f533717175d478655debc5e332d9f9bb51"
+    dependencies:
+      domelementtype "^2.0.1"
+      entities "^2.0.0"
+  
   dom-storage@2.1.0:
     version "2.1.0"
     resolved "https://registry.yarnpkg.com/dom-storage/-/dom-storage-2.1.0.tgz#00fb868bc9201357ea243c7bcfd3304c1e34ea39"
+  
+  domelementtype@1:
+    version "1.3.1"
+    resolved "https://registry.yarnpkg.com/domelementtype/-/domelementtype-1.3.1.tgz#d048c44b37b0d10a7f2a3d5fee3f4333d790481f"
+  
+  domelementtype@^2.0.1:
+    version "2.0.1"
+    resolved "https://registry.yarnpkg.com/domelementtype/-/domelementtype-2.0.1.tgz#1f8bdfe91f5a78063274e803b4bdcedf6e94f94d"
+  
+  domutils@^1.7.0:
+    version "1.7.0"
+    resolved "https://registry.yarnpkg.com/domutils/-/domutils-1.7.0.tgz#56ea341e834e06e6748af7a1cb25da67ea9f8c2a"
+    dependencies:
+      dom-serializer "0"
+      domelementtype "1"
   
   ee-first@1.1.1:
     version "1.1.1"
@@ -2363,6 +2442,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/end-of-stream/-/end-of-stream-1.4.4.tgz#5ae64a5f45057baf3626ec14da0ca5e4b2431eb0"
     dependencies:
       once "^1.4.0"
+  
+  entities@^2.0.0:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.0.tgz#68d6084cab1b079767540d80e56a39b423e4abf4"
   
   envinfo@^7.1.0:
     version "7.5.0"
@@ -2449,10 +2532,6 @@ Lockfile:
       debug "^2.6.9"
       pkg-dir "^2.0.0"
   
-  eslint-plugin-eslint-plugin@^2.1.0:
-    version "2.2.0"
-    resolved "https://registry.yarnpkg.com/eslint-plugin-eslint-plugin/-/eslint-plugin-eslint-plugin-2.2.0.tgz#6cac90a8085f658e892b155dda130deac54cfa51"
-  
   eslint-plugin-import@^2.20.0:
     version "2.20.0"
     resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.20.0.tgz#d749a7263fb6c29980def8e960d380a6aa6aecaa"
@@ -2490,20 +2569,19 @@ Lockfile:
     dependencies:
       prettier-linter-helpers "^1.0.0"
   
-  eslint-plugin-react@^7.17.0:
-    version "7.17.0"
-    resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.17.0.tgz#a31b3e134b76046abe3cd278e7482bd35a1d12d7"
+  eslint-plugin-react@^7.18.0:
+    version "7.18.0"
+    resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.18.0.tgz#2317831284d005b30aff8afb7c4e906f13fa8e7e"
     dependencies:
-      array-includes "^3.0.3"
+      array-includes "^3.1.1"
       doctrine "^2.1.0"
-      eslint-plugin-eslint-plugin "^2.1.0"
       has "^1.0.3"
       jsx-ast-utils "^2.2.3"
-      object.entries "^1.1.0"
-      object.fromentries "^2.0.1"
-      object.values "^1.1.0"
+      object.entries "^1.1.1"
+      object.fromentries "^2.0.2"
+      object.values "^1.1.1"
       prop-types "^15.7.2"
-      resolve "^1.13.1"
+      resolve "^1.14.2"
   
   eslint-scope@^5.0.0:
     version "5.0.0"
@@ -2896,6 +2974,10 @@ Lockfile:
       setimmediate "^1.0.5"
       ua-parser-js "^0.7.18"
   
+  fecha@3.0.3:
+    version "3.0.3"
+    resolved "https://registry.yarnpkg.com/fecha/-/fecha-3.0.3.tgz#fabbd416497649a42c24d34bfa726b579203a1e2"
+  
   figures@^2.0.0:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/figures/-/figures-2.0.0.tgz#3ab1a2d2a62c8bfb431a0c94cb797a2fce27c962"
@@ -3201,7 +3283,7 @@ Lockfile:
     version "2.5.5"
     resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
   
-  hoist-non-react-statics@^3.0.1, hoist-non-react-statics@^3.1.0, hoist-non-react-statics@^3.3.0:
+  hoist-non-react-statics@^3.0.1, hoist-non-react-statics@^3.1.0, hoist-non-react-statics@^3.2.1, hoist-non-react-statics@^3.3.0:
     version "3.3.1"
     resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#101685d3aff3b23ea213163f6e8e12f4f111e19f"
     dependencies:
@@ -3780,6 +3862,10 @@ Lockfile:
     version "4.5.0"
     resolved "https://registry.yarnpkg.com/lodash.clone/-/lodash.clone-4.5.0.tgz#195870450f5a13192478df4bc3d23d2dea1907b6"
   
+  lodash.merge@^4.6.1:
+    version "4.6.2"
+    resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  
   lodash.throttle@^4.1.1:
     version "4.1.1"
     resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
@@ -3857,6 +3943,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/md5-file/-/md5-file-3.2.3.tgz#f9bceb941eca2214a4c0727f5e700314e770f06f"
     dependencies:
       buffer-alloc "^1.1.0"
+  
+  mdn-data@2.0.6:
+    version "2.0.6"
+    resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.6.tgz#852dc60fcaa5daa2e8cf6c9189c440ed3e042978"
   
   mem@^1.1.0:
     version "1.1.0"
@@ -4367,6 +4457,12 @@ Lockfile:
       gauge "~2.7.3"
       set-blocking "~2.0.0"
   
+  nth-check@^1.0.2:
+    version "1.0.2"
+    resolved "https://registry.yarnpkg.com/nth-check/-/nth-check-1.0.2.tgz#b2bd295c37e3dd58a3bf0700376663ba4d9cf05c"
+    dependencies:
+      boolbase "~1.0.0"
+  
   nullthrows@^1.1.0:
     version "1.1.1"
     resolved "https://registry.yarnpkg.com/nullthrows/-/nullthrows-1.1.1.tgz#7818258843856ae971eae4208ad7d7eb19a431b1"
@@ -4414,7 +4510,7 @@ Lockfile:
       has-symbols "^1.0.0"
       object-keys "^1.0.11"
   
-  object.entries@^1.1.0:
+  object.entries@^1.1.0, object.entries@^1.1.1:
     version "1.1.1"
     resolved "https://registry.yarnpkg.com/object.entries/-/object.entries-1.1.1.tgz#ee1cf04153de02bb093fec33683900f57ce5399b"
     dependencies:
@@ -4423,7 +4519,7 @@ Lockfile:
       function-bind "^1.1.1"
       has "^1.0.3"
   
-  object.fromentries@^2.0.1:
+  object.fromentries@^2.0.2:
     version "2.0.2"
     resolved "https://registry.yarnpkg.com/object.fromentries/-/object.fromentries-2.0.2.tgz#4a09c9b9bb3843dd0f89acdb517a794d4f355ac9"
     dependencies:
@@ -4438,7 +4534,7 @@ Lockfile:
     dependencies:
       isobject "^3.0.1"
   
-  object.values@^1.1.0:
+  object.values@^1.1.0, object.values@^1.1.1:
     version "1.1.1"
     resolved "https://registry.yarnpkg.com/object.values/-/object.values-1.1.1.tgz#68a99ecde356b7e9295a3c5e0ce31dc8c953de5e"
     dependencies:
@@ -4909,6 +5005,10 @@ Lockfile:
       react-native-ratings "^6.3.0"
       react-native-status-bar-height "^2.2.0"
   
+  react-native-eva-icons@1.1.0:
+    version "1.1.0"
+    resolved "https://registry.yarnpkg.com/react-native-eva-icons/-/react-native-eva-icons-1.1.0.tgz#323e55d759187edc216d049e7c0012a27383e0ed"
+  
   react-native-gesture-handler@~1.5.0:
     version "1.5.2"
     resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.5.2.tgz#281111550bf1eee10b7feba5278d142169892731"
@@ -4990,6 +5090,19 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-native-super-grid/-/react-native-super-grid-3.1.2.tgz#55deb3cd52173c487b76c868e7f794044fc0c6cd"
     dependencies:
       prop-types "^15.6.0"
+  
+  react-native-svg@^11.0.1:
+    version "11.0.1"
+    resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-11.0.1.tgz#e92e7e9f9cb2604333fd5014fd4edcf62fea6496"
+    dependencies:
+      css-select "^2.1.0"
+      css-tree "^1.0.0-alpha.39"
+  
+  react-native-swiper@^1.5.14:
+    version "1.5.14"
+    resolved "https://registry.yarnpkg.com/react-native-swiper/-/react-native-swiper-1.5.14.tgz#1c6f949ca377186300f972bb0f30d24062c899aa"
+    dependencies:
+      prop-types "^15.5.10"
   
   react-native-tab-view@^2.11.0:
     version "2.11.0"
@@ -5245,7 +5358,7 @@ Lockfile:
     dependencies:
       path-parse "^1.0.6"
   
-  resolve@^1.12.0, resolve@^1.13.1:
+  resolve@^1.12.0, resolve@^1.13.1, resolve@^1.14.2:
     version "1.14.2"
     resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.14.2.tgz#dbf31d0fa98b1f29aa5169783b9c290cb865fea2"
     dependencies:
@@ -5541,7 +5654,7 @@ Lockfile:
     version "0.5.7"
     resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   
-  source-map@^0.6.0, source-map@~0.6.1:
+  source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.1:
     version "0.6.1"
     resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   
