@@ -111,21 +111,24 @@ class PaymentScreen extends Component {
     const { user } = this.props;
     const balance = payments.reduce((totalBalance, currentPayment) => {
       // check if the currentPayment belongs to the logged in user
-      const sign = currentPayment.owner === user ? 1 : -1;
       const currentPaymentBalance = currentPayment.payees.reduce(
         (currPaymentBalance, payee) => {
           let amount = 0;
-          if (payee.user.id === user) {
-            if (!payee.isPaid) {
+          // first check if current payment belongs to owner
+          if (currentPayment.owner === user) {
+            if (payee.user.id !== user && !payee.isPaid) {
               amount = payee.amount;
             }
+          } else if (payee.user.id === user && !payee.isPaid) {
+            // you aren't the owner of the payment
+            amount = -1 * payee.amount;
           }
           return currPaymentBalance + amount;
         },
         0
       );
 
-      return totalBalance + currentPaymentBalance * sign;
+      return totalBalance + currentPaymentBalance;
     }, 0);
     this.setState({ balance });
   };

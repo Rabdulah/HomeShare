@@ -101,7 +101,7 @@ class CreatePaymentScreen extends Component {
 
   renderCostPerPerson = totalCost => {
     const { allUsersInGroup } = this.props;
-    const costPerPerson = totalCost / allUsersInGroup.length; // hard coded, should be fixed later
+    const costPerPerson = totalCost / allUsersInGroup.length;
     return `($${this.numToTwoDecimalPlaces(costPerPerson)}/person)`;
   };
 

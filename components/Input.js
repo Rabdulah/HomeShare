@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import { Input as KittenInput } from '@ui-kitten/components';
-import { Input as RNInput } from 'react-native-elements';
 
 const Input = React.forwardRef((props, ref) => {
   const {
@@ -15,7 +14,7 @@ const Input = React.forwardRef((props, ref) => {
     keyboardType
   } = props;
   return (
-    <View style={styles.backgroundStyle}>
+    <View style={[styles.backgroundStyle, containerStyle]}>
       <KittenInput
         style={styles.inputStyle}
         size="small"
@@ -33,6 +32,7 @@ const Input = React.forwardRef((props, ref) => {
           fontSize: 16
         }}
         ref={ref}
+        label={label}
       />
     </View>
   );
@@ -42,9 +42,6 @@ const styles = StyleSheet.create({
   backgroundStyle: {
     flexDirection: 'row',
     height: 60
-    // padding: 10
-    // backgroundColor: '#F0EEEE',
-    // borderRadius: 5,
   },
   inputStyle: {
     flex: 1,
