@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Layout } from '@ui-kitten/components';
-import { ScrollView } from 'react-native';
+import { Button, Layout, Text } from '@ui-kitten/components';
+import { ScrollView, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import firebase from 'firebase';
 import { NavigationEvents } from 'react-navigation';
 import HeaderCard from '../../components/HeaderCard';
@@ -70,6 +71,29 @@ import { DARK_BLUE } from '../../styles/colours';
 // export default PaymentScreen;
 
 class PaymentScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      backgroundColor: 'white'
+    },
+    headerLeft: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Ionicons
+            name="ios-arrow-back"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
+          />
+        </TouchableOpacity>
+      );
+    },
+    headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Payments</Text>
+  });
+
   constructor(props) {
     super(props);
 

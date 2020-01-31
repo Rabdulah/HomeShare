@@ -11,22 +11,30 @@ import Spinner from '../../components/Spinner';
 import { DARK_BLUE } from '../../styles/colours';
 
 class CreatePaymentScreen extends Component {
-  // specify custom header in navigationOptions
-  static navigationOptions = ({ navigation }) => {
-    const { params } = navigation.state;
-    const address = params ? params.address : null;
-    return {
-      header: () => {
-        return (
-          <Header
-            style={{ backgroundColor: 'white' }}
-            title={`${address}`}
-            subtitle="Enter a Payment"
+  static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      backgroundColor: 'white'
+    },
+    headerLeft: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Ionicons
+            name="ios-arrow-back"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
           />
-        );
-      }
-    };
-  };
+        </TouchableOpacity>
+      );
+    },
+    headerTitle: () => (
+      <Text style={{ fontWeight: 'bold' }}>Enter a Payment</Text>
+    )
+  });
 
   constructor(props) {
     super(props);

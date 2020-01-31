@@ -11,6 +11,29 @@ import Spinner from '../../components/Spinner';
 import { DARK_BLUE } from '../../styles/colours';
 
 class PaybackScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      backgroundColor: 'white'
+    },
+    headerLeft: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Ionicons
+            name="ios-arrow-back"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
+          />
+        </TouchableOpacity>
+      );
+    },
+    headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Pay Back</Text>
+  });
+
   constructor(props) {
     super(props);
 
@@ -64,7 +87,7 @@ class PaybackScreen extends Component {
         */
         return {
           ...payee,
-          isPaid: payment === currentPaymentPayee.amount
+          isPaid: parseFloat(payment) === currentPaymentPayee.amount
         };
       }
       return payee;
