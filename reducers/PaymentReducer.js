@@ -24,7 +24,7 @@ export default (state = INITIAL_STATE, action) => {
       clonedPayments.push(payment);
       return { ...state, payments: clonedPayments };
     case RETRIEVE_PAYMENTS:
-      return { ...state, payments: action.payload };
+      return { ...state, currentPayment: null, payments: action.payload };
     case GET_CURRENT_PAYMENT:
       return { ...state, currentPayment: action.payload };
     default:

@@ -11,8 +11,10 @@ import { DARK_BLUE } from '../../styles/colours';
 
 class ReadPaymentScreen extends Component {
   // specify custom header in navigationOptions
-
   static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      backgroundColor: 'white'
+    },
     headerLeft: () => {
       return (
         <TouchableOpacity

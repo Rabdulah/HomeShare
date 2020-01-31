@@ -158,7 +158,9 @@ class LoginScreen extends Component {
           </TouchableOpacity>
           {this.renderError()}
           <View
-            style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
+            style={[
+              this.props.loading ? { marginVertical: 15 } : { marginTop: 0 }
+            ]}
           >
             {this.renderButton()}
           </View>
