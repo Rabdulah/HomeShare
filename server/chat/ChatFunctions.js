@@ -68,8 +68,9 @@ class ChatFunctions {
   and render only the latest message added. Otherwise we end up in the situation
   where GiftedChat renders the same messages multiple times */
   on = callback => {
-    unsubscribe = this.getChatMessages().then(promise => {
-      promise.onSnapshot(snapshots => {
+    unsubscribe = this.getChatMessages()
+    .then(promise => {
+      promise.orderBy('timestamp', 'asc').onSnapshot(snapshots => {
         snapshots.docChanges().forEach(document => {
           if (document.type == 'added') {
             callback(this.parse(document.doc));

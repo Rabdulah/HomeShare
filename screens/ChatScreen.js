@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { StyleSheet, YellowBox, View, Platform } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -30,7 +31,7 @@ class ChatScreen extends React.Component {
 
   get user() {
     return {
-      name: 'ramzi',
+      name: this.props.firstName,
       _id: ChatFunctions.shared.uid
     };
   }
@@ -62,4 +63,9 @@ class ChatScreen extends React.Component {
 
 const styles = StyleSheet.create({});
 
-export default ChatScreen;
+const mapStateToProps = state => {
+  return {
+    firstName: state.auth.firstName
+  };
+};
+export default connect(mapStateToProps, {})(ChatScreen);
