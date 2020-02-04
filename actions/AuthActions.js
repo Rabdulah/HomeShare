@@ -140,7 +140,18 @@ export const loginUser = ({ email, password }) => {
       };
       dispatch({ type: LOGIN_USER_SUCCESS, payload: userPayload });
     } catch (error) {
-      console.log(error);
+      console.log(error.code);
+      switch (error.code) {
+        case 'auth/user-not-found':
+          error.message =
+            'There is no user with this email and password combination.';
+          break;
+        case 'auth/wrong-password':
+          error.message =
+            'There is no user with this email and password combination.';
+          break;
+        default:
+      }
       dispatch({ type: LOGIN_USER_FAIL, payload: error });
     }
   };
@@ -181,7 +192,7 @@ export const resetPassword = ({ email }) => {
       // Firebase error can be broken into the error.code and error.message.
       // Default error.message is usually fine, but some of them may need to be modified a bit.
       // This case statement allows for a custom error message for a specific error code.
-      // The original error for user-not-found was a little in accurate in our case.
+      // The original error for user-not-found was a little inaccurate in our case.
       switch (error.code) {
         case 'auth/user-not-found':
           error.message = 'There is no user with this email.';
