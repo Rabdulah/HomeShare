@@ -13,7 +13,10 @@ import {
   SIGNUP_USER_SUCCESS,
   GET_USER_GROUP,
   CLEAR_ERRORS,
-  GET_ALL_USERS_IN_GROUP
+  GET_ALL_USERS_IN_GROUP,
+  RESET_PASSWORD,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAIL
 } from './types';
 
 export const getUserGroup = userId => {
@@ -124,8 +127,8 @@ export const loginUser = ({ email, password }) => {
         .get();
 
       const user = userSnapshot.data();
-      const groupSnapshot = await user.group.get();
-      const group = groupSnapshot.data();
+      const groupSnapshot = await user.group.get(); // TODO: We need to fix this. causes bugs for firsttime sign up
+      const group = groupSnapshot.data(); // TODO: We need to fix this. causes bugs for firsttime sign up
 
       const userPayload = {
         email: user.email,
@@ -133,12 +136,12 @@ export const loginUser = ({ email, password }) => {
         lastName: user.name.lastName,
         username: user.username,
         user: response.user.uid,
-        groupInfo: group
+        groupInfo: group // TODO: We need to fix this. causes bugs for firsttime sign up
       };
       dispatch({ type: LOGIN_USER_SUCCESS, payload: userPayload });
     } catch (error) {
       console.log(error);
-      dispatch({ type: LOGIN_USER_FAIL });
+      dispatch({ type: LOGIN_USER_FAIL, payload: error });
     }
   };
 };
@@ -163,6 +166,29 @@ export const signupUser = ({
     } catch (error) {
       console.log(error);
       dispatch({ type: SIGNUP_USER_FAIL, payload: error });
+    }
+  };
+};
+
+export const resetPassword = ({ email }) => {
+  return async dispatch => {
+    dispatch({ type: RESET_PASSWORD });
+
+    try {
+      await firebase.auth().sendPasswordResetEmail(email);
+      dispatch({ type: RESET_PASSWORD_SUCCESS });
+    } catch (error) {
+      // Firebase error can be broken into the error.code and error.message.
+      // Default error.message is usually fine, but some of them may need to be modified a bit.
+      // This case statement allows for a custom error message for a specific error code.
+      // The original error for user-not-found was a little in accurate in our case.
+      switch (error.code) {
+        case 'auth/user-not-found':
+          error.message = 'There is no user with this email.';
+          break;
+        default:
+      }
+      dispatch({ type: RESET_PASSWORD_FAIL, payload: error });
     }
   };
 };

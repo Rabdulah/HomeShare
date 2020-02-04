@@ -5,13 +5,7 @@ import { Layout, Text } from '@ui-kitten/components';
 import { Button } from 'react-native-elements';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import {
-  emailChanged,
-  passwordChanged,
-  loginUser,
-  getUserGroup,
-  clearErrors
-} from '../actions';
+import { emailChanged, clearErrors, resetPassword } from '../actions';
 
 import Input from '../components/Input';
 import Spinner from '../components/Spinner';
@@ -36,7 +30,7 @@ const styles = StyleSheet.create({
   }
 });
 
-class LoginScreen extends Component {
+class ForgotPasswordScreen extends Component {
   /*
     componentDidMount => Lifecycle hook for whenever the user navigates to this screen.
     We are making sure to clear the global error states whenever they get to this screen,
@@ -50,37 +44,59 @@ class LoginScreen extends Component {
     case where user successfully logs in.
   */
   componentDidUpdate(prevProps) {
-    this.onAuthComplete(this.props);
+    //this.onAuthComplete(this.props);
   }
 
   onAuthComplete = props => {
-    if (props.user) {
-      // Set user's group if available
-      this.props.getUserGroup(this.props.user);
-
-      // programmatically navigate user
-      this.props.navigation.navigate('home');
-    }
+    // if (props.user) {
+    //   // Set user's group if available
+    //   this.props.getUserGroup(this.props.user);
+    //   // programmatically navigate user
+    //   this.props.navigation.navigate('home');
+    // }
   };
 
   onEmailChange = text => {
     this.props.emailChanged(text);
   };
 
-  onPasswordChange = text => {
-    this.props.passwordChanged(text);
-  };
-
   onButtonPress = () => {
-    const { email, password } = this.props;
-    this.props.loginUser({ email, password });
+    const { email } = this.props;
+    this.props.clearErrors();
+    this.props.resetPassword({ email });
   };
 
   renderError = () => {
     if (this.props.error) {
       return (
-        <View style={{ backgroundColor: 'white' }}>
+        <View style={{ backgroundColor: 'white', marginBottom: 30 }}>
           <Text style={styles.errorTextStyle}>{this.props.error}</Text>
+        </View>
+      );
+    }
+  };
+
+  renderSuccess = () => {
+    if (this.props.success) {
+      return (
+        <View
+          style={{
+            marginBottom: 30,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center'
+          }}
+        >
+          <Text style={{ fontSize: 16 }}>Password reset sent. </Text>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('login')}
+          >
+            <Text
+              style={{ color: DARK_BLUE, fontWeight: 'bold', fontSize: 16 }}
+            >
+              Return to login.
+            </Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -93,7 +109,7 @@ class LoginScreen extends Component {
 
     return (
       <Button
-        title="Log In"
+        title="Send Password Reset"
         buttonStyle={{
           borderRadius: 5,
           padding: 10,
@@ -119,16 +135,16 @@ class LoginScreen extends Component {
         >
           <Text
             style={{
-              fontSize: 32,
+              fontSize: 30,
               lineHeight: 32,
               fontWeight: 'bold',
               marginVertical: 5
             }}
           >
-            Welcome back!
+            What's My Password?
           </Text>
           <Text style={{ fontSize: 16, color: 'rgba(0, 0, 0, 0.85)' }}>
-            Sign in to continue
+            If you have forgotten your password you can reset it here.
           </Text>
         </Layout>
         <Layout style={{ flex: 3 }}>
@@ -137,53 +153,16 @@ class LoginScreen extends Component {
             onChangeText={this.onEmailChange}
             secure={false}
             value={this.props.email}
-            label="Email"
-            containerStyle={{ marginVertical: 15 }}
+            containerStyle={{ marginVertical: 0 }}
           />
-          <Input
-            secure
-            secureTextEntry
-            placeholder="Password"
-            onChangeText={this.onPasswordChange}
-            value={this.props.password}
-            label="Password"
-            containerStyle={{ marginVertical: 15 }}
-          />
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('forgotPassword')}
-          >
-            <Text
-              style={{ marginVertical: 15, textAlign: 'right', fontSize: 16 }}
-            >
-              Forgot Password?
-            </Text>
-          </TouchableOpacity>
           {this.renderError()}
+          {this.renderSuccess()}
           <View
             style={[
               this.props.loading ? { marginVertical: 15 } : { marginTop: 0 }
             ]}
           >
             {this.renderButton()}
-          </View>
-          <View
-            style={{
-              marginVertical: 15,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center'
-            }}
-          >
-            <Text style={{ fontSize: 16 }}>New user? </Text>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('signup')}
-            >
-              <Text
-                style={{ color: DARK_BLUE, fontWeight: 'bold', fontSize: 16 }}
-              >
-                Signup
-              </Text>
-            </TouchableOpacity>
           </View>
         </Layout>
       </Layout>
@@ -210,16 +189,14 @@ const mapStateToProps = state => {
 
   return {
     email: state.auth.email,
-    password: state.auth.password,
-    error: state.auth.errorLogin,
+    error: state.auth.errorReset,
+    success: state.auth.resetSuccess,
     loading: state.auth.loading,
     user: state.auth.user
   };
 };
 export default connect(mapStateToProps, {
   emailChanged,
-  passwordChanged,
-  loginUser,
-  getUserGroup,
-  clearErrors
-})(LoginScreen);
+  clearErrors,
+  resetPassword
+})(ForgotPasswordScreen);

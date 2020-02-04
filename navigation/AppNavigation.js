@@ -16,6 +16,7 @@ import WelcomeScreen from '../screens/WelcomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import ChatScreen from '../screens/ChatScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 
 // MAIN PAGE
 import HomeScreen from '../screens/HomeScreen';
@@ -50,7 +51,8 @@ const AppNavigator = createBottomTabNavigator(
       screen: createStackNavigator(
         {
           login: { screen: LoginScreen },
-          signup: { screen: SignupScreen }
+          signup: { screen: SignupScreen },
+          forgotPassword: { screen: ForgotPasswordScreen }
         },
         {
           defaultNavigationOptions: {

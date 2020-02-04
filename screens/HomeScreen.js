@@ -107,7 +107,7 @@ class HomeScreen extends Component {
     navigation.setParams({
       firstName,
       lastName,
-      address: groupInfo.address
+      address: groupInfo.address // TODO: We need to fix this. causes bugs for firsttime sign up
     });
   }
 
