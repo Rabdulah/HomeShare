@@ -16,7 +16,7 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  email: 'ramzi+4@uwo.ca',
+  email: 'ramzi@uwo.ca',
   password: 'password',
   user: null, // user id assigned from firebase
   errorLogin: '',

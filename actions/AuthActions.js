@@ -19,7 +19,6 @@ import {
 export const getUserGroup = userId => {
   return async dispatch => {
     try {
-      console.log('IN GET USER GROUP');
       const response = await firebase
         .firestore()
         .collection('users')
