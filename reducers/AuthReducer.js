@@ -70,10 +70,8 @@ export default (state = INITIAL_STATE, action) => {
     case RESET_PASSWORD:
       return { ...state, loading: true, resetSuccess: false};
     case RESET_PASSWORD_SUCCESS:
-      console.log(action.payload);
       return { ...state, loading: false, resetSuccess: true };
     case RESET_PASSWORD_FAIL:
-      console.log(action.payload.message);
       return { ...state, loading: false, errorReset: action.payload.message };
     default:
       return state;
