@@ -100,15 +100,20 @@ class HomeScreen extends Component {
       lastName,
       groupInfo,
       getUserGroup,
+      inGroup,
       user,
       navigation
     } = this.props;
-    getUserGroup(user);
     navigation.setParams({
       firstName,
-      lastName,
-      address: groupInfo.address
+      lastName
     });
+    if (inGroup) {
+      getUserGroup(user);
+      navigation.setParams({
+        address: groupInfo.address
+      });
+    }
   }
 
   render() {
@@ -151,8 +156,8 @@ class HomeScreen extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
-  const { firstName, lastName, user, groupInfo } = auth;
+  const { firstName, lastName, user, groupInfo, inGroup } = auth;
 
-  return { firstName, lastName, user, groupInfo };
+  return { firstName, lastName, user, groupInfo, inGroup };
 };
 export default connect(mapStateToProps, { getUserGroup })(HomeScreen);

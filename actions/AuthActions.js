@@ -59,6 +59,7 @@ const insertNewUser = async (firstName, lastName, username, email, uid) => {
     .set({
       email,
       username,
+      inGroup: false,
       name: {
         firstName,
         lastName
@@ -124,17 +125,20 @@ export const loginUser = ({ email, password }) => {
         .get();
 
       const user = userSnapshot.data();
-      const groupSnapshot = await user.group.get();
-      const group = groupSnapshot.data();
 
-      const userPayload = {
+      var userPayload = {
         email: user.email,
         firstName: user.name.firstName,
         lastName: user.name.lastName,
         username: user.username,
         user: response.user.uid,
-        groupInfo: group
+        inGroup: user.inGroup
       };
+      if (user.inGroup) {
+        const groupSnapshot = await user.group.get();
+        const group = groupSnapshot.data();
+        userPayload = { ...userPayload, groupInfo: group };
+      }
       dispatch({ type: LOGIN_USER_SUCCESS, payload: userPayload });
     } catch (error) {
       console.log(error);

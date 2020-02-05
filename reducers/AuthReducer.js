@@ -27,6 +27,7 @@ const INITIAL_STATE = {
   username: '',
   group: '', // actual group reference
   groupInfo: null, // group info such as address, etc.
+  inGroup: false,
   allUsersInGroup: []
 };
 
