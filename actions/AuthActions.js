@@ -19,6 +19,7 @@ import {
 export const getUserGroup = userId => {
   return async dispatch => {
     try {
+      console.log('IN GET USER GROUP');
       const response = await firebase
         .firestore()
         .collection('users')
@@ -163,7 +164,16 @@ export const signupUser = ({
         .createUserWithEmailAndPassword(email, password);
 
       insertNewUser(firstName, lastName, username, email, response.user.uid);
-      dispatch({ type: SIGNUP_USER_SUCCESS, payload: response.user.uid });
+
+      const userPayload = {
+        firstName,
+        lastName,
+        username,
+        email,
+        user: response.user.uid
+      };
+
+      dispatch({ type: SIGNUP_USER_SUCCESS, payload: userPayload });
     } catch (error) {
       console.log(error);
       dispatch({ type: SIGNUP_USER_FAIL, payload: error });

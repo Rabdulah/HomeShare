@@ -56,8 +56,9 @@ class LoginScreen extends Component {
   onAuthComplete = props => {
     if (props.user) {
       // Set user's group if available
-      this.props.getUserGroup(this.props.user);
-
+      if (this.props.inGroup) {
+        this.props.getUserGroup(this.props.user);
+      }
       // programmatically navigate user
       this.props.navigation.navigate('home');
     }
