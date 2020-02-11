@@ -29,13 +29,15 @@ class ProfileScreen extends Component {
   };
 
   renderButton = () => {
-    // if (this.props.loading) {
-    //   return <Spinner size="small" colour={DARK_BLUE} />;
-    // }
-
+    let title;
+    if (this.props.inGroup) {
+      title = 'Leave Group';
+    } else {
+      title = "Create Group"
+    }
     return (
       <Button
-        title="Create group"
+        title= {title}
         buttonStyle={{
           borderRadius: 5,
           padding: 10,
@@ -48,6 +50,12 @@ class ProfileScreen extends Component {
         onPress={this.onButtonPress}
       />
     );
+  };
+
+  onButtonPress = () => {
+    if(this.props.inGroup){
+      console.log('yay');
+    }
   };
 
   render() {
