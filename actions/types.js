@@ -20,5 +20,8 @@ export const CREATE_PAYMENT = 'create_payment';
 export const RETRIEVE_PAYMENTS = 'retrieve_payments';
 export const GET_CURRENT_PAYMENT = 'get_current_payment';
 
+// chores
+export const RETRIEVE_CHORES = 'retrieve_chores';
+
 // utilities
 export const VIEW_UTILITY = 'view_utility';
