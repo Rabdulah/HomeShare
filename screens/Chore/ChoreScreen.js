@@ -59,7 +59,7 @@ class ChoreScreen extends Component {
       .firestore()
       .collection('chores')
       .where('group', '==', group)
-      .get()
+      .get() // get all chores belonging to a group first
       .then(async snapshot => {
         const choresList = await Promise.all(
           snapshot.docs.map(async doc => {
@@ -67,28 +67,40 @@ class ChoreScreen extends Component {
             let { responsibility } = doc.data();
             const userList = [];
 
-            // get all users responsible for a chore
+            /* 
+              get all users responsible for a chore.
+              use Promise.all to make sure we wait
+              for all the promises to return.
+            */
             responsibility = await Promise.all(
               /* 
                 resp = one of the user(s) responsible
                 for a chore.
               */
               responsibility.map(async resp => {
-                console.log('hello', resp.userRef.id);
                 const u = await firebase
                   .firestore()
                   .collection('users')
                   .doc(resp.userRef.id)
                   .get();
 
+                // pull off the data we want from user
                 const userData = u.data();
                 userList.push({
-                  address: userData.address,
-                  email: userData.email,
-                  name: userData.name,
-                  username: userData.username,
-                  id: u.id
+                  user: {
+                    address: userData.address,
+                    email: userData.email,
+                    name: userData.name,
+                    username: userData.username,
+                    id: u.id
+                  },
+                  count: resp.count
                 });
+
+                /*
+                  return the userData to the mapping of
+                  the responsibility arr.
+                */
                 return {
                   address: userData.address,
                   email: userData.email,
@@ -106,11 +118,28 @@ class ChoreScreen extends Component {
             };
           })
         );
+
+        // dispatch action to play nice looking chores in store
         this.props.retrieveChores(choresList);
       });
   };
 
+  // helper function to calc who is next up for the chore
+  whoIsNext = chore => {
+    let lowestCount = Number.MAX_SAFE_INTEGER;
+    let userWithLowestChoreCount = null;
+    chore.responsibility.forEach(user => {
+      if (user.count < lowestCount) {
+        userWithLowestChoreCount = user;
+        lowestCount = user.count;
+      }
+    });
+
+    return userWithLowestChoreCount;
+  };
+
   renderChoreList = ({ item }) => {
+    const userWithLowestChoreCount = this.whoIsNext(item);
     return (
       <ListItem
         title={`${item.name}`}
@@ -125,7 +154,7 @@ class ChoreScreen extends Component {
           lineHeight: 20,
           fontWeight: 'normal'
         }}
-        description="Matt's turn"
+        description={`${userWithLowestChoreCount.user.name.firstName}'s turn`}
         icon={() => {
           return (
             <>
