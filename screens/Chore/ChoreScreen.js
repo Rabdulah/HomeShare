@@ -139,7 +139,9 @@ class ChoreScreen extends Component {
   };
 
   onChorePress = chore => {
-    this.props.viewChore(chore);
+    const { viewChore, navigation } = this.props;
+    viewChore(chore);
+    navigation.navigate('readChore');
   };
 
   renderChoreList = ({ item }) => {
