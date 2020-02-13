@@ -55,6 +55,19 @@ class ChoreScreen extends Component {
   retrieveChoresHelper = async () => {
     const { group } = this.props;
 
+    // firebase
+    //   .firestore()
+    //   .collection('chores')
+    //   .add({
+    //     group: '',
+    //     name: 'Dishes',
+    //     recurring: true,
+    //     responsibility: [
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' }
+    //     ]
+    //   });
     const choresSnapshot = await firebase
       .firestore()
       .collection('chores')

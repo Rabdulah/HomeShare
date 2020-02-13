@@ -1,19 +1,54 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Layout, Text } from '@ui-kitten/components';
+import { Ionicons } from '@expo/vector-icons';
 import { retrieveChores, viewChore } from '../../actions';
 import CustomBarChart from '../../components/CustomBarChart';
+import { DARK_BLUE } from '../../styles/colours';
 
 class ReadChoreScreen extends Component {
-  render() {
-    const data = [29, 30, 70, 50, 34, 98, 51, 35, 53, 24, 50];
+  // specify custom header in navigationOptions
+  static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      backgroundColor: 'white'
+    },
+    headerLeft: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Ionicons
+            name="ios-arrow-back"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
+          />
+        </TouchableOpacity>
+      );
+    },
+    headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Chore Details</Text>
+  });
 
+  getData = () => {
+    const { responsibility } = this.props.currentChore;
+    const data = responsibility.map(user => {
+      return user.count;
+    });
+
+    return data;
+  };
+
+  render() {
     return (
-      <View>
-        <Text>hello</Text>
-        <CustomBarChart />
-      </View>
+      <Layout
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+      >
+        <Text>{this.props.currentChore.name}</Text>
+        <CustomBarChart data={this.props.currentChore.responsibility} />
+      </Layout>
     );
   }
 }
