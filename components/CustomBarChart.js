@@ -51,13 +51,14 @@ class CustomBarChart extends Component {
       });
 
     const { data } = this.props;
-    // PLAY WITH DYNAMIC VIEW-Width
+    // PLAY WITH DYNAMIC VIEW-paddingHorizontal
     // switch statement?
     return (
       <View
         style={{
           height: 250,
           width: '80%',
+          paddingHorizontal: 70,
           backgroundColor: 'pink'
         }}
       >

@@ -29,7 +29,9 @@ class ChoreScreen extends Component {
         </TouchableOpacity>
       );
     },
-    headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Chores</Text>,
+    headerTitle: () => (
+      <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Chores</Text>
+    ),
     headerRight: () => {
       return (
         <TouchableOpacity
