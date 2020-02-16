@@ -19,7 +19,7 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  email: 'ramzi@uwo.ca',
+  email: 'ramzi+4@uwo.ca',
   password: 'password',
   user: null, // user id assigned from firebase
   errorLogin: '',
@@ -32,6 +32,7 @@ const INITIAL_STATE = {
   username: '',
   group: '', // actual group reference
   groupInfo: null, // group info such as address, etc.
+  inGroup: false,
   allUsersInGroup: []
 };
 
@@ -56,7 +57,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, ...INITIAL_STATE, ...action.payload };
     case SIGNUP_USER_SUCCESS:
       // add the new user model to our application state
-      return { ...state, ...INITIAL_STATE, user: action.payload };
+      return { ...state, ...INITIAL_STATE, ...action.payload };
     case LOGIN_USER_FAIL:
       return { ...state, errorLogin: action.payload.message, loading: false };
     case SIGNUP_USER_FAIL:

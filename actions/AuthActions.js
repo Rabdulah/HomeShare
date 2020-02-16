@@ -22,6 +22,7 @@ import {
 export const getUserGroup = userId => {
   return async dispatch => {
     try {
+      console.log('IN GET USER GROUP');
       const response = await firebase
         .firestore()
         .collection('users')
@@ -62,6 +63,7 @@ const insertNewUser = async (firstName, lastName, username, email, uid) => {
     .set({
       email,
       username,
+      inGroup: false,
       name: {
         firstName,
         lastName
@@ -127,17 +129,20 @@ export const loginUser = ({ email, password }) => {
         .get();
 
       const user = userSnapshot.data();
-      const groupSnapshot = await user.group.get(); // TODO: We need to fix this. causes bugs for firsttime sign up
-      const group = groupSnapshot.data(); // TODO: We need to fix this. causes bugs for firsttime sign up
 
-      const userPayload = {
+      var userPayload = {
         email: user.email,
         firstName: user.name.firstName,
         lastName: user.name.lastName,
         username: user.username,
         user: response.user.uid,
-        groupInfo: group // TODO: We need to fix this. causes bugs for firsttime sign up
+        inGroup: user.inGroup
       };
+      if (user.inGroup) {
+        const groupSnapshot = await user.group.get();
+        const group = groupSnapshot.data();
+        userPayload = { ...userPayload, groupInfo: group };
+      }
       dispatch({ type: LOGIN_USER_SUCCESS, payload: userPayload });
     } catch (error) {
       console.log(error.code);
@@ -173,7 +178,16 @@ export const signupUser = ({
         .createUserWithEmailAndPassword(email, password);
 
       insertNewUser(firstName, lastName, username, email, response.user.uid);
-      dispatch({ type: SIGNUP_USER_SUCCESS, payload: response.user.uid });
+
+      const userPayload = {
+        firstName,
+        lastName,
+        username,
+        email,
+        user: response.user.uid
+      };
+
+      dispatch({ type: SIGNUP_USER_SUCCESS, payload: userPayload });
     } catch (error) {
       console.log(error);
       dispatch({ type: SIGNUP_USER_FAIL, payload: error });
