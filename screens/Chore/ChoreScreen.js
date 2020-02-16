@@ -5,7 +5,7 @@ import { Layout, Text, List, ListItem } from '@ui-kitten/components';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { DARK_BLUE } from '../../styles/colours';
-import { retrieveChores } from '../../actions';
+import { retrieveChores, viewChore } from '../../actions';
 
 class ChoreScreen extends Component {
   // specify custom header in navigationOptions
@@ -29,7 +29,9 @@ class ChoreScreen extends Component {
         </TouchableOpacity>
       );
     },
-    headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Chores</Text>,
+    headerTitle: () => (
+      <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Chores</Text>
+    ),
     headerRight: () => {
       return (
         <TouchableOpacity
@@ -55,6 +57,19 @@ class ChoreScreen extends Component {
   retrieveChoresHelper = async () => {
     const { group } = this.props;
 
+    // firebase
+    //   .firestore()
+    //   .collection('chores')
+    //   .add({
+    //     group: '',
+    //     name: 'Dishes',
+    //     recurring: true,
+    //     responsibility: [
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' }
+    //     ]
+    //   });
     const choresSnapshot = await firebase
       .firestore()
       .collection('chores')
@@ -138,6 +153,12 @@ class ChoreScreen extends Component {
     return userWithLowestChoreCount;
   };
 
+  onChorePress = chore => {
+    const { viewChore, navigation } = this.props;
+    viewChore(chore);
+    navigation.navigate('readChore');
+  };
+
   renderChoreList = ({ item }) => {
     const userWithLowestChoreCount = this.whoIsNext(item);
     return (
@@ -153,6 +174,9 @@ class ChoreScreen extends Component {
           fontSize: 20,
           lineHeight: 20,
           fontWeight: 'normal'
+        }}
+        onPress={() => {
+          this.onChorePress(item);
         }}
         description={`${userWithLowestChoreCount.user.name.firstName}'s turn`}
         icon={() => {
@@ -216,4 +240,6 @@ const mapStateToProps = ({ auth, chore }) => {
   const { chores } = chore;
   return { group, user, chores };
 };
-export default connect(mapStateToProps, { retrieveChores })(ChoreScreen);
+export default connect(mapStateToProps, { retrieveChores, viewChore })(
+  ChoreScreen
+);

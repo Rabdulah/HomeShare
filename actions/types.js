@@ -25,6 +25,7 @@ export const GET_CURRENT_PAYMENT = 'get_current_payment';
 
 // chores
 export const RETRIEVE_CHORES = 'retrieve_chores';
+export const VIEW_CHORE = 'view_chore';
 
 // utilities
 export const VIEW_UTILITY = 'view_utility';

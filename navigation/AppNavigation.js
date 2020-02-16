@@ -33,8 +33,11 @@ import CreatePaymentScreen from '../screens/Payment/CreatePaymentScreen';
 import ReadPaymentScreen from '../screens/Payment/ReadPaymentScreen';
 import PaybackScreen from '../screens/Payment/PaybackScreen';
 import UpdatePaymentScreen from '../screens/Payment/UpdatePaymentScreen';
+
+// CHORES
 import ChoreScreen from '../screens/Chore/ChoreScreen';
-import AddChore from '../screens/Chore/AddChore';
+import AddChoreScreen from '../screens/Chore/AddChoreScreen';
+import ReadChoreScreen from '../screens/Chore/ReadChoreScreen';
 /*
   big gotcha: for any navigator, when it is rendered, react
   native will try / does render all screens for that navigator.
@@ -89,7 +92,8 @@ const AppNavigator = createBottomTabNavigator(
               payback: { screen: PaybackScreen },
               updatePayment: { screen: UpdatePaymentScreen },
               chore: { screen: ChoreScreen },
-              addChore: { screen: AddChore }
+              addChore: { screen: AddChoreScreen },
+              readChore: { screen: ReadChoreScreen }
             },
             {
               defaultNavigationOptions: {
