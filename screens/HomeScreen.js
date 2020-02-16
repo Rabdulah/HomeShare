@@ -69,7 +69,7 @@ const items = [
     icon: 'md-trash',
     code: MOONSTONE_BLUE,
     numItems: '4 items due',
-    routes: 'chores'
+    route: 'chore'
   }
 ];
 
@@ -151,8 +151,6 @@ class HomeScreen extends Component {
       </View>
     );
   }
-
-  componentWillUnmount() {}
 }
 
 const mapStateToProps = ({ auth }) => {
