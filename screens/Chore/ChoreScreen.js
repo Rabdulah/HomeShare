@@ -29,9 +29,7 @@ class ChoreScreen extends Component {
         </TouchableOpacity>
       );
     },
-    headerTitle: () => (
-      <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Chores</Text>
-    ),
+    headerTitle: () => <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Chores</Text>,
     headerRight: () => {
       return (
         <TouchableOpacity
@@ -39,12 +37,7 @@ class ChoreScreen extends Component {
             navigation.navigate('addChore');
           }}
         >
-          <Ionicons
-            name="md-add"
-            size={30}
-            color={DARK_BLUE}
-            style={{ paddingHorizontal: 16 }}
-          />
+          <Ionicons name="md-add" size={30} color={DARK_BLUE} style={{ paddingHorizontal: 16 }} />
         </TouchableOpacity>
       );
     }
@@ -159,6 +152,51 @@ class ChoreScreen extends Component {
     navigation.navigate('readChore');
   };
 
+  onCheckmarkPress = async chore => {
+    const { user, navigation } = this.props;
+    // get list of people responsible
+    const choreCopy = JSON.parse(JSON.stringify(chore)); // clone obj first
+    let updatedResponsibility = Array.from(choreCopy.responsibility);
+
+    updatedResponsibility = await Promise.all(
+      updatedResponsibility.map(async el => {
+        const userRef = await firebase
+          .firestore()
+          .collection('users')
+          .doc(el.user.id);
+
+        let newCount = el.count;
+        if (el.user.id === user) {
+          newCount = el.count + 1;
+        }
+
+        return {
+          count: newCount,
+          userRef
+        };
+      })
+    );
+
+    // set updatedFields
+    const updatedFields = {
+      responsibility: updatedResponsibility
+    };
+
+    // update firebase
+    firebase
+      .firestore()
+      .collection('chores')
+      .doc(chore.id)
+      .update(updatedFields)
+      .then(() => {
+        // fetch fresh chores from db
+        this.retrieveChoresHelper();
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
+  };
+
   renderChoreList = ({ item }) => {
     const userWithLowestChoreCount = this.whoIsNext(item);
     return (
@@ -189,6 +227,9 @@ class ChoreScreen extends Component {
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center'
+                }}
+                onPress={() => {
+                  this.onCheckmarkPress(item);
                 }}
               >
                 <Ionicons
@@ -226,10 +267,10 @@ class ChoreScreen extends Component {
             />
           </Layout>
         ) : (
-          <Layout>
-            <Text>Loading...</Text>
-          </Layout>
-        )}
+            <Layout>
+              <Text>Loading...</Text>
+            </Layout>
+          )}
       </>
     );
   }
@@ -240,6 +281,4 @@ const mapStateToProps = ({ auth, chore }) => {
   const { chores } = chore;
   return { group, user, chores };
 };
-export default connect(mapStateToProps, { retrieveChores, viewChore })(
-  ChoreScreen
-);
+export default connect(mapStateToProps, { retrieveChores, viewChore })(ChoreScreen);

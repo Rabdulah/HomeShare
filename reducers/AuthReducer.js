@@ -19,7 +19,7 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  email: 'ramzi+4@uwo.ca',
+  email: 'ramzi@uwo.ca',
   password: 'password',
   user: null, // user id assigned from firebase
   errorLogin: '',
@@ -69,7 +69,7 @@ export default (state = INITIAL_STATE, action) => {
     case GET_ALL_USERS_IN_GROUP:
       return { ...state, allUsersInGroup: action.payload };
     case RESET_PASSWORD:
-      return { ...state, loading: true, resetSuccess: false};
+      return { ...state, loading: true, resetSuccess: false };
     case RESET_PASSWORD_SUCCESS:
       return { ...state, loading: false, resetSuccess: true };
     case RESET_PASSWORD_FAIL:
