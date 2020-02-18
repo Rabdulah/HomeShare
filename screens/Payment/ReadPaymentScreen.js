@@ -148,10 +148,7 @@ class ReadPaymentScreen extends Component {
             }}
           >
             <NavigationEvents onDidFocus={this.getCurrentPaymentHelper} />
-            <HeaderCard
-              title={`$${currentPayment.cost}`}
-              subtitle={currentPayment.name}
-            />
+            <HeaderCard title={`$${currentPayment.cost}`} subtitle={currentPayment.name} />
             <List
               data={currentPayment.payees}
               renderItem={this.renderPayeeList}
@@ -168,10 +165,10 @@ class ReadPaymentScreen extends Component {
             </Button>
           </Layout>
         ) : (
-          <Layout>
-            <Text>Loading...</Text>
-          </Layout>
-        )}
+            <Layout>
+              <Text>Loading...</Text>
+            </Layout>
+          )}
       </>
     );
   }
@@ -182,6 +179,4 @@ const mapStateToProps = ({ payment, auth }) => {
   const { user } = auth;
   return { currentPaymentId, currentPayment, user };
 };
-export default connect(mapStateToProps, { viewPayment, getCurrentPayment })(
-  ReadPaymentScreen
-);
+export default connect(mapStateToProps, { viewPayment, getCurrentPayment })(ReadPaymentScreen);

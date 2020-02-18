@@ -34,7 +34,7 @@ class ChoreScreen extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('addChore');
+            navigation.navigate('createChore');
           }}
         >
           <Ionicons name="md-add" size={30} color={DARK_BLUE} style={{ paddingHorizontal: 16 }} />

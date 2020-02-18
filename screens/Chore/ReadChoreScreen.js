@@ -29,7 +29,23 @@ class ReadChoreScreen extends Component {
         </TouchableOpacity>
       );
     },
-    headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Chore Details</Text>
+    headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Chore Details</Text>,
+    headerRight: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('updatePayment');
+          }}
+        >
+          <Ionicons
+            name="md-create"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
+          />
+        </TouchableOpacity>
+      );
+    }
   });
 
   getData = () => {
@@ -43,9 +59,7 @@ class ReadChoreScreen extends Component {
 
   render() {
     return (
-      <Layout
-        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-      >
+      <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>{this.props.currentChore.name}</Text>
         <CustomBarChart data={this.props.currentChore.responsibility} />
       </Layout>

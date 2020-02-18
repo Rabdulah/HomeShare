@@ -4,12 +4,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import { Ionicons } from '@expo/vector-icons';
-import {
-  PEWTER_BLUE,
-  DARK_BLUE,
-  MOONSTONE_BLUE,
-  LIGHT_SEA_GREEN
-} from '../styles/colours';
+import { PEWTER_BLUE, DARK_BLUE, MOONSTONE_BLUE, LIGHT_SEA_GREEN } from '../styles/colours';
 
 // AUTH
 import WelcomeScreen from '../screens/WelcomeScreen';
@@ -36,7 +31,7 @@ import UpdatePaymentScreen from '../screens/Payment/UpdatePaymentScreen';
 
 // CHORES
 import ChoreScreen from '../screens/Chore/ChoreScreen';
-import AddChoreScreen from '../screens/Chore/AddChoreScreen';
+import CreateChoreScreen from '../screens/Chore/CreateChoreScreen';
 import ReadChoreScreen from '../screens/Chore/ReadChoreScreen';
 /*
   big gotcha: for any navigator, when it is rendered, react
@@ -92,7 +87,7 @@ const AppNavigator = createBottomTabNavigator(
               payback: { screen: PaybackScreen },
               updatePayment: { screen: UpdatePaymentScreen },
               chore: { screen: ChoreScreen },
-              addChore: { screen: AddChoreScreen },
+              createChore: { screen: CreateChoreScreen },
               readChore: { screen: ReadChoreScreen }
             },
             {
