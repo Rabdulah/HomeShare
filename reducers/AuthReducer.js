@@ -12,21 +12,28 @@ import {
   SIGNUP_USER_FAIL,
   GET_USER_GROUP,
   CLEAR_ERRORS,
-  GET_ALL_USERS_IN_GROUP
+  GET_ALL_USERS_IN_GROUP,
+  GROUP_ADDRESS_CHANGED,
+  GROUP_NAME_CHANGED,
+  GROUP_ADDED,
+  GROUP_ADDED_FAILED
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  email: 'ramzi@uwo.ca',
+  email: 'fakeramzi@uwo.ca',
   password: 'password',
   user: null, // user id assigned from firebase
   errorLogin: '',
   errorSignUp: '',
+  errorGroup: '',
   loading: false,
   firstName: '',
   lastName: '',
   username: '',
   group: '', // actual group reference
   groupInfo: null, // group info such as address, etc.
+  groupAddress: '1099 western rd',
+  groupName: '',
   inGroup: false,
   allUsersInGroup: []
 };
@@ -60,9 +67,17 @@ export default (state = INITIAL_STATE, action) => {
     case GET_USER_GROUP:
       return { ...state, group: action.payload };
     case CLEAR_ERRORS:
-      return { ...state, errorLogin: '', errorSignUp: '' };
+      return { ...state, errorLogin: '', errorSignUp: '', errorGroup: '' };
     case GET_ALL_USERS_IN_GROUP:
       return { ...state, allUsersInGroup: action.payload };
+    case GROUP_ADDRESS_CHANGED:
+      return { ...state, groupAddress: action.payload };
+    case GROUP_NAME_CHANGED:
+      return { ...state, groupName: action.payload };
+    case GROUP_ADDED:
+      return { ...state, inGroup: true, group: action.payload.response, groupInfo: action.payload.data };
+    case GROUP_ADDED_FAILED:
+      return { ...state, errorGroup: action.payload };
     default:
       return state;
   }

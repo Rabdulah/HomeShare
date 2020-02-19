@@ -13,6 +13,10 @@ export const SIGNUP_USER_FAIL = 'signup_user_fail';
 export const GET_USER_GROUP = 'get_user_group';
 export const CLEAR_ERRORS = 'clear_errors';
 export const GET_ALL_USERS_IN_GROUP = 'get_all_users_in_group';
+export const GROUP_ADDRESS_CHANGED = 'group_address_changed';
+export const GROUP_NAME_CHANGED = 'group_name_changed';
+export const GROUP_ADDED = 'group_added';
+export const GROUP_ADDED_FAILED = 'group_added_failed';
 
 // payments
 export const VIEW_PAYMENT = 'view_payment';

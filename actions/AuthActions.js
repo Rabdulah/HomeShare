@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import geoSearch from '../server/location/locationFunction';
 import {
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
@@ -13,7 +14,11 @@ import {
   SIGNUP_USER_SUCCESS,
   GET_USER_GROUP,
   CLEAR_ERRORS,
-  GET_ALL_USERS_IN_GROUP
+  GET_ALL_USERS_IN_GROUP,
+  GROUP_ADDRESS_CHANGED,
+  GROUP_NAME_CHANGED,
+  GROUP_ADDED,
+  GROUP_ADDED_FAILED
 } from './types';
 
 export const getUserGroup = userId => {
@@ -67,6 +72,17 @@ const insertNewUser = async (firstName, lastName, username, email, uid) => {
     });
 };
 
+const updateUserGroupData = (groupRef, user) => {
+  firebase
+    .firestore()
+    .collection('users')
+    .doc(user)
+    .update({
+      inGroup: true,
+      group: groupRef
+    });
+};
+
 export const emailChanged = text => {
   return {
     type: EMAIL_CHANGED,
@@ -98,6 +114,18 @@ export const lnameChanged = text => {
 export const usernameChanged = text => {
   return {
     type: USERNAME_CHANGED,
+    payload: text
+  };
+};
+export const groupAddressChanged = text => {
+  return {
+    type: GROUP_ADDRESS_CHANGED,
+    payload: text
+  };
+};
+export const groupNameChanged = text => {
+  return {
+    type: GROUP_NAME_CHANGED,
     payload: text
   };
 };
@@ -137,6 +165,7 @@ export const loginUser = ({ email, password }) => {
       if (user.inGroup) {
         const groupSnapshot = await user.group.get();
         const group = groupSnapshot.data();
+        console.log(group);
         userPayload = { ...userPayload, groupInfo: group };
       }
       dispatch({ type: LOGIN_USER_SUCCESS, payload: userPayload });
@@ -176,6 +205,37 @@ export const signupUser = ({
     } catch (error) {
       console.log(error);
       dispatch({ type: SIGNUP_USER_FAIL, payload: error });
+    }
+  };
+};
+
+export const addGroup = ({ name, address }) => {
+  return async (dispatch, getState) => {
+    try {
+      let location = await geoSearch(address);
+      location = new firebase.firestore.GeoPoint(location.lat, location.lon);
+      const response = await firebase
+        .firestore()
+        .collection('groups')
+        .add({ name, address, location });
+
+      const user = getState().auth.user;
+      updateUserGroupData(response, user);
+
+      let data = await response.get();
+      data = data.data();
+
+      const payload = {
+        response,
+        data
+      };
+      dispatch({ type: GROUP_ADDED, payload });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: GROUP_ADDED_FAILED,
+        payload: 'Address does not exist.'
+      });
     }
   };
 };

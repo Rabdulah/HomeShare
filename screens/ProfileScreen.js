@@ -33,11 +33,11 @@ class ProfileScreen extends Component {
     if (this.props.inGroup) {
       title = 'Leave Group';
     } else {
-      title = "Create Group"
+      title = 'Create Group';
     }
     return (
       <Button
-        title= {title}
+        title={title}
         buttonStyle={{
           borderRadius: 5,
           padding: 10,
@@ -53,8 +53,11 @@ class ProfileScreen extends Component {
   };
 
   onButtonPress = () => {
-    if(this.props.inGroup){
+    if (this.props.inGroup) {
       console.log('yay');
+    } else {
+      this.props.navigation.navigate('createGroup');
+      console.log('not in group');
     }
   };
 

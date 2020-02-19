@@ -14,6 +14,7 @@
     "@types/react-native-app-intro-slider": "^3.0.0",
     "@ui-kitten/components": "^4.3.2",
     "@ui-kitten/eva-icons": "^4.3.2",
+    "axios": "^0.19.2",
     "expo": "~36.0.0",
     "expo-font": "^8.0.0",
     "expo-linear-gradient": "^8.0.0",

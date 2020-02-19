@@ -32,6 +32,10 @@ import CreatePaymentScreen from '../screens/Payment/CreatePaymentScreen';
 import ReadPaymentScreen from '../screens/Payment/ReadPaymentScreen';
 import PaybackScreen from '../screens/Payment/PaybackScreen';
 import UpdatePaymentScreen from '../screens/Payment/UpdatePaymentScreen';
+
+// GROUPS
+import CreateGroupScreen from '../screens/CreateGroupScreen';
+
 /*
   big gotcha: for any navigator, when it is rendered, react
   native will try / does render all screens for that navigator.
@@ -83,7 +87,8 @@ const AppNavigator = createBottomTabNavigator(
               createPayment: { screen: CreatePaymentScreen },
               readPayment: { screen: ReadPaymentScreen },
               payback: { screen: PaybackScreen },
-              updatePayment: { screen: UpdatePaymentScreen }
+              updatePayment: { screen: UpdatePaymentScreen },
+              createGroup: { screen: CreateGroupScreen }
             },
             {
               defaultNavigationOptions: {
