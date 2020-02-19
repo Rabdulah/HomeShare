@@ -18,7 +18,8 @@ import {
   GROUP_ADDRESS_CHANGED,
   GROUP_NAME_CHANGED,
   GROUP_ADDED,
-  GROUP_ADDED_FAILED
+  GROUP_ADD_FAILED,
+  REMOVE_FROM_GROUP
 } from './types';
 
 export const getUserGroup = userId => {
@@ -80,6 +81,17 @@ const updateUserGroupData = (groupRef, user) => {
     .update({
       inGroup: true,
       group: groupRef
+    });
+};
+
+const removeUserFromGroup = user => {
+  firebase
+    .firestore()
+    .collection('users')
+    .doc(user)
+    .update({
+      inGroup: false,
+      group: null
     });
 };
 
@@ -165,7 +177,6 @@ export const loginUser = ({ email, password }) => {
       if (user.inGroup) {
         const groupSnapshot = await user.group.get();
         const group = groupSnapshot.data();
-        console.log(group);
         userPayload = { ...userPayload, groupInfo: group };
       }
       dispatch({ type: LOGIN_USER_SUCCESS, payload: userPayload });
@@ -233,9 +244,20 @@ export const addGroup = ({ name, address }) => {
     } catch (error) {
       console.log(error);
       dispatch({
-        type: GROUP_ADDED_FAILED,
+        type: GROUP_ADD_FAILED,
         payload: 'Address does not exist.'
       });
+    }
+  };
+};
+
+export const leaveGroup = () => {
+  return async (dispatch, getState) => {
+    try {
+      removeUserFromGroup(getState().auth.user);
+      dispatch({ type: REMOVE_FROM_GROUP });
+    } catch (error) {
+      console.log(error);
     }
   };
 };

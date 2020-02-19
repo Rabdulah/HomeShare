@@ -9,7 +9,8 @@ import {
   lnameChanged,
   usernameChanged,
   signupUser,
-  clearErrors
+  clearErrors,
+  leaveGroup
 } from '../actions';
 import AuthStyles from '../styles/auth';
 import { Layout } from '@ui-kitten/components';
@@ -54,7 +55,7 @@ class ProfileScreen extends Component {
 
   onButtonPress = () => {
     if (this.props.inGroup) {
-      console.log('yay');
+      this.props.leaveGroup();
     } else {
       this.props.navigation.navigate('createGroup');
       console.log('not in group');
@@ -107,5 +108,6 @@ export default connect(mapStateToProps, {
   lnameChanged,
   usernameChanged,
   signupUser,
-  clearErrors
+  clearErrors,
+  leaveGroup
 })(ProfileScreen);
