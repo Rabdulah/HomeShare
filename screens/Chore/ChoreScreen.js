@@ -3,6 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout, Text, List, ListItem } from '@ui-kitten/components';
 import firebase from 'firebase';
+import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
 import { DARK_BLUE } from '../../styles/colours';
 import { retrieveChores, viewChore } from '../../actions';
@@ -249,6 +250,7 @@ class ChoreScreen extends Component {
     const { chores } = this.props;
     return (
       <>
+        <NavigationEvents onDidFocus={this.retrieveChoresHelper} />
         {chores !== null ? (
           <Layout>
             <ListItem
