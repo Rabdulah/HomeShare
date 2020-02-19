@@ -13,7 +13,7 @@ import {
   leaveGroup
 } from '../actions';
 import AuthStyles from '../styles/auth';
-import { Layout } from '@ui-kitten/components';
+import { Layout, ListItem } from '@ui-kitten/components';
 import { DARK_BLUE } from '../styles/colours';
 
 class ProfileScreen extends Component {
@@ -28,6 +28,18 @@ class ProfileScreen extends Component {
       );
     }
   };
+
+  renderPendingInvites = () => {
+    // We will not show invites if you are in a group
+    if(this.props.inGroup && this.props.pendingInvites) {
+      return (
+        <View>
+          <Text style={AuthStyles.subTitle}>Pending Invites</Text>
+          <ListItem></ListItem>
+        </View>
+      );
+    }
+  }
 
   renderButton = () => {
     let title;
@@ -58,7 +70,6 @@ class ProfileScreen extends Component {
       this.props.leaveGroup();
     } else {
       this.props.navigation.navigate('createGroup');
-      console.log('not in group');
     }
   };
 
@@ -73,6 +84,7 @@ class ProfileScreen extends Component {
           <Text>Username: {this.props.username}</Text>
           {this.renderGroupInfo()}
           {this.renderButton()}
+          {this.renderPendingInvites()}
         </View>
       </Layout>
     );
@@ -88,7 +100,8 @@ const mapStateToProps = ({ auth }) => {
     username,
     user,
     inGroup,
-    groupInfo
+    groupInfo,
+    pendingInvites
   } = auth;
 
   return {
@@ -99,7 +112,8 @@ const mapStateToProps = ({ auth }) => {
     username,
     user,
     inGroup,
-    groupInfo
+    groupInfo,
+    pendingInvites
   };
 };
 export default connect(mapStateToProps, {

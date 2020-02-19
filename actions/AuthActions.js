@@ -18,6 +18,7 @@ import {
   GROUP_ADDRESS_CHANGED,
   GROUP_NAME_CHANGED,
   GROUP_ADDED,
+  GROUP_ADDED_SUCCESS,
   GROUP_ADD_FAILED,
   REMOVE_FROM_GROUP
 } from './types';
@@ -222,6 +223,8 @@ export const signupUser = ({
 
 export const addGroup = ({ name, address }) => {
   return async (dispatch, getState) => {
+    dispatch({ type: GROUP_ADDED });
+
     try {
       let location = await geoSearch(address);
       location = new firebase.firestore.GeoPoint(location.lat, location.lon);
@@ -240,7 +243,7 @@ export const addGroup = ({ name, address }) => {
         response,
         data
       };
-      dispatch({ type: GROUP_ADDED, payload });
+      dispatch({ type: GROUP_ADDED_SUCCESS, payload });
     } catch (error) {
       console.log(error);
       dispatch({

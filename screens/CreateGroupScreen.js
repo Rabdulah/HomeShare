@@ -4,25 +4,52 @@ import { View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Layout, Text } from '@ui-kitten/components';
 
-import { groupAddressChanged, groupNameChanged, addGroup } from '../actions';
+import {
+  groupAddressChanged,
+  groupNameChanged,
+  addGroup,
+  clearErrors
+} from '../actions';
 
 import Input from '../components/Input';
+import Spinner from '../components/Spinner';
 import AuthStyles from '../styles/auth';
 import { DARK_BLUE } from '../styles/colours';
 
 class CreateGroupScreen extends Component {
+  componentDidMount() {
+    this.props.clearErrors();
+  }
+  // Case Where group successfully created
+  componentDidUpdate() {
+    this.onCreateGroupComplete(this.props);
+  }
+
+  onCreateGroupComplete = props => {
+    if (props.inGroup) {
+      if (props.navigation.isFocused()) {
+        props.navigation.navigate('profile');
+      }
+    }
+  };
+
   onAddressChange = text => {
     this.props.groupAddressChanged(text);
   };
+
   onNameChange = text => {
     this.props.groupNameChanged(text);
   };
 
   onButtonPress = () => {
-    this.props.addGroup(this.props)
+    this.props.addGroup(this.props);
   };
 
   renderButton = () => {
+    if (this.props.loading) {
+      return <Spinner size="small" colour={DARK_BLUE} />;
+    }
+
     return (
       <Button
         title="Create Group"
@@ -73,7 +100,13 @@ class CreateGroupScreen extends Component {
             containerStyle={{ marginVertical: 15 }}
           />
           {this.renderError()}
-          {this.renderButton()}
+          <View
+            style={[
+              this.props.loading ? { marginVertical: 15 } : { marginTop: 0 }
+            ]}
+          >
+            {this.renderButton()}
+          </View>
         </Layout>
       </Layout>
     );
@@ -94,11 +127,14 @@ const mapStateToProps = state => {
     group: state.auth.groupInfo,
     address: state.auth.groupAddress,
     name: state.auth.groupName,
-    error: state.auth.errorGroup
+    error: state.auth.errorGroup,
+    loading: state.auth.loading,
+    inGroup: state.auth.inGroup
   };
 };
 export default connect(mapStateToProps, {
   groupAddressChanged,
   groupNameChanged,
-  addGroup
+  addGroup,
+  clearErrors
 })(CreateGroupScreen);

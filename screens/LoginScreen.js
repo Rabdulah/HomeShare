@@ -59,8 +59,16 @@ class LoginScreen extends Component {
       if (this.props.inGroup) {
         this.props.getUserGroup(this.props.user);
       }
-      // programmatically navigate user
-      this.props.navigation.navigate('home');
+      /* 
+        programmatically navigate user.
+        We use isFocused because in some cases, this component catches updates
+        from changes in other screens and sends users to the home screen seemingly
+        at random. isFocused makes sure that this only happend when the login screen
+        is the active screen.
+      */
+      if (props.navigation.isFocused()) {
+        this.props.navigation.navigate('home');
+      }
     }
   };
 

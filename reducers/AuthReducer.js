@@ -15,9 +15,10 @@ import {
   GET_ALL_USERS_IN_GROUP,
   GROUP_ADDRESS_CHANGED,
   GROUP_NAME_CHANGED,
-  GROUP_ADDED,
+  GROUP_ADDED_SUCCESS,
   GROUP_ADD_FAILED,
-  REMOVE_FROM_GROUP
+  REMOVE_FROM_GROUP,
+  GROUP_ADDED
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -36,7 +37,8 @@ const INITIAL_STATE = {
   groupAddress: '1099 western rd', // I think this is unnecessary. Will look at it later.
   groupName: '', // I think this is unnecessary. Will look at it later.
   inGroup: false,
-  allUsersInGroup: []
+  allUsersInGroup: [],
+  pendingInvites: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -76,16 +78,19 @@ export default (state = INITIAL_STATE, action) => {
     case GROUP_NAME_CHANGED:
       return { ...state, groupName: action.payload };
     case GROUP_ADDED:
+      return { ...state, loading: true, errorGroup: '' };
+    case GROUP_ADDED_SUCCESS:
       return {
         ...state,
         inGroup: true,
         group: action.payload.response,
-        groupInfo: action.payload.data
+        groupInfo: action.payload.data,
+        loading: false
       };
     case GROUP_ADD_FAILED:
-      return { ...state, errorGroup: action.payload };
-      case REMOVE_FROM_GROUP:
-          return { ...state, inGroup: false, group: null, groupInfo: null };
+      return { ...state, errorGroup: action.payload, loading: false };
+    case REMOVE_FROM_GROUP:
+      return { ...state, inGroup: false, group: null, groupInfo: null };
     default:
       return state;
   }

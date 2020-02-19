@@ -16,6 +16,7 @@ export const GET_ALL_USERS_IN_GROUP = 'get_all_users_in_group';
 export const GROUP_ADDRESS_CHANGED = 'group_address_changed';
 export const GROUP_NAME_CHANGED = 'group_name_changed';
 export const GROUP_ADDED = 'group_added';
+export const GROUP_ADDED_SUCCESS = 'group_added_success';
 export const GROUP_ADD_FAILED = 'group_add_failed';
 export const REMOVE_FROM_GROUP = 'remove_from_group';
 
