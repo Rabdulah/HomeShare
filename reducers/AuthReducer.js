@@ -18,7 +18,9 @@ import {
   GROUP_ADDED_SUCCESS,
   GROUP_ADD_FAILED,
   REMOVE_FROM_GROUP,
-  GROUP_ADDED
+  GROUP_ADDED,
+  INVITATION_EMAIL_CHANGED,
+  SEND_INVITE
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -38,7 +40,8 @@ const INITIAL_STATE = {
   groupName: '', // I think this is unnecessary. Will look at it later.
   inGroup: false,
   allUsersInGroup: [],
-  pendingInvites: []
+  pendingInvites: [],
+  invitationEmail: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -91,6 +94,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, errorGroup: action.payload, loading: false };
     case REMOVE_FROM_GROUP:
       return { ...state, inGroup: false, group: null, groupInfo: null };
+    case INVITATION_EMAIL_CHANGED:
+      return { ...state, invitationEmail: action.payload };
+    case SEND_INVITE:
+      return { ...state, loading: true };
     default:
       return state;
   }

@@ -30,8 +30,8 @@ class ProfileScreen extends Component {
   };
 
   renderPendingInvites = () => {
-    // We will not show invites if you are in a group
-    if(this.props.inGroup && this.props.pendingInvites) {
+    // Show pending invites only if you have them and you are not in a group
+    if (!this.props.inGroup && this.props.pendingInvites.length) {
       return (
         <View>
           <Text style={AuthStyles.subTitle}>Pending Invites</Text>
@@ -39,9 +39,9 @@ class ProfileScreen extends Component {
         </View>
       );
     }
-  }
+  };
 
-  renderButton = () => {
+  renderGroupButton = () => {
     let title;
     if (this.props.inGroup) {
       title = 'Leave Group';
@@ -60,17 +60,41 @@ class ProfileScreen extends Component {
           width: '90%',
           fontSize: 20
         }}
-        onPress={this.onButtonPress}
+        onPress={this.onButtonPressGroup}
       />
     );
   };
 
-  onButtonPress = () => {
+  renderInviteButton = () => {
+    if (this.props.inGroup) {
+      return (
+        <Button
+          title="Send Invite"
+          buttonStyle={{
+            borderRadius: 5,
+            padding: 10,
+            backgroundColor: DARK_BLUE
+          }}
+          titleStyle={{
+            width: '90%',
+            fontSize: 20
+          }}
+          onPress={this.onButtonPressInvite}
+        />
+      );
+    }
+  };
+
+  onButtonPressGroup = () => {
     if (this.props.inGroup) {
       this.props.leaveGroup();
     } else {
       this.props.navigation.navigate('createGroup');
     }
+  };
+
+  onButtonPressInvite = () => {
+    this.props.navigation.navigate('sendInvite');
   };
 
   render() {
@@ -83,7 +107,8 @@ class ProfileScreen extends Component {
           <Text>Email: {this.props.email}</Text>
           <Text>Username: {this.props.username}</Text>
           {this.renderGroupInfo()}
-          {this.renderButton()}
+          {this.renderGroupButton()}
+          {this.renderInviteButton()}
           {this.renderPendingInvites()}
         </View>
       </Layout>

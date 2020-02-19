@@ -35,6 +35,7 @@ import UpdatePaymentScreen from '../screens/Payment/UpdatePaymentScreen';
 
 // GROUPS
 import CreateGroupScreen from '../screens/CreateGroupScreen';
+import SendInviteScreen from '../screens/SendInviteScreen';
 
 /*
   big gotcha: for any navigator, when it is rendered, react
@@ -88,7 +89,8 @@ const AppNavigator = createBottomTabNavigator(
               readPayment: { screen: ReadPaymentScreen },
               payback: { screen: PaybackScreen },
               updatePayment: { screen: UpdatePaymentScreen },
-              createGroup: { screen: CreateGroupScreen }
+              createGroup: { screen: CreateGroupScreen },
+              sendInvite: { screen: SendInviteScreen }
             },
             {
               defaultNavigationOptions: {

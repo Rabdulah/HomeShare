@@ -19,6 +19,10 @@ export const GROUP_ADDED = 'group_added';
 export const GROUP_ADDED_SUCCESS = 'group_added_success';
 export const GROUP_ADD_FAILED = 'group_add_failed';
 export const REMOVE_FROM_GROUP = 'remove_from_group';
+export const INVITATION_EMAIL_CHANGED = 'invitation_email_changed';
+export const SEND_INVITE = 'send_invite';
+export const SEND_INVITE_SUCCESS = 'send_invite_success';
+export const SEND_INVITE_FAILED = 'send_invite_failed';
 
 // payments
 export const VIEW_PAYMENT = 'view_payment';

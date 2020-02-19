@@ -20,7 +20,11 @@ import {
   GROUP_ADDED,
   GROUP_ADDED_SUCCESS,
   GROUP_ADD_FAILED,
-  REMOVE_FROM_GROUP
+  REMOVE_FROM_GROUP,
+  INVITATION_EMAIL_CHANGED,
+  SEND_INVITE,
+  SEND_INVITE_SUCCESS,
+  SEND_INVITE_FAILED
 } from './types';
 
 export const getUserGroup = userId => {
@@ -149,6 +153,13 @@ export const clearErrors = () => {
   };
 };
 
+export const inviteEmailChanged = text => {
+  return {
+    type: INVITATION_EMAIL_CHANGED,
+    payload: text
+  };
+};
+
 export const loginUser = ({ email, password }) => {
   // async req
   return async dispatch => {
@@ -261,6 +272,51 @@ export const leaveGroup = () => {
       dispatch({ type: REMOVE_FROM_GROUP });
     } catch (error) {
       console.log(error);
+    }
+  };
+};
+
+export const sendInvite = ({ groupName, group, inviteEmail }) => {
+  return async dispatch => {
+    dispatch({ type: SEND_INVITE });
+    try {
+      let user = null;
+      await firebase
+        .firestore()
+        .collection('users')
+        .where('email', '==', inviteEmail)
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            user = doc.id;
+          });
+        });
+      console.log(user);
+      if (user) {
+        const invite = {
+          groupName,
+          group
+        };
+
+        await firebase
+          .firestore()
+          .collection('users')
+          .doc(user)
+          .update({
+            pendingInvites: firebase.firestore.FieldValue.arrayUnion(invite)
+          });
+        dispatch({ type: SEND_INVITE_SUCCESS });
+      } else {
+        dispatch({
+          type: SEND_INVITE_FAILED,
+          payload: 'No user with this email exists.'
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: SEND_INVITE_FAILED,
+        payload: 'No user with this email exists.'
+      });
     }
   };
 };
