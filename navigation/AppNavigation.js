@@ -16,6 +16,7 @@ import WelcomeScreen from '../screens/WelcomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import ChatScreen from '../screens/ChatScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 
 // MAIN PAGE
 import HomeScreen from '../screens/HomeScreen';
@@ -37,6 +38,10 @@ import UpdatePaymentScreen from '../screens/Payment/UpdatePaymentScreen';
 import CreateGroupScreen from '../screens/CreateGroupScreen';
 import SendInviteScreen from '../screens/SendInviteScreen';
 
+// CHORES
+import ChoreScreen from '../screens/Chore/ChoreScreen';
+import AddChoreScreen from '../screens/Chore/AddChoreScreen';
+import ReadChoreScreen from '../screens/Chore/ReadChoreScreen';
 /*
   big gotcha: for any navigator, when it is rendered, react
   native will try / does render all screens for that navigator.
@@ -55,7 +60,8 @@ const AppNavigator = createBottomTabNavigator(
       screen: createStackNavigator(
         {
           login: { screen: LoginScreen },
-          signup: { screen: SignupScreen }
+          signup: { screen: SignupScreen },
+          forgotPassword: { screen: ForgotPasswordScreen }
         },
         {
           defaultNavigationOptions: {
@@ -90,7 +96,10 @@ const AppNavigator = createBottomTabNavigator(
               payback: { screen: PaybackScreen },
               updatePayment: { screen: UpdatePaymentScreen },
               createGroup: { screen: CreateGroupScreen },
-              sendInvite: { screen: SendInviteScreen }
+              sendInvite: { screen: SendInviteScreen },
+              chore: { screen: ChoreScreen },
+              addChore: { screen: AddChoreScreen },
+              readChore: { screen: ReadChoreScreen }
             },
             {
               defaultNavigationOptions: {
@@ -123,7 +132,6 @@ const AppNavigator = createBottomTabNavigator(
           // }
         },
         {
-          shifting: true,
           labeled: true,
           activeColor: LIGHT_SEA_GREEN,
           inactiveColor: 'grey',

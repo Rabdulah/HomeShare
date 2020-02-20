@@ -24,7 +24,10 @@ import {
   GET_INVITES,
   SEND_INVITE_SUCCESS,
   SEND_INVITE_FAILED,
-  ACCEPT_INVITE
+  ACCEPT_INVITE,
+  RESET_PASSWORD,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAIL
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -34,6 +37,8 @@ const INITIAL_STATE = {
   errorLogin: '',
   errorSignUp: '',
   errorGroup: '',
+  errorReset: '',
+  resetSuccess: false,
   loading: false,
   firstName: '',
   lastName: '',
@@ -71,7 +76,7 @@ export default (state = INITIAL_STATE, action) => {
       // add the new user model to our application state
       return { ...state, ...INITIAL_STATE, ...action.payload };
     case LOGIN_USER_FAIL:
-      return { ...state, errorLogin: 'Authentication Failed.', loading: false };
+      return { ...state, errorLogin: action.payload.message, loading: false };
     case SIGNUP_USER_FAIL:
       return { ...state, errorSignUp: action.payload.message, loading: false };
     case GET_USER_GROUP:
@@ -115,6 +120,15 @@ export default (state = INITIAL_STATE, action) => {
         groupInfo: action.payload.groupInfo,
         group: action.payload.groupRef
       };
+      return { ...state, errorLogin: '', errorSignUp: '', errorReset: '' };
+    case GET_ALL_USERS_IN_GROUP:
+      return { ...state, allUsersInGroup: action.payload };
+    case RESET_PASSWORD:
+      return { ...state, loading: true, resetSuccess: false};
+    case RESET_PASSWORD_SUCCESS:
+      return { ...state, loading: false, resetSuccess: true };
+    case RESET_PASSWORD_FAIL:
+      return { ...state, loading: false, errorReset: action.payload.message };
     default:
       return state;
   }

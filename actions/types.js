@@ -25,12 +25,19 @@ export const SEND_INVITE_SUCCESS = 'send_invite_success';
 export const SEND_INVITE_FAILED = 'send_invite_failed';
 export const GET_INVITES = 'get_invites';
 export const ACCEPT_INVITE = 'accept_invite';
+export const RESET_PASSWORD = 'reset_password';
+export const RESET_PASSWORD_SUCCESS = 'reset_password_sucess';
+export const RESET_PASSWORD_FAIL = 'reset_password_fail';
 
 // payments
 export const VIEW_PAYMENT = 'view_payment';
 export const CREATE_PAYMENT = 'create_payment';
 export const RETRIEVE_PAYMENTS = 'retrieve_payments';
 export const GET_CURRENT_PAYMENT = 'get_current_payment';
+
+// chores
+export const RETRIEVE_CHORES = 'retrieve_chores';
+export const VIEW_CHORE = 'view_chore';
 
 // utilities
 export const VIEW_UTILITY = 'view_utility';
