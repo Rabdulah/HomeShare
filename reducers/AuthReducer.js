@@ -120,7 +120,6 @@ export default (state = INITIAL_STATE, action) => {
         groupInfo: action.payload.groupInfo,
         group: action.payload.groupRef
       };
-      return { ...state, errorLogin: '', errorSignUp: '', errorReset: '' };
     case GET_ALL_USERS_IN_GROUP:
       return { ...state, allUsersInGroup: action.payload };
     case RESET_PASSWORD:
