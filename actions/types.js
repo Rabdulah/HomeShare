@@ -23,6 +23,8 @@ export const INVITATION_EMAIL_CHANGED = 'invitation_email_changed';
 export const SEND_INVITE = 'send_invite';
 export const SEND_INVITE_SUCCESS = 'send_invite_success';
 export const SEND_INVITE_FAILED = 'send_invite_failed';
+export const GET_INVITES = 'get_invites';
+export const ACCEPT_INVITE = 'accept_invite';
 
 // payments
 export const VIEW_PAYMENT = 'view_payment';

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
+import { AntDesign } from '@expo/vector-icons';
+import firebase from 'firebase';
 
 import {
   emailChanged,
@@ -10,13 +12,37 @@ import {
   usernameChanged,
   signupUser,
   clearErrors,
-  leaveGroup
+  leaveGroup,
+  getInvites,
+  acceptInvite
 } from '../actions';
 import AuthStyles from '../styles/auth';
-import { Layout, ListItem } from '@ui-kitten/components';
+import { Layout, List, ListItem } from '@ui-kitten/components';
 import { DARK_BLUE } from '../styles/colours';
 
 class ProfileScreen extends Component {
+  componentDidMount() {
+    this.subscribeToInvites(this.props);
+  }
+
+  subscribeToInvites = props => {
+    var unsubscribe = firebase
+      .firestore()
+      .collection('users')
+      .doc(props.user)
+      .onSnapshot(doc => {
+        this.props.getInvites(doc.data().pendingInvites);
+      });
+  };
+
+  componentDidUpdate() {
+    //this.invites(this.props);
+  }
+
+  componentWillUnmount() {
+    //unsubscribe();
+  }
+
   renderGroupInfo = () => {
     if (this.props.inGroup) {
       return (
@@ -35,10 +61,37 @@ class ProfileScreen extends Component {
       return (
         <View>
           <Text style={AuthStyles.subTitle}>Pending Invites</Text>
-          <ListItem></ListItem>
+          <List
+            data={this.props.pendingInvites}
+            renderItem={this.renderInvite}
+          />
         </View>
       );
     }
+  };
+
+  acceptInvitation = groupRef => {
+    this.props.acceptInvite(groupRef);
+  };
+
+  icon = () => {
+    return <AntDesign name="plus" size={24} />;
+  };
+
+  renderInvite = ({ item }) => {
+    return (
+      <ListItem
+        title={item.name}
+        description={item.address}
+        onPress={() => this.acceptInvitation(item.ref)}
+        icon={this.icon}
+        style={{
+          paddingVertical: 15,
+          borderBottomColor: '#e3e3e3',
+          borderBottomWidth: 1
+        }}
+      />
+    );
   };
 
   renderGroupButton = () => {
@@ -148,5 +201,7 @@ export default connect(mapStateToProps, {
   usernameChanged,
   signupUser,
   clearErrors,
-  leaveGroup
+  leaveGroup,
+  getInvites,
+  acceptInvite
 })(ProfileScreen);

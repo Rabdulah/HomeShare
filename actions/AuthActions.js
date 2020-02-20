@@ -24,7 +24,9 @@ import {
   INVITATION_EMAIL_CHANGED,
   SEND_INVITE,
   SEND_INVITE_SUCCESS,
-  SEND_INVITE_FAILED
+  SEND_INVITE_FAILED,
+  GET_INVITES,
+  ACCEPT_INVITE
 } from './types';
 
 export const getUserGroup = userId => {
@@ -276,7 +278,7 @@ export const leaveGroup = () => {
   };
 };
 
-export const sendInvite = ({ groupName, group, inviteEmail }) => {
+export const sendInvite = ({ group, inviteEmail }) => {
   return async dispatch => {
     dispatch({ type: SEND_INVITE });
     try {
@@ -291,10 +293,9 @@ export const sendInvite = ({ groupName, group, inviteEmail }) => {
             user = doc.id;
           });
         });
-      console.log(user);
+
       if (user) {
         const invite = {
-          groupName,
           group
         };
 
@@ -317,6 +318,52 @@ export const sendInvite = ({ groupName, group, inviteEmail }) => {
         type: SEND_INVITE_FAILED,
         payload: 'No user with this email exists.'
       });
+    }
+  };
+};
+
+export const getInvites = pendingInvites => {
+  return async dispatch => {
+    try {
+      const invitePayload = [];
+      const groupRefs = pendingInvites.map(async invite => {
+        return invite.group.get();
+      });
+      const groupData = await Promise.all(groupRefs);
+      groupData.forEach(invite => {
+        let obj = invite.data();
+        obj.id = invite.id;
+        obj.ref = invite.ref;
+        invitePayload.push(obj);
+      });
+
+      dispatch({ type: GET_INVITES, payload: invitePayload });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const acceptInvite = groupRef => {
+  return async (dispatch, getState) => {
+    try {
+      await firebase
+        .firestore()
+        .collection('users')
+        .doc(getState().auth.user)
+        .update({
+          pendingInvites: firebase.firestore.FieldValue.arrayRemove({group: groupRef}),
+          inGroup: true,
+          group: groupRef
+        });
+        const groupInfo = await groupRef.get().then(snapshot => snapshot.data());
+        const payload = {
+          groupRef,
+          groupInfo
+        }
+        dispatch({ type: ACCEPT_INVITE, payload })
+    } catch (error) {
+      console.log(error);
     }
   };
 };

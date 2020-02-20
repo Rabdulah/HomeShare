@@ -20,7 +20,11 @@ import {
   REMOVE_FROM_GROUP,
   GROUP_ADDED,
   INVITATION_EMAIL_CHANGED,
-  SEND_INVITE
+  SEND_INVITE,
+  GET_INVITES,
+  SEND_INVITE_SUCCESS,
+  SEND_INVITE_FAILED,
+  ACCEPT_INVITE
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -98,6 +102,19 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, invitationEmail: action.payload };
     case SEND_INVITE:
       return { ...state, loading: true };
+    case SEND_INVITE_SUCCESS:
+      return { ...state, loading: false };
+    case SEND_INVITE_FAILED:
+      return { ...state, loading: false };
+    case GET_INVITES:
+      return { ...state, pendingInvites: action.payload };
+    case ACCEPT_INVITE:
+      return {
+        ...state,
+        inGroup: true,
+        groupInfo: action.payload.groupInfo,
+        group: action.payload.groupRef
+      };
     default:
       return state;
   }
