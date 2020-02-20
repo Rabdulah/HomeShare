@@ -35,11 +35,8 @@ class ProfileScreen extends Component {
       });
   };
 
-  componentDidUpdate() {
-    //this.invites(this.props);
-  }
-
   componentWillUnmount() {
+    // May need to unsubscribe at some point
     //unsubscribe();
   }
 
