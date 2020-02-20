@@ -110,7 +110,7 @@ export default (state = INITIAL_STATE, action) => {
     case SEND_INVITE_SUCCESS:
       return { ...state, loading: false };
     case SEND_INVITE_FAILED:
-      return { ...state, loading: false };
+      return { ...state, loading: false, errorGroup: action.payload };
     case GET_INVITES:
       return { ...state, pendingInvites: action.payload };
     case ACCEPT_INVITE:
