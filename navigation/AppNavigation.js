@@ -38,6 +38,9 @@ import ChoreScreen from '../screens/Chore/ChoreScreen';
 import CreateChoreScreen from '../screens/Chore/CreateChoreScreen';
 import ReadChoreScreen from '../screens/Chore/ReadChoreScreen';
 import UpdateChoreScreen from '../screens/Chore/UpdateChoreScreen';
+
+// ERRANDS
+import ErrandScreen from '../screens/Errand/ErrandScreen';
 /*
   big gotcha: for any navigator, when it is rendered, react
   native will try / does render all screens for that navigator.
@@ -96,7 +99,8 @@ const AppNavigator = createBottomTabNavigator(
               chore: { screen: ChoreScreen },
               createChore: { screen: CreateChoreScreen },
               readChore: { screen: ReadChoreScreen },
-              updateChore: { screen: UpdateChoreScreen }
+              updateChore: { screen: UpdateChoreScreen },
+              errand: { screen: ErrandScreen }
             },
             {
               defaultNavigationOptions: {
