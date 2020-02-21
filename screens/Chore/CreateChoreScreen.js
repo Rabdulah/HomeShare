@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet, KeyboardAvoidingView, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Layout, Input as KittenInput, Text, Select } from '@ui-kitten/components';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -67,6 +67,10 @@ class CreateChoreScreen extends Component {
     };
   }
 
+  componentDidMount() {
+    this.firstInput.current.focus();
+  }
+
   onChoreNameChange = choreName => {
     this.setState({ choreName });
   };
@@ -118,48 +122,51 @@ class CreateChoreScreen extends Component {
   render() {
     const { users, selectedUsers, choreName } = this.state;
     return (
-      <Layout style={{ flex: 1 }}>
-        <ScrollView
-          contentContainerStyle={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-          scrollEnabled={false}
-        >
-          <KittenInput
-            label="Name"
-            placeholder="Chore name"
-            value={choreName}
-            onChangeText={this.onChoreNameChange}
-            style={styles.input}
-          />
-          <Select
-            label="Assign"
-            data={users}
-            selectedOption={selectedUsers}
-            onSelect={this.setSelectedOption}
-            multiSelect
-            style={styles.input}
-          />
-          <Layout
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              width: '60%',
-              margin: 20
+      <KeyboardAvoidingView style={{ flex: 1 }} behaviour="height" enabled>
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            contentContainerStyle={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
+            scrollEnabled={false}
           >
-            <TouchableOpacity>
-              <Ionicons name="md-close" size={40} color="red" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.onCheckmarkPress}>
-              <Ionicons name="md-checkmark" size={40} color="green" />
-            </TouchableOpacity>
-          </Layout>
-        </ScrollView>
-      </Layout>
+            <KittenInput
+              label="Name"
+              placeholder="Chore name"
+              ref={this.firstInput}
+              value={choreName}
+              onChangeText={this.onChoreNameChange}
+              style={styles.input}
+            />
+            <Select
+              label="Assign"
+              data={users}
+              selectedOption={selectedUsers}
+              onSelect={this.setSelectedOption}
+              multiSelect
+              style={styles.input}
+            />
+            <Layout
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                width: '60%',
+                margin: 20
+              }}
+            >
+              <TouchableOpacity>
+                <Ionicons name="md-close" size={40} color="red" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.onCheckmarkPress}>
+                <Ionicons name="md-checkmark" size={40} color="green" />
+              </TouchableOpacity>
+            </Layout>
+          </ScrollView>
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 }
