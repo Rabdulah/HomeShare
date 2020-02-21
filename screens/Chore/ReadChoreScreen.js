@@ -34,7 +34,7 @@ class ReadChoreScreen extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('updatePayment');
+            navigation.navigate('updateChore');
           }}
         >
           <Ionicons
