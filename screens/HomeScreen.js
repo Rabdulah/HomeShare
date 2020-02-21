@@ -82,28 +82,29 @@ class HomeScreen extends Component {
     const address = params ? params.address : null;
     const shortFormAddress = address ? address.split(',')[0] : '';
     return {
-      header: () => {
-        return (
-          <Header
-            style={{ backgroundColor: 'white' }}
-            title={`${firstName} ${lastName}`}
-            subtitle={`${shortFormAddress}`}
-          />
-        );
-      }
+      // header: () => {
+      //   return (
+      //     <Header
+      //       style={{ backgroundColor: 'white' }}
+      //       title={`${firstName} ${lastName}`}
+      //       subtitle={`${shortFormAddress}`}
+      //     />
+      //   );
+      // }
+      headerStyle: {
+        backgroundColor: 'white',
+        border: 'none'
+      },
+      headerTitle: () => (
+        <Text
+          style={{ fontWeight: 'bold', textAlign: 'center' }}
+        >{`${firstName} ${lastName}\n${shortFormAddress}`}</Text>
+      )
     };
   };
 
   componentDidMount() {
-    const {
-      firstName,
-      lastName,
-      groupInfo,
-      getUserGroup,
-      inGroup,
-      user,
-      navigation
-    } = this.props;
+    const { firstName, lastName, groupInfo, getUserGroup, inGroup, user, navigation } = this.props;
     navigation.setParams({
       firstName,
       lastName
@@ -118,10 +119,7 @@ class HomeScreen extends Component {
 
   render() {
     const { groupInfo, firstName, lastName, navigation } = this.props;
-    const lighterPewterBlue = `#${lightenDarkenColor(
-      PEWTER_BLUE.slice(1),
-      55
-    )}`;
+    const lighterPewterBlue = `#${lightenDarkenColor(PEWTER_BLUE.slice(1), 55)}`;
     return (
       <View style={styles.container}>
         <HomeOccupancy />

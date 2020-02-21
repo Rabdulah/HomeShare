@@ -4,6 +4,7 @@ import { Layout, Text, Input as KittenInput, Select } from '@ui-kitten/component
 import { KeyboardAvoidingView, TouchableOpacity, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
+import firebase from 'firebase';
 import { DARK_BLUE } from '../../styles/colours';
 
 class UpdateChoreScreen extends Component {
@@ -32,23 +33,77 @@ class UpdateChoreScreen extends Component {
 
   constructor(props) {
     super(props);
-
-    const choreCopy = JSON.parse(JSON.stringify(this.props.currentChore));
-
-    const users = choreCopy.responsibility.map(user => {
+    this.firstInput = React.createRef();
+    const { allUsersInGroup, currentChore } = props;
+    const users = allUsersInGroup.map(user => {
+      return {
+        text: user.name.firstName,
+        id: user.id
+      };
+    });
+    const choreCopy = JSON.parse(JSON.stringify(currentChore));
+    const selectedUsers = choreCopy.responsibility.map(user => {
       return {
         text: user.user.name.firstName,
-        id: user.user.id
+        id: user.user.id,
+        count: user.count
       };
     });
     this.state = {
       users,
-      selectedUsers: [...users],
+      selectedUsers,
       choreName: choreCopy.name
     };
   }
 
+  componentDidMount() {
+    this.firstInput.current.focus();
+  }
+
   setSelectedOption = user => { };
+
+  onChoreNameChange = choreName => {
+    this.setState({ choreName });
+  };
+
+  updateChore = updatedFields => {
+    const { currentChore, navigation } = this.props;
+
+    firebase
+      .firestore()
+      .collection('chores')
+      .doc(currentChore.id)
+      .update(updatedFields)
+      .then(() => {
+        navigation.navigate('chore');
+      });
+  };
+
+  onCheckmarkPress = async () => {
+    const { choreName, selectedUsers } = this.state;
+
+    // get user references
+    const selectedUsersWithRef = await Promise.all(
+      selectedUsers.map(async el => {
+        const userRef = await firebase
+          .firestore()
+          .collection('users')
+          .doc(el.id);
+
+        return {
+          userRef,
+          count: el.count ? el.count : 0
+        };
+      })
+    );
+
+    const updatedFields = {
+      name: choreName,
+      responsibility: selectedUsersWithRef
+    };
+
+    this.updateChore(updatedFields);
+  };
 
   render() {
     const { choreName, users, selectedUsers } = this.state;
@@ -66,7 +121,8 @@ class UpdateChoreScreen extends Component {
             <KittenInput
               label="Name"
               placeholder="Chore name"
-              onChangeText={this.onDescriptionChange}
+              onChangeText={this.onChoreNameChange}
+              value={choreName}
               ref={this.firstInput}
               style={{
                 fontSize: 16,
@@ -74,7 +130,6 @@ class UpdateChoreScreen extends Component {
                 width: '60%'
               }}
               size="large"
-              value={choreName}
               autoCorrect={false}
             />
             <Select
@@ -85,6 +140,22 @@ class UpdateChoreScreen extends Component {
               multiSelect
               style={styles.input}
             />
+            <Layout
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                width: '60%',
+                margin: 20
+              }}
+            >
+              <TouchableOpacity>
+                <Ionicons name="md-close" size={40} color="red" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.onCheckmarkPress}>
+                <Ionicons name="md-checkmark" size={40} color="green" />
+              </TouchableOpacity>
+            </Layout>
           </ScrollView>
         </Layout>
       </KeyboardAvoidingView>
@@ -98,9 +169,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ chore }) => {
+const mapStateToProps = ({ chore, auth }) => {
   const { currentChore } = chore;
+  const { allUsersInGroup } = auth;
 
-  return { currentChore };
+  return { currentChore, allUsersInGroup };
 };
 export default connect(mapStateToProps, null)(UpdateChoreScreen);

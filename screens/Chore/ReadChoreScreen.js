@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Layout, Text } from '@ui-kitten/components';
 import { Ionicons } from '@expo/vector-icons';
-import { retrieveChores, viewChore } from '../../actions';
+import { retrieveChores } from '../../actions';
 import CustomBarChart from '../../components/CustomBarChart';
 import { DARK_BLUE } from '../../styles/colours';
 
@@ -58,10 +58,11 @@ class ReadChoreScreen extends Component {
   };
 
   render() {
+    const { currentChore } = this.props;
     return (
       <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>{this.props.currentChore.name}</Text>
-        <CustomBarChart data={this.props.currentChore.responsibility} />
+        <Text>{currentChore.name}</Text>
+        <CustomBarChart data={currentChore.responsibility} />
       </Layout>
     );
   }
