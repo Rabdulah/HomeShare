@@ -34,6 +34,10 @@ import ReadPaymentScreen from '../screens/Payment/ReadPaymentScreen';
 import PaybackScreen from '../screens/Payment/PaybackScreen';
 import UpdatePaymentScreen from '../screens/Payment/UpdatePaymentScreen';
 
+// GROUPS
+import CreateGroupScreen from '../screens/CreateGroupScreen';
+import SendInviteScreen from '../screens/SendInviteScreen';
+
 // CHORES
 import ChoreScreen from '../screens/Chore/ChoreScreen';
 import AddChoreScreen from '../screens/Chore/AddChoreScreen';
@@ -91,6 +95,8 @@ const AppNavigator = createBottomTabNavigator(
               readPayment: { screen: ReadPaymentScreen },
               payback: { screen: PaybackScreen },
               updatePayment: { screen: UpdatePaymentScreen },
+              createGroup: { screen: CreateGroupScreen },
+              sendInvite: { screen: SendInviteScreen },
               chore: { screen: ChoreScreen },
               addChore: { screen: AddChoreScreen },
               readChore: { screen: ReadChoreScreen }
@@ -126,7 +132,6 @@ const AppNavigator = createBottomTabNavigator(
           // }
         },
         {
-          shifting: true,
           labeled: true,
           activeColor: LIGHT_SEA_GREEN,
           inactiveColor: 'grey',
