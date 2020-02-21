@@ -33,22 +33,42 @@ class UpdateChoreScreen extends Component {
 
   constructor(props) {
     super(props);
+
+    // create ref to first input to load keyboard upon
+    // navigating to screen
     this.firstInput = React.createRef();
     const { allUsersInGroup, currentChore } = props;
+
+    // create deep clone copy of currentChore
+    const choreCopy = JSON.parse(JSON.stringify(currentChore));
+
+    // get all users
     const users = allUsersInGroup.map(user => {
+      /*
+        match user based on those already assigned to this chore.
+        we do this so we can get the current 'count' if the user
+        is already assigned to this chore.
+      */
+
+      const matchingUser = choreCopy.responsibility.find(el => user.id === el.user.id);
       return {
         text: user.name.firstName,
-        id: user.id
+        id: user.id,
+        count: matchingUser ? matchingUser.count : 0 // get current count if it exists
       };
     });
-    const choreCopy = JSON.parse(JSON.stringify(currentChore));
+
+    /*
+      selectedUsers need to be derived from the same
+      users[] array so that the <Select /> component works properly.
+
+      if you care about this just ask me what the error was lol
+    */
     const selectedUsers = choreCopy.responsibility.map(user => {
-      return {
-        text: user.user.name.firstName,
-        id: user.user.id,
-        count: user.count
-      };
+      const matchingUser = users.find(el => el.id === user.user.id);
+      return matchingUser;
     });
+
     this.state = {
       users,
       selectedUsers,
