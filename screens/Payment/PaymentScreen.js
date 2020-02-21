@@ -111,22 +111,19 @@ class PaymentScreen extends Component {
     const { user } = this.props;
     const balance = payments.reduce((totalBalance, currentPayment) => {
       // check if the currentPayment belongs to the logged in user
-      const currentPaymentBalance = currentPayment.payees.reduce(
-        (currPaymentBalance, payee) => {
-          let amount = 0;
-          // first check if current payment belongs to owner
-          if (currentPayment.owner === user) {
-            if (payee.user.id !== user && !payee.isPaid) {
-              amount = payee.amount;
-            }
-          } else if (payee.user.id === user && !payee.isPaid) {
-            // you aren't the owner of the payment
-            amount = -1 * payee.amount;
+      const currentPaymentBalance = currentPayment.payees.reduce((currPaymentBalance, payee) => {
+        let amount = 0;
+        // first check if current payment belongs to owner
+        if (currentPayment.owner === user) {
+          if (payee.user.id !== user && !payee.isPaid) {
+            amount = payee.amount;
           }
-          return currPaymentBalance + amount;
-        },
-        0
-      );
+        } else if (payee.user.id === user && !payee.isPaid) {
+          // you aren't the owner of the payment
+          amount = -1 * payee.amount;
+        }
+        return currPaymentBalance + amount;
+      }, 0);
 
       return totalBalance + currentPaymentBalance;
     }, 0);
@@ -166,22 +163,16 @@ class PaymentScreen extends Component {
   render() {
     const { payments, navigation } = this.props;
     const { balance } = this.state;
-    const headerCardSubtitle =
-      balance >= 0 ? 'is owed to you.' : 'is the total you owe.';
+    const headerCardSubtitle = balance >= 0 ? 'is owed to you.' : 'is the total you owe.';
 
     return (
       <Layout style={{ padding: 16, flex: 1, flexDirection: 'column' }}>
         <NavigationEvents onDidFocus={this.retrievePaymentsHelper} />
-        <HeaderCard
-          title={`$${Math.abs(balance)}`}
-          subtitle={headerCardSubtitle}
-        />
+        <HeaderCard title={`$${Math.abs(balance)}`} subtitle={headerCardSubtitle} />
         <ScrollView
           vertical
           contentContainerStyle={[
-            payments.length === 0
-              ? { justifyContent: 'center', alignItems: 'center' }
-              : {}
+            payments.length === 0 ? { justifyContent: 'center', alignItems: 'center' } : {}
           ]}
         >
           {this.renderPayments()}
@@ -205,6 +196,4 @@ const mapStateToProps = ({ payment, auth }) => {
 
   return { payments, group, user };
 };
-export default connect(mapStateToProps, { viewPayment, retrievePayments })(
-  PaymentScreen
-);
+export default connect(mapStateToProps, { viewPayment, retrievePayments })(PaymentScreen);

@@ -4,12 +4,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import { Ionicons } from '@expo/vector-icons';
-import {
-  PEWTER_BLUE,
-  DARK_BLUE,
-  MOONSTONE_BLUE,
-  LIGHT_SEA_GREEN
-} from '../styles/colours';
+import { PEWTER_BLUE, DARK_BLUE, MOONSTONE_BLUE, LIGHT_SEA_GREEN } from '../styles/colours';
 
 // AUTH
 import WelcomeScreen from '../screens/WelcomeScreen';
@@ -40,8 +35,9 @@ import SendInviteScreen from '../screens/SendInviteScreen';
 
 // CHORES
 import ChoreScreen from '../screens/Chore/ChoreScreen';
-import AddChoreScreen from '../screens/Chore/AddChoreScreen';
+import CreateChoreScreen from '../screens/Chore/CreateChoreScreen';
 import ReadChoreScreen from '../screens/Chore/ReadChoreScreen';
+import UpdateChoreScreen from '../screens/Chore/UpdateChoreScreen';
 /*
   big gotcha: for any navigator, when it is rendered, react
   native will try / does render all screens for that navigator.
@@ -98,8 +94,9 @@ const AppNavigator = createBottomTabNavigator(
               createGroup: { screen: CreateGroupScreen },
               sendInvite: { screen: SendInviteScreen },
               chore: { screen: ChoreScreen },
-              addChore: { screen: AddChoreScreen },
-              readChore: { screen: ReadChoreScreen }
+              createChore: { screen: CreateChoreScreen },
+              readChore: { screen: ReadChoreScreen },
+              updateChore: { screen: UpdateChoreScreen }
             },
             {
               defaultNavigationOptions: {
