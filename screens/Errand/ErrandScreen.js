@@ -1,20 +1,68 @@
 import React, { Component } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { Layout, Text } from '@ui-kitten/components';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { Ionicons } from '@expo/vector-icons';
+import moment from 'moment';
+import { DARK_BLUE } from '../../styles/colours';
+
+const FORMAT = 'YYYY-MM-DD';
+const TODAY = moment().format(FORMAT);
 
 class ErrandScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      backgroundColor: 'white'
+    },
+    headerLeft: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Ionicons
+            name="ios-arrow-back"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
+          />
+        </TouchableOpacity>
+      );
+    },
+    headerTitle: () => <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Errands</Text>,
+    headerRight: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('createChore');
+          }}
+        >
+          <Ionicons name="md-add" size={30} color={DARK_BLUE} style={{ paddingHorizontal: 16 }} />
+        </TouchableOpacity>
+      );
+    }
+  });
+
   componentDidMount() { }
 
   render() {
     return (
       <Layout>
         <Calendar
+          // Specify style for calendar container element. Default = {}
+          style={{
+            borderWidth: 1,
+            borderColor: 'gray',
+            height: 350
+          }}
+          // Specify theme properties to override specific styles for calendar parts. Default = {}
+          theme={{
+            todayTextColor: '#00adf5',
+            dayTextColor: '#2d4150'
+          }}
           // Initially visible month. Default = Date()
-          current="2012-03-01"
-          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-          minDate="2012-05-10"
-          // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-          maxDate="2012-05-30"
+          minDate={TODAY}
           // Handler which gets executed on day press. Default = undefined
           onDayPress={day => {
             console.log('selected day', day);
@@ -24,34 +72,12 @@ class ErrandScreen extends Component {
             console.log('selected day', day);
           }}
           // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-          monthFormat="yyyy MM"
-          // Handler which gets executed when visible month changes in calendar. Default = undefined
-          onMonthChange={month => {
-            console.log('month changed', month);
-          }}
-          // Hide month navigation arrows. Default = false
-          hideArrows
-          // Replace default arrows with custom ones (direction can be 'left' or 'right')
-          renderArrow={direction => <Arrow />}
-          // Do not show days of other months in month page. Default = false
-          hideExtraDays
+          monthFormat="MMMM yyyy"
           // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-          // day from another month that is visible in calendar page. Default = false
-          disableMonthChange
-          // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-          firstDay={1}
-          // Hide day names. Default = false
-          hideDayNames
-          // Show week numbers to the left. Default = false
-          showWeekNumbers
           // Handler which gets executed when press arrow icon left. It receive a callback can go back month
           onPressArrowLeft={substractMonth => substractMonth()}
           // Handler which gets executed when press arrow icon right. It receive a callback can go next month
           onPressArrowRight={addMonth => addMonth()}
-          // Disable left arrow. Default = false
-          disableArrowLeft
-          // Disable right arrow. Default = false
-          disableArrowRight
         />
       </Layout>
     );
