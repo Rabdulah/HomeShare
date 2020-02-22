@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { Layout, Text } from '@ui-kitten/components';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Ionicons } from '@expo/vector-icons';
@@ -46,42 +46,117 @@ class ErrandScreen extends Component {
 
   componentDidMount() { }
 
+  renderItem = (item, firstItemInDay) => {
+    return (
+      <TouchableOpacity
+        style={[styles.item, { height: item.height }]}
+        onPress={() => Alert.alert(item.name)}
+      >
+        <Text>{item.name}</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  renderEmptyDate = () => {
+    return (
+      <Layout style={styles.emptyDate}>
+        <Text>This is empty date!</Text>
+      </Layout>
+    );
+  };
+
   render() {
     return (
-      <Layout>
-        <Calendar
-          // Specify style for calendar container element. Default = {}
-          style={{
-            borderWidth: 1,
-            borderColor: 'gray',
-            height: 350
+      <Layout style={{ flex: 1 }}>
+        <Agenda
+          // The list of items that have to be displayed in agenda. If you want to render item as empty date
+          // the value of date key has to be an empty array []. If there exists no value for date key it is
+          // considered that the date in question is not yet loaded
+          items={{
+            '2020-02-22': [{ name: 'item 1 - any js object' }],
+            '2020-02-23': [{ name: 'item 2 - any js object', height: 80 }],
+            '2020-02-24': [],
+            '2020-02-25': [{ name: 'item 3 - any js object' }, { name: 'any js object' }]
           }}
-          // Specify theme properties to override specific styles for calendar parts. Default = {}
-          theme={{
-            todayTextColor: '#00adf5',
-            dayTextColor: '#2d4150'
+          // Callback that gets called when items for a certain month should be loaded (month became visible)
+          loadItemsForMonth={month => {
+            console.log('trigger items loading');
           }}
-          // Initially visible month. Default = Date()
-          minDate={TODAY}
-          // Handler which gets executed on day press. Default = undefined
+          // Callback that fires when the calendar is opened or closed
+          onCalendarToggled={calendarOpened => {
+            console.log(calendarOpened);
+          }}
+          // Callback that gets called on day press
           onDayPress={day => {
-            console.log('selected day', day);
+            console.log('day pressed');
           }}
-          // Handler which gets executed on day long press. Default = undefined
-          onDayLongPress={day => {
-            console.log('selected day', day);
+          // Callback that gets called when day changes while scrolling agenda list
+          onDayChange={day => {
+            console.log('day changed');
           }}
-          // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-          monthFormat="MMMM yyyy"
-          // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-          // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-          onPressArrowLeft={substractMonth => substractMonth()}
-          // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-          onPressArrowRight={addMonth => addMonth()}
+          // Initially selected day
+          selected={TODAY}
+          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+          minDate={TODAY}
+          // Max amount of months allowed to scroll to the past. Default = 50
+          pastScrollRange={50}
+          // Max amount of months allowed to scroll to the future. Default = 50
+          futureScrollRange={50}
+          // Specify how each item should be rendered in agenda
+          renderItem={this.renderItem}
+          // Specify how each date should be rendered. day can be undefined if the item is not first in that day.
+          renderDay={(day, item) => {
+            return <Layout />;
+          }}
+          // Specify how empty date content with no items should be rendered
+          renderEmptyDate={this.renderEmptyDate}
+          // Specify your item comparison function for increased performance
+          rowHasChanged={(r1, r2) => {
+            return r1.text !== r2.text;
+          }}
+          // Hide knob button. Default = false
+          // By default, agenda dates are marked if they have at least one item, but you can override this if needed
+          markedDates={{
+            '2020-02-16': { marked: true },
+            '2020-02-17': { marked: true },
+            '2020-02-18': { disabled: true }
+          }}
+          // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false
+          disabledByDefault
+          // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
+          onRefresh={() => console.log('refreshing...')}
+          // Set this true while waiting for new data from a refresh
+          refreshing={false}
+          // Add a custom RefreshControl component, used to provide pull-to-refresh functionality for the ScrollView.
+          refreshControl={null}
+          // Agenda theme
+          theme={{
+            agendaDayTextColor: 'yellow',
+            agendaDayNumColor: 'green',
+            agendaTodayColor: 'red'
+          }}
+          // Agenda container style
+          style={{}}
         />
       </Layout>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  item: {
+    backgroundColor: 'white',
+    flex: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginRight: 10,
+    marginTop: 17
+  },
+  emptyDate: {
+    height: 15,
+    flex: 1,
+    paddingTop: 30
+  }
+});
 
 export default ErrandScreen;
