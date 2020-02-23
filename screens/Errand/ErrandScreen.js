@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 import { Layout, Text } from '@ui-kitten/components';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { Agenda } from 'react-native-calendars';
 import { Ionicons } from '@expo/vector-icons';
+import firebase from 'firebase';
 import moment from 'moment';
 import { DARK_BLUE } from '../../styles/colours';
 
@@ -44,7 +46,97 @@ class ErrandScreen extends Component {
     }
   });
 
-  componentDidMount() { }
+  componentDidMount = async () => {
+    const { group } = this.props;
+    // convoluted firebase fetch
+    const response = await firebase
+      .firestore()
+      .collection('errands')
+      .where('group', '==', group)
+      .get()
+      .then(async snapshot => {
+        const errands = await Promise.all(
+          snapshot.docs.map(async doc => {
+            const { name, description } = doc.data();
+            let attendantsFromDb = doc.data().attendants;
+            const attendants = [];
+
+            // fetch owner from db
+            const ownerSnapshot = await firebase
+              .firestore()
+              .collection('users')
+              .doc(doc.data().owner.id)
+              .get();
+
+            const ownerData = ownerSnapshot.data();
+            const owner = {
+              address: ownerData.address,
+              email: ownerData.email,
+              name: ownerData.name,
+              username: ownerData.username,
+              id: ownerSnapshot.id
+            };
+            // get all attendants from db (fetch)
+            attendantsFromDb = await Promise.all(
+              attendantsFromDb.map(async attendant => {
+                const a = await firebase
+                  .firestore()
+                  .collection('users')
+                  .doc(attendant.userRef.id)
+                  .get();
+
+                // pull off data we want form user;
+                const attendantData = a.data();
+                attendants.push({
+                  address: attendantData.address,
+                  email: attendantData.email,
+                  name: attendantData.name,
+                  username: attendantData.username,
+                  id: a.id
+                });
+
+                /*
+              return attendantData to the mapping of the attendants arr
+            */
+
+                return {
+                  address: attendantData.address,
+                  email: attendantData.email,
+                  name: attendantData.name,
+                  username: attendantData.username,
+                  id: a.id
+                };
+              })
+            );
+            console.log('name', name);
+            return {
+              id: doc.id,
+              name,
+              description,
+              attendants,
+              owner
+            };
+          })
+        );
+
+        // dispatch an action or smt
+        console.log('errands', errands);
+      });
+    // firebase
+    //   .firestore()
+    //   .collection('errands')
+    //   .add({
+    //     group: '',
+    //     name: 'car',
+    //     description: 'going to the grocery store',
+    //     owner: '',
+    //     attendants: [
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' }
+    //     ]
+    //   });
+  };
 
   renderItem = (item, firstItemInDay) => {
     return (
@@ -159,4 +251,9 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ErrandScreen;
+const mapStateToProps = ({ auth }) => {
+  const { group } = auth;
+
+  return { group };
+};
+export default connect(mapStateToProps, null)(ErrandScreen);
