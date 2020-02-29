@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import firebase from 'firebase';
 import moment from 'moment';
 import { DARK_BLUE } from '../../styles/colours';
+import Avatar from '../../components/Avatar';
 
 const FORMAT = 'YYYY-MM-DD';
 const TODAY = moment().format(FORMAT);
@@ -58,7 +59,6 @@ class ErrandScreen extends Component {
 
   componentDidMount = async () => {
     const { group } = this.props;
-    console.log(moment().month());
     const month = moment().month();
     const year = moment().year();
 
@@ -68,7 +68,6 @@ class ErrandScreen extends Component {
       .date(0)
       .toDate();
 
-    console.log(startDate);
     // convoluted firebase fetch
     const response = await firebase
       .firestore()
@@ -189,13 +188,67 @@ class ErrandScreen extends Component {
     });
   };
 
+  attendantNameArrayToString = arr => {
+    if (arr.length === 0) {
+      return;
+    }
+
+    if (arr.length === 1) {
+      return arr[0];
+    }
+
+    if (arr.length === 2) {
+      return `${arr[0]} and ${arr[1]}`;
+    }
+
+    let str = '';
+    arr.forEach((el, index) => {
+      if (index === arr.length - 1) {
+        str += `and ${el}`;
+      } else {
+        str += `${el}, `;
+      }
+    });
+
+    return str;
+  };
+
+  nameToInitials = name => {
+    const initials = name.firstName.charAt(0) + name.lastName.charAt(0);
+    return initials.toUpperCase();
+  };
+
   renderItem = (item, firstItemInDay) => {
+    // get time of day
+    const timeOfDay = moment.unix(item.date);
+
+    // get human readable list of ppl attending
+    const attendantNames = item.attendants.map(attendant => {
+      return attendant.name.firstName;
+    });
+
+    const verb = attendantNames.length > 1 ? 'are' : 'is';
+    const ownerInitials = this.nameToInitials(item.owner.name);
     return (
       <TouchableOpacity
-        style={[styles.item, { height: item.height }]}
+        style={[styles.item, { height: item.height }, { flexDirection: 'row' }]}
         onPress={() => Alert.alert(item.name)}
       >
-        <Text>{item.name}</Text>
+        <Layout style={{ flex: 1 }}>
+          <Text>{timeOfDay.format('h:mm A')}</Text>
+          <Text style={{ marginVertical: 10 }}>{item.name}</Text>
+          <Text style={{ color: '#7a92a5' }}>{item.description}</Text>
+          <Text style={{ color: '#7a92a5' }}>{`${this.attendantNameArrayToString(
+            attendantNames
+          )} ${verb} attending.`}</Text>
+        </Layout>
+        <Layout
+          style={{
+            flex: 0.25
+          }}
+        >
+          <Avatar initials={ownerInitials} />
+        </Layout>
       </TouchableOpacity>
     );
   };
@@ -272,14 +325,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
     borderRadius: 5,
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 15,
     marginRight: 10,
     marginTop: 17
   },
   emptyDate: {
     height: 15,
     flex: 1,
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 15,
     marginRight: 10,
     marginTop: 17,
     borderRadius: 5
