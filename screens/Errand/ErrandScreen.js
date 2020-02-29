@@ -46,6 +46,16 @@ class ErrandScreen extends Component {
     }
   });
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      errandsForSelectedDay: {},
+      currentMonth: null,
+      errands: null
+    };
+  }
+
   componentDidMount = async () => {
     const { group } = this.props;
     // convoluted firebase fetch
@@ -57,7 +67,7 @@ class ErrandScreen extends Component {
       .then(async snapshot => {
         const errands = await Promise.all(
           snapshot.docs.map(async doc => {
-            const { name, description } = doc.data();
+            const { name, description, date } = doc.data();
             let attendantsFromDb = doc.data().attendants;
             const attendants = [];
 
@@ -108,19 +118,19 @@ class ErrandScreen extends Component {
                 };
               })
             );
-            console.log('name', name);
             return {
               id: doc.id,
               name,
               description,
               attendants,
-              owner
+              owner,
+              date: date.seconds // timestamp in unix seconds
             };
           })
         );
 
         // dispatch an action or smt
-        console.log('errands', errands);
+        this.setupErrandsData(errands);
       });
     // firebase
     //   .firestore()
@@ -136,6 +146,33 @@ class ErrandScreen extends Component {
     //       { count: 3, userRef: '' }
     //     ]
     //   });
+  };
+
+  setupErrandsData = errands => {
+    const { currentMonth } = this.state;
+    let startDate = moment([currentMonth.year, currentMonth.month - 1]);
+    let endDate = moment(startDate).endOf('month');
+    startDate = parseInt(startDate.format('D'));
+    endDate = parseInt(endDate.format('D'));
+
+    // setup buckets for errand items
+    const items = {};
+    for (; startDate <= endDate; startDate += 1) {
+      const doubleDigitDay = `0${startDate}`.slice(-2);
+      const doubleDigitMonth = `0${currentMonth.month}`.slice(-2);
+      const dateFormatted = `${currentMonth.year}-${doubleDigitMonth}-${doubleDigitDay}`;
+      items[dateFormatted] = [];
+    }
+
+    // loop through all items for this month, add to bucket
+    errands.forEach(errand => {
+      const errandDateFormatted = moment.unix(errand.date).format('YYYY-MM-DD');
+      items[errandDateFormatted].push(errand);
+    });
+
+    this.setState({ errands: items }, () => {
+      this.onUpdateSelectedDate(moment().add(1, 'months'));
+    });
   };
 
   renderItem = (item, firstItemInDay) => {
@@ -157,49 +194,42 @@ class ErrandScreen extends Component {
     );
   };
 
+  onUpdateSelectedDate = date => {
+    const formattedDate = moment(date)
+      .subtract(1, 'months')
+      .format(FORMAT);
+    const { errands } = this.state;
+    const dates = errands[formattedDate];
+    this.setState({
+      errandsForSelectedDay: {
+        [formattedDate]: dates
+      }
+    });
+  };
+
   render() {
+    const { errandsForSelectedDay } = this.state;
     return (
       <Layout style={{ flex: 1 }}>
         <Agenda
-          // The list of items that have to be displayed in agenda. If you want to render item as empty date
-          // the value of date key has to be an empty array []. If there exists no value for date key it is
-          // considered that the date in question is not yet loaded
-          items={{
-            '2020-02-22': [{ name: 'item 1 - any js object' }],
-            '2020-02-23': [{ name: 'item 2 - any js object', height: 80 }],
-            '2020-02-24': [],
-            '2020-02-25': [{ name: 'item 3 - any js object' }, { name: 'any js object' }]
-          }}
+          items={errandsForSelectedDay}
           // Callback that gets called when items for a certain month should be loaded (month became visible)
           loadItemsForMonth={month => {
             console.log('trigger items loading');
+            this.setState({ currentMonth: month });
           }}
+          onDayPress={this.onUpdateSelectedDate}
           // Callback that fires when the calendar is opened or closed
-          onCalendarToggled={calendarOpened => {
-            console.log(calendarOpened);
-          }}
-          // Callback that gets called on day press
-          onDayPress={day => {
-            console.log('day pressed');
-          }}
-          // Callback that gets called when day changes while scrolling agenda list
-          onDayChange={day => {
-            console.log('day changed');
-          }}
+          onCalendarToggled={calendarOpened => { }}
           // Initially selected day
           selected={TODAY}
           // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-          minDate={TODAY}
           // Max amount of months allowed to scroll to the past. Default = 50
           pastScrollRange={50}
           // Max amount of months allowed to scroll to the future. Default = 50
           futureScrollRange={50}
           // Specify how each item should be rendered in agenda
           renderItem={this.renderItem}
-          // Specify how each date should be rendered. day can be undefined if the item is not first in that day.
-          renderDay={(day, item) => {
-            return <Layout />;
-          }}
           // Specify how empty date content with no items should be rendered
           renderEmptyDate={this.renderEmptyDate}
           // Specify your item comparison function for increased performance
@@ -215,18 +245,6 @@ class ErrandScreen extends Component {
           }}
           // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false
           disabledByDefault
-          // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
-          onRefresh={() => console.log('refreshing...')}
-          // Set this true while waiting for new data from a refresh
-          refreshing={false}
-          // Add a custom RefreshControl component, used to provide pull-to-refresh functionality for the ScrollView.
-          refreshControl={null}
-          // Agenda theme
-          theme={{
-            agendaDayTextColor: 'yellow',
-            agendaDayNumColor: 'green',
-            agendaTodayColor: 'red'
-          }}
           // Agenda container style
           style={{}}
         />
@@ -247,7 +265,10 @@ const styles = StyleSheet.create({
   emptyDate: {
     height: 15,
     flex: 1,
-    paddingTop: 30
+    padding: 10,
+    marginRight: 10,
+    marginTop: 17,
+    borderRadius: 5
   }
 });
 
