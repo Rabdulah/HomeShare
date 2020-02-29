@@ -59,9 +59,14 @@ class ErrandScreen extends Component {
 
   componentDidMount = async () => {
     const { group } = this.props;
+
+    /*
+      get start and end date of the month
+      b/c we will limit how much data we get from
+      firebase to the current month being viewed.
+      */
     const month = moment().month();
     const year = moment().year();
-
     const startDate = moment([year, month]).toDate();
     const endDate = moment()
       .add(1, 'months')
@@ -118,9 +123,8 @@ class ErrandScreen extends Component {
                 });
 
                 /*
-              return attendantData to the mapping of the attendants arr
-            */
-
+                  return attendantData to the mapping of the attendants arr
+                */
                 return {
                   address: attendantData.address,
                   email: attendantData.email,
@@ -130,6 +134,8 @@ class ErrandScreen extends Component {
                 };
               })
             );
+
+            // return to original call
             return {
               id: doc.id,
               name,
@@ -141,7 +147,8 @@ class ErrandScreen extends Component {
           })
         );
 
-        // dispatch an action or smt
+        // dispatch an action or smt at some point
+        // for now, just setup errands data for format required.
         this.setupErrandsData(errands);
       });
     // firebase
@@ -162,6 +169,7 @@ class ErrandScreen extends Component {
   };
 
   setupErrandsData = errands => {
+    // the items / errands in the Agenda require a certain format.
     const { currentMonth } = this.state;
     let startDate = moment([currentMonth.year, currentMonth.month - 1]);
     let endDate = moment(startDate).endOf('month');
@@ -188,6 +196,7 @@ class ErrandScreen extends Component {
     });
   };
 
+  // helper function to convert an arr of names to a sentence
   attendantNameArrayToString = arr => {
     if (arr.length === 0) {
       return;
@@ -218,6 +227,10 @@ class ErrandScreen extends Component {
     return initials.toUpperCase();
   };
 
+  /* 
+    this function determines what will be rendered in the agenda
+    for a specific day.
+  */
   renderItem = (item, firstItemInDay) => {
     // get time of day
     const timeOfDay = moment.unix(item.date);
@@ -261,6 +274,13 @@ class ErrandScreen extends Component {
     );
   };
 
+  /*
+    this function runs when u select a diff date.
+    this may need some extra luv. 
+
+    need to implement the part where u select smt
+    from a diff month.
+   */
   onUpdateSelectedDate = date => {
     const formattedDate = moment(date)
       .subtract(1, 'months')
@@ -290,7 +310,6 @@ class ErrandScreen extends Component {
           onCalendarToggled={calendarOpened => { }}
           // Initially selected day
           selected={TODAY}
-          // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
           // Max amount of months allowed to scroll to the past. Default = 50
           pastScrollRange={50}
           // Max amount of months allowed to scroll to the future. Default = 50
@@ -303,7 +322,6 @@ class ErrandScreen extends Component {
           rowHasChanged={(r1, r2) => {
             return r1.text !== r2.text;
           }}
-          // Hide knob button. Default = false
           // By default, agenda dates are marked if they have at least one item, but you can override this if needed
           markedDates={{
             '2020-02-16': { marked: true },
