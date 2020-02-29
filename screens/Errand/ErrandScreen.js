@@ -58,11 +58,24 @@ class ErrandScreen extends Component {
 
   componentDidMount = async () => {
     const { group } = this.props;
+    console.log(moment().month());
+    const month = moment().month();
+    const year = moment().year();
+
+    const startDate = moment([year, month]).toDate();
+    const endDate = moment()
+      .add(1, 'months')
+      .date(0)
+      .toDate();
+
+    console.log(startDate);
     // convoluted firebase fetch
     const response = await firebase
       .firestore()
       .collection('errands')
       .where('group', '==', group)
+      .where('date', '>=', startDate)
+      .where('date', '<=', endDate)
       .get()
       .then(async snapshot => {
         const errands = await Promise.all(
@@ -137,9 +150,10 @@ class ErrandScreen extends Component {
     //   .collection('errands')
     //   .add({
     //     group: '',
-    //     name: 'car',
-    //     description: 'going to the grocery store',
+    //     name: 'Another errand',
+    //     description: 'doing smt',
     //     owner: '',
+    //     date: '',
     //     attendants: [
     //       { count: 3, userRef: '' },
     //       { count: 3, userRef: '' },
