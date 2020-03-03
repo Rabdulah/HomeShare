@@ -48,7 +48,7 @@ const items = [
     icon: 'md-calendar',
     code: '#f39c12',
     numItems: '4 upcoming',
-    route: ''
+    route: 'errand'
   },
   {
     name: 'Utilities',

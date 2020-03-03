@@ -1,0 +1,367 @@
+import React, { Component } from 'react';
+import { TouchableOpacity, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
+import { Layout, Text } from '@ui-kitten/components';
+import { Agenda } from 'react-native-calendars';
+import { Ionicons } from '@expo/vector-icons';
+import firebase from 'firebase';
+import moment from 'moment';
+import { DARK_BLUE } from '../../styles/colours';
+import Avatar from '../../components/Avatar';
+
+const FORMAT = 'YYYY-MM-DD';
+const TODAY = moment().format(FORMAT);
+
+class ErrandScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      backgroundColor: 'white'
+    },
+    headerLeft: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Ionicons
+            name="ios-arrow-back"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
+          />
+        </TouchableOpacity>
+      );
+    },
+    headerTitle: () => <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Errands</Text>,
+    headerRight: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('createChore');
+          }}
+        >
+          <Ionicons name="md-add" size={30} color={DARK_BLUE} style={{ paddingHorizontal: 16 }} />
+        </TouchableOpacity>
+      );
+    }
+  });
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      errandsForSelectedDay: {},
+      currentMonth: null,
+      errands: null
+    };
+  }
+
+  componentDidMount = async () => {
+    const { group } = this.props;
+
+    /*
+      get start and end date of the month
+      b/c we will limit how much data we get from
+      firebase to the current month being viewed.
+      */
+    const month = moment().month();
+    const year = moment().year();
+    const startDate = moment([year, month]).toDate();
+    const endDate = moment()
+      .add(1, 'months')
+      .date(0)
+      .toDate();
+
+    // convoluted firebase fetch
+    const response = await firebase
+      .firestore()
+      .collection('errands')
+      .where('group', '==', group)
+      .where('date', '>=', startDate)
+      .where('date', '<=', endDate)
+      .get()
+      .then(async snapshot => {
+        const errands = await Promise.all(
+          snapshot.docs.map(async doc => {
+            const { name, description, date } = doc.data();
+            let attendantsFromDb = doc.data().attendants;
+            const attendants = [];
+
+            // fetch owner from db
+            const ownerSnapshot = await firebase
+              .firestore()
+              .collection('users')
+              .doc(doc.data().owner.id)
+              .get();
+
+            const ownerData = ownerSnapshot.data();
+            const owner = {
+              address: ownerData.address,
+              email: ownerData.email,
+              name: ownerData.name,
+              username: ownerData.username,
+              id: ownerSnapshot.id
+            };
+            // get all attendants from db (fetch)
+            attendantsFromDb = await Promise.all(
+              attendantsFromDb.map(async attendant => {
+                const a = await firebase
+                  .firestore()
+                  .collection('users')
+                  .doc(attendant.userRef.id)
+                  .get();
+
+                // pull off data we want form user;
+                const attendantData = a.data();
+                attendants.push({
+                  address: attendantData.address,
+                  email: attendantData.email,
+                  name: attendantData.name,
+                  username: attendantData.username,
+                  id: a.id
+                });
+
+                /*
+                  return attendantData to the mapping of the attendants arr
+                */
+                return {
+                  address: attendantData.address,
+                  email: attendantData.email,
+                  name: attendantData.name,
+                  username: attendantData.username,
+                  id: a.id
+                };
+              })
+            );
+
+            // return to original call
+            return {
+              id: doc.id,
+              name,
+              description,
+              attendants,
+              owner,
+              date: date.seconds // timestamp in unix seconds
+            };
+          })
+        );
+
+        // dispatch an action or smt at some point
+        // for now, just setup errands data for format required.
+        this.setupErrandsData(errands);
+      });
+    // firebase
+    //   .firestore()
+    //   .collection('errands')
+    //   .add({
+    //     group: '',
+    //     name: 'Another errand',
+    //     description: 'doing smt',
+    //     owner: '',
+    //     date: '',
+    //     attendants: [
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' }
+    //     ]
+    //   });
+  };
+
+  setupErrandsData = errands => {
+    // the items / errands in the Agenda require a certain format.
+    const { currentMonth } = this.state;
+    let startDate = moment([currentMonth.year, currentMonth.month - 1]);
+    let endDate = moment(startDate).endOf('month');
+    startDate = parseInt(startDate.format('D'));
+    endDate = parseInt(endDate.format('D'));
+
+    // setup buckets for errand items
+    const items = {};
+    for (; startDate <= endDate; startDate += 1) {
+      const doubleDigitDay = `0${startDate}`.slice(-2);
+      const doubleDigitMonth = `0${currentMonth.month}`.slice(-2);
+      const dateFormatted = `${currentMonth.year}-${doubleDigitMonth}-${doubleDigitDay}`;
+      items[dateFormatted] = [];
+    }
+
+    // loop through all items for this month, add to bucket
+    errands.forEach(errand => {
+      const errandDateFormatted = moment.unix(errand.date).format('YYYY-MM-DD');
+      items[errandDateFormatted].push(errand);
+    });
+
+    this.setState({ errands: items }, () => {
+      this.onUpdateSelectedDate(moment().add(1, 'months'));
+    });
+  };
+
+  // helper function to convert an arr of names to a sentence
+  attendantNameArrayToString = arr => {
+    if (arr.length === 0) {
+      return;
+    }
+
+    if (arr.length === 1) {
+      return arr[0];
+    }
+
+    if (arr.length === 2) {
+      return `${arr[0]} and ${arr[1]}`;
+    }
+
+    let str = '';
+    arr.forEach((el, index) => {
+      if (index === arr.length - 1) {
+        str += `and ${el}`;
+      } else {
+        str += `${el}, `;
+      }
+    });
+
+    return str;
+  };
+
+  nameToInitials = name => {
+    const initials = name.firstName.charAt(0) + name.lastName.charAt(0);
+    return initials.toUpperCase();
+  };
+
+  /* 
+    this function determines what will be rendered in the agenda
+    for a specific day.
+  */
+  renderItem = (item, firstItemInDay) => {
+    // get time of day
+    const timeOfDay = moment.unix(item.date);
+
+    // get human readable list of ppl attending
+    const attendantNames = item.attendants.map(attendant => {
+      return attendant.name.firstName;
+    });
+
+    const verb = attendantNames.length > 1 ? 'are' : 'is';
+    const ownerInitials = this.nameToInitials(item.owner.name);
+    return (
+      <TouchableOpacity
+        style={[styles.item, { height: item.height }, { flexDirection: 'row' }]}
+        onPress={() => Alert.alert(item.name)}
+      >
+        <Layout style={{ flex: 1 }}>
+          <Text>{timeOfDay.format('h:mm A')}</Text>
+          <Text style={{ marginVertical: 10 }}>{item.name}</Text>
+          <Text style={{ color: '#7a92a5' }}>{item.description}</Text>
+          <Text style={{ color: '#7a92a5' }}>{`${this.attendantNameArrayToString(
+            attendantNames
+          )} ${verb} attending.`}</Text>
+        </Layout>
+        <Layout
+          style={{
+            flex: 0.25
+          }}
+        >
+          <Avatar initials={ownerInitials} />
+        </Layout>
+      </TouchableOpacity>
+    );
+  };
+
+  renderEmptyDate = () => {
+    return (
+      <Layout style={styles.emptyDate}>
+        <Text>This is empty date!</Text>
+      </Layout>
+    );
+  };
+
+  /*
+    this function runs when u select a diff date.
+    this may need some extra luv. 
+
+    need to implement the part where u select smt
+    from a diff month.
+   */
+  onUpdateSelectedDate = date => {
+    const formattedDate = moment(date)
+      .subtract(1, 'months')
+      .format(FORMAT);
+    const { errands } = this.state;
+    const dates = errands[formattedDate];
+    this.setState({
+      errandsForSelectedDay: {
+        [formattedDate]: dates
+      }
+    });
+  };
+
+  render() {
+    const { errandsForSelectedDay } = this.state;
+    return (
+      <Layout style={{ flex: 1 }}>
+        <Agenda
+          items={errandsForSelectedDay}
+          // Callback that gets called when items for a certain month should be loaded (month became visible)
+          loadItemsForMonth={month => {
+            console.log('trigger items loading');
+            this.setState({ currentMonth: month });
+          }}
+          onDayPress={this.onUpdateSelectedDate}
+          // Callback that fires when the calendar is opened or closed
+          onCalendarToggled={calendarOpened => { }}
+          // Initially selected day
+          selected={TODAY}
+          // Max amount of months allowed to scroll to the past. Default = 50
+          pastScrollRange={50}
+          // Max amount of months allowed to scroll to the future. Default = 50
+          futureScrollRange={50}
+          // Specify how each item should be rendered in agenda
+          renderItem={this.renderItem}
+          // Specify how empty date content with no items should be rendered
+          renderEmptyDate={this.renderEmptyDate}
+          // Specify your item comparison function for increased performance
+          rowHasChanged={(r1, r2) => {
+            return r1.text !== r2.text;
+          }}
+          // By default, agenda dates are marked if they have at least one item, but you can override this if needed
+          markedDates={{
+            '2020-02-16': { marked: true },
+            '2020-02-17': { marked: true },
+            '2020-02-18': { disabled: true }
+          }}
+          // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false
+          disabledByDefault
+          // Agenda container style
+          style={{}}
+        />
+      </Layout>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  item: {
+    backgroundColor: 'white',
+    flex: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    marginRight: 10,
+    marginTop: 17
+  },
+  emptyDate: {
+    height: 15,
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    marginRight: 10,
+    marginTop: 17,
+    borderRadius: 5
+  }
+});
+
+const mapStateToProps = ({ auth }) => {
+  const { group } = auth;
+
+  return { group };
+};
+export default connect(mapStateToProps, null)(ErrandScreen);
