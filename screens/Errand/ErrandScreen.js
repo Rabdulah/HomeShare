@@ -53,18 +53,17 @@ class ErrandScreen extends Component {
     this.state = {
       errandsForSelectedDay: {},
       currentMonth: null,
-      errands: null
+      errands: {},
+      monthsLoaded: new Array(13)
     };
   }
 
   componentDidMount = async () => {
-    const { group } = this.props;
-
     /*
       get start and end date of the month
       b/c we will limit how much data we get from
       firebase to the current month being viewed.
-      */
+    */
     const month = moment().month();
     const year = moment().year();
     const startDate = moment([year, month]).toDate();
@@ -73,6 +72,36 @@ class ErrandScreen extends Component {
       .date(0)
       .toDate();
 
+    // 1.) make a shallow copy of months loaded
+    const monthsLoaded = [...this.state.monthsLoaded];
+
+    // 2.) update part in arr we want to update
+    monthsLoaded[month] = true;
+
+    // this.setState({ monthsLoaded });
+    // this.getErrandsForCurrentMonth(startDate, endDate);
+
+    // firebase
+    //   .firestore()
+    //   .collection('errands')
+    //   .add({
+    //     group: '',
+    //     name: 'Another errand',
+    //     description: 'doing smt',
+    //     owner: '',
+    //     date: '',
+    //     attendants: [
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' }
+    //     ]
+    //   });
+  };
+
+  getErrandsForCurrentMonth = async (startDate, endDate) => {
+    const { group } = this.props;
+
+    console.log('fetch startDate, endDate', startDate, endDate);
     // convoluted firebase fetch
     const response = await firebase
       .firestore()
@@ -151,33 +180,19 @@ class ErrandScreen extends Component {
         // for now, just setup errands data for format required.
         this.setupErrandsData(errands);
       });
-    // firebase
-    //   .firestore()
-    //   .collection('errands')
-    //   .add({
-    //     group: '',
-    //     name: 'Another errand',
-    //     description: 'doing smt',
-    //     owner: '',
-    //     date: '',
-    //     attendants: [
-    //       { count: 3, userRef: '' },
-    //       { count: 3, userRef: '' },
-    //       { count: 3, userRef: '' }
-    //     ]
-    //   });
   };
 
   setupErrandsData = errands => {
     // the items / errands in the Agenda require a certain format.
     const { currentMonth } = this.state;
+    const currErrandsInState = this.state.errands;
     let startDate = moment([currentMonth.year, currentMonth.month - 1]);
     let endDate = moment(startDate).endOf('month');
     startDate = parseInt(startDate.format('D'));
     endDate = parseInt(endDate.format('D'));
 
     // setup buckets for errand items
-    const items = {};
+    const items = { ...currErrandsInState };
     for (; startDate <= endDate; startDate += 1) {
       const doubleDigitDay = `0${startDate}`.slice(-2);
       const doubleDigitMonth = `0${currentMonth.month}`.slice(-2);
@@ -285,6 +300,7 @@ class ErrandScreen extends Component {
     const formattedDate = moment(date)
       .subtract(1, 'months')
       .format(FORMAT);
+
     const { errands } = this.state;
     const dates = errands[formattedDate];
     this.setState({
@@ -294,6 +310,43 @@ class ErrandScreen extends Component {
     });
   };
 
+  loadItemsForMonth = month => {
+    this.setState({ currentMonth: month });
+    const monthNumber = month.month;
+
+    /* 
+      only fetch errands for months that have not been loaded.
+      
+      this is kept track in the monthsLoaded[]. if, say,
+      monthsLoaded[1] = true, then it means that all errands
+      for January have been loaded.
+    */
+    if (!this.state.monthsLoaded[monthNumber]) {
+      /*
+     get start and end date of the month
+     b/c we will limit how much data we get from
+     firebase to the current month being viewed.
+   */
+      const endDate = moment(month.dateString)
+        .add(1, 'months')
+        .date(0)
+        .toDate();
+
+      const { year } = month;
+      const startDate = moment([parseInt(year), parseInt(monthNumber) - 1]).toDate();
+
+      // 1.) make a shallow copy of months loaded
+      const monthsLoaded = [...this.state.monthsLoaded];
+
+      // 2.) update part in arr we want to update
+      monthsLoaded[monthNumber] = true;
+
+      this.setState({ monthsLoaded }, () => {
+        this.getErrandsForCurrentMonth(startDate, endDate);
+      });
+    }
+  };
+
   render() {
     const { errandsForSelectedDay } = this.state;
     return (
@@ -301,10 +354,7 @@ class ErrandScreen extends Component {
         <Agenda
           items={errandsForSelectedDay}
           // Callback that gets called when items for a certain month should be loaded (month became visible)
-          loadItemsForMonth={month => {
-            console.log('trigger items loading');
-            this.setState({ currentMonth: month });
-          }}
+          loadItemsForMonth={this.loadItemsForMonth}
           onDayPress={this.onUpdateSelectedDate}
           // Callback that fires when the calendar is opened or closed
           onCalendarToggled={calendarOpened => { }}
