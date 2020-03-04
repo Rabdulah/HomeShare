@@ -38,7 +38,7 @@ class ErrandScreen extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('createChore');
+            navigation.navigate('createErrand');
           }}
         >
           <Ionicons name="md-add" size={30} color={DARK_BLUE} style={{ paddingHorizontal: 16 }} />
