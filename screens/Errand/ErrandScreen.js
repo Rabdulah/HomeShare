@@ -80,7 +80,6 @@ class ErrandScreen extends Component {
   getErrandsForCurrentMonth = async (startDate, endDate) => {
     const { group } = this.props;
 
-    console.log('fetch startDate, endDate', startDate, endDate);
     // convoluted firebase fetch
     const response = await firebase
       .firestore()
@@ -172,20 +171,27 @@ class ErrandScreen extends Component {
 
     // setup buckets for errand items
     const items = { ...currErrandsInState };
+    const markedDates = { ...this.state.markedDates };
     for (; startDate <= endDate; startDate += 1) {
+      // format / get double digit day, month cuz the Agenda lib needs this
       const doubleDigitDay = `0${startDate}`.slice(-2);
       const doubleDigitMonth = `0${currentMonth.month}`.slice(-2);
       const dateFormatted = `${currentMonth.year}-${doubleDigitMonth}-${doubleDigitDay}`;
       items[dateFormatted] = [];
     }
-
-    // loop through all items for this month, add to bucket
+    // loop through all items for this month, add to bucket, add to markedDates
     errands.forEach(errand => {
+      // format date properly
       const errandDateFormatted = moment.unix(errand.date).format('YYYY-MM-DD');
+
+      // add errand to appropriate key in items {}
       items[errandDateFormatted].push(errand);
+
+      // make sure to mark the errand
+      markedDates[errandDateFormatted] = { marked: true };
     });
 
-    this.setState({ errands: items }, () => {
+    this.setState({ errands: items, markedDates }, () => {
       this.onUpdateSelectedDate(moment().add(1, 'months'));
     });
   };
@@ -309,6 +315,7 @@ class ErrandScreen extends Component {
       const endDate = moment(month.dateString)
         .add(1, 'months')
         .date(0)
+        .endOf('day')
         .toDate();
 
       const { year } = month;
@@ -327,7 +334,8 @@ class ErrandScreen extends Component {
   };
 
   render() {
-    const { errandsForSelectedDay } = this.state;
+    const { errandsForSelectedDay, markedDates } = this.state;
+
     return (
       <Layout style={{ flex: 1 }}>
         <Agenda
@@ -352,11 +360,7 @@ class ErrandScreen extends Component {
             return r1.text !== r2.text;
           }}
           // By default, agenda dates are marked if they have at least one item, but you can override this if needed
-          markedDates={{
-            '2020-02-16': { marked: true },
-            '2020-02-17': { marked: true },
-            '2020-02-18': { disabled: true }
-          }}
+          markedDates={markedDates}
           // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false
           disabledByDefault
           // Agenda container style
