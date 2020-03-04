@@ -54,33 +54,12 @@ class ErrandScreen extends Component {
       errandsForSelectedDay: {},
       currentMonth: null,
       errands: {},
-      monthsLoaded: new Array(13)
+      monthsLoaded: new Array(13),
+      markedDates: {}
     };
   }
 
   componentDidMount = async () => {
-    /*
-      get start and end date of the month
-      b/c we will limit how much data we get from
-      firebase to the current month being viewed.
-    */
-    const month = moment().month();
-    const year = moment().year();
-    const startDate = moment([year, month]).toDate();
-    const endDate = moment()
-      .add(1, 'months')
-      .date(0)
-      .toDate();
-
-    // 1.) make a shallow copy of months loaded
-    const monthsLoaded = [...this.state.monthsLoaded];
-
-    // 2.) update part in arr we want to update
-    monthsLoaded[month] = true;
-
-    // this.setState({ monthsLoaded });
-    // this.getErrandsForCurrentMonth(startDate, endDate);
-
     // firebase
     //   .firestore()
     //   .collection('errands')
@@ -284,7 +263,7 @@ class ErrandScreen extends Component {
   renderEmptyDate = () => {
     return (
       <Layout style={styles.emptyDate}>
-        <Text>This is empty date!</Text>
+        <Text>This is an empty date!</Text>
       </Layout>
     );
   };
