@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import {
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-  ScrollView,
-  KeyboardAvoidingView
-} from 'react-native';
-import { Layout, Text, Input as KittenInput } from '@ui-kitten/components';
+import { TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { connect } from 'react-redux';
+import { Layout, Text } from '@ui-kitten/components';
 import { Input } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import { Ionicons } from '@expo/vector-icons';
+import firebase from 'firebase';
 import { DARK_BLUE } from '../../styles/colours';
 
 const styles = StyleSheet.create({
@@ -57,7 +52,11 @@ class CreateErrandScreen extends Component {
     ),
     headerRight: () => {
       return (
-        <TouchableOpacity onPress={() => { }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.getParam('onAdd')();
+          }}
+        >
           <Text style={{ paddingHorizontal: 16 }}>Add</Text>
         </TouchableOpacity>
       );
@@ -66,8 +65,57 @@ class CreateErrandScreen extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { date: new Date(), showDate: false, showTime: false };
+    this.state = {
+      date: new Date(),
+      showDate: false,
+      showTime: false,
+      name: '',
+      description: ''
+    };
+    this.descriptionInput = React.createRef();
   }
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    navigation.setParams({
+      onAdd: this.onAdd
+    });
+  }
+
+  onAdd = () => {
+    const { name, description, date } = this.state;
+    const { user, group } = this.props;
+
+    // get owner reference
+    const ownerRef = firebase
+      .firestore()
+      .collection('users')
+      .doc(user);
+
+    const newErrand = {
+      attendants: [],
+      date,
+      description,
+      group,
+      name,
+      owner: ownerRef
+    };
+
+    this.createErrand(newErrand);
+  };
+
+  createErrand = errand => {
+    const { navigation } = this.props;
+    const errandsRef = firebase.firestore().collection('errands');
+    errandsRef
+      .add(errand)
+      .then(() => {
+        navigation.navigate('errand');
+      })
+      .catch(err => {
+        console.log('err in creating errand', err);
+      });
+  };
 
   setDate = date => {
     this.setState({ date });
@@ -77,6 +125,14 @@ class CreateErrandScreen extends Component {
     const { date } = this.state;
     const currentDate = selectedDate || date;
     this.setDate(currentDate);
+  };
+
+  onNameChange = name => {
+    this.setState({ name });
+  };
+
+  onDescriptionChange = description => {
+    this.setState({ description });
   };
 
   toggleShowDate = () => {
@@ -90,12 +146,11 @@ class CreateErrandScreen extends Component {
   };
 
   render() {
-    const { date, showDate, showTime } = this.state;
+    const { date, showDate, showTime, name, description } = this.state;
     return (
       <KeyboardAvoidingView
         style={{ flex: 1, paddingVertical: 15, backgroundColor: '#f0f0f0' }}
         behaviour="height"
-        enabled
       >
         <Layout
           style={{
@@ -113,18 +168,33 @@ class CreateErrandScreen extends Component {
             ]}
             scrollEnabled
           >
-            <Input placeholder="Name" inputContainerStyle={{ borderBottomColor: '#dbdbdb' }} />
-            <Input placeholder="Description" inputContainerStyle={{ borderBottomWidth: 0 }} />
+            <Input
+              placeholder="Name"
+              inputContainerStyle={{ borderBottomColor: '#dbdbdb' }}
+              value={name}
+              onChangeText={this.onNameChange}
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                this.descriptionInput.current.focus();
+              }}
+            />
+            <Input
+              placeholder="Description"
+              inputContainerStyle={{ borderBottomWidth: 0 }}
+              value={description}
+              onChangeText={this.onDescriptionChange}
+              ref={this.descriptionInput}
+            />
           </ScrollView>
 
-          <Layout style={{ marginBottom: 36 }}>
+          <Layout style={[styles.inputContainer]}>
             <Layout
               style={[
                 {
-                  width: '100%',
-                  paddingHorizontal: 10
-                },
-                styles.inputContainer
+                  marginHorizontal: 10,
+                  borderBottomColor: '#dbdbdb',
+                  borderBottomWidth: 1
+                }
               ]}
             >
               <TouchableOpacity onPress={this.toggleShowDate}>
@@ -143,14 +213,17 @@ class CreateErrandScreen extends Component {
                 />
               )}
             </Layout>
-            <Layout style={{ width: '100%', paddingHorizontal: 10 }}>
+            <Layout
+              style={{
+                marginHorizontal: 10
+              }}
+            >
               <TouchableOpacity onPress={this.toggleShowTime}>
                 <Layout style={styles.dateTime}>
                   <Text style={styles.text}>Time:</Text>
                   <Text style={styles.text}>{moment(date).format('h:mm a')}</Text>
                 </Layout>
               </TouchableOpacity>
-              {/* date */}
               {showTime && (
                 <DateTimePicker
                   testID="timePicker"
@@ -168,4 +241,9 @@ class CreateErrandScreen extends Component {
   }
 }
 
-export default CreateErrandScreen;
+const mapStateToProps = ({ auth }) => {
+  const { group, user } = auth;
+
+  return { group, user };
+};
+export default connect(mapStateToProps, {})(CreateErrandScreen);

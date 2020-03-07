@@ -6,11 +6,19 @@ import { Agenda } from 'react-native-calendars';
 import { Ionicons } from '@expo/vector-icons';
 import firebase from 'firebase';
 import moment from 'moment';
+import { NavigationEvents } from 'react-navigation';
 import { DARK_BLUE } from '../../styles/colours';
 import Avatar from '../../components/Avatar';
 
 const FORMAT = 'YYYY-MM-DD';
 const TODAY = moment().format(FORMAT);
+const INITITAL_STATE = {
+  errandsForSelectedDay: {},
+  currentMonth: null,
+  errands: {},
+  monthsLoaded: new Array(13),
+  markedDates: {}
+};
 
 class ErrandScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -50,13 +58,7 @@ class ErrandScreen extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      errandsForSelectedDay: {},
-      currentMonth: null,
-      errands: {},
-      monthsLoaded: new Array(13),
-      markedDates: {}
-    };
+    this.state = INITITAL_STATE;
   }
 
   componentDidMount = async () => {
@@ -199,7 +201,7 @@ class ErrandScreen extends Component {
   // helper function to convert an arr of names to a sentence
   attendantNameArrayToString = arr => {
     if (arr.length === 0) {
-      return;
+      return 'No one';
     }
 
     if (arr.length === 1) {
@@ -298,6 +300,7 @@ class ErrandScreen extends Component {
   loadItemsForMonth = month => {
     this.setState({ currentMonth: month });
     const monthNumber = month.month;
+    console.log('monthnum', monthNumber);
 
     /* 
       only fetch errands for months that have not been loaded.
@@ -333,40 +336,48 @@ class ErrandScreen extends Component {
     }
   };
 
+  getErrandsForCurrentMonthHelper = () => {
+    const { current } = this.state;
+    console.log('month in helper', this.state);
+  };
+
   render() {
     const { errandsForSelectedDay, markedDates } = this.state;
 
     return (
-      <Layout style={{ flex: 1 }}>
-        <Agenda
-          items={errandsForSelectedDay}
-          // Callback that gets called when items for a certain month should be loaded (month became visible)
-          loadItemsForMonth={this.loadItemsForMonth}
-          onDayPress={this.onUpdateSelectedDate}
-          // Callback that fires when the calendar is opened or closed
-          onCalendarToggled={calendarOpened => { }}
-          // Initially selected day
-          selected={TODAY}
-          // Max amount of months allowed to scroll to the past. Default = 50
-          pastScrollRange={50}
-          // Max amount of months allowed to scroll to the future. Default = 50
-          futureScrollRange={50}
-          // Specify how each item should be rendered in agenda
-          renderItem={this.renderItem}
-          // Specify how empty date content with no items should be rendered
-          renderEmptyDate={this.renderEmptyDate}
-          // Specify your item comparison function for increased performance
-          rowHasChanged={(r1, r2) => {
-            return r1.text !== r2.text;
-          }}
-          // By default, agenda dates are marked if they have at least one item, but you can override this if needed
-          markedDates={markedDates}
-          // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false
-          disabledByDefault
-          // Agenda container style
-          style={{}}
-        />
-      </Layout>
+      <>
+        <NavigationEvents onDidFocus={this.getErrandsForCurrentMonthHelper} />
+        <Layout style={{ flex: 1 }}>
+          <Agenda
+            items={errandsForSelectedDay}
+            // Callback that gets called when items for a certain month should be loaded (month became visible)
+            loadItemsForMonth={this.loadItemsForMonth}
+            onDayPress={this.onUpdateSelectedDate}
+            // Callback that fires when the calendar is opened or closed
+            onCalendarToggled={calendarOpened => { }}
+            // Initially selected day
+            selected={TODAY}
+            // Max amount of months allowed to scroll to the past. Default = 50
+            pastScrollRange={50}
+            // Max amount of months allowed to scroll to the future. Default = 50
+            futureScrollRange={50}
+            // Specify how each item should be rendered in agenda
+            renderItem={this.renderItem}
+            // Specify how empty date content with no items should be rendered
+            renderEmptyDate={this.renderEmptyDate}
+            // Specify your item comparison function for increased performance
+            rowHasChanged={(r1, r2) => {
+              return r1.text !== r2.text;
+            }}
+            // By default, agenda dates are marked if they have at least one item, but you can override this if needed
+            markedDates={markedDates}
+            // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false
+            disabledByDefault
+            // Agenda container style
+            style={{}}
+          />
+        </Layout>
+      </>
     );
   }
 }
