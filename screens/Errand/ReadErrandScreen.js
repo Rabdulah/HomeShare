@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +10,20 @@ const styles = StyleSheet.create({
   headerText: {
     paddingHorizontal: 16,
     color: DARK_BLUE
+  },
+  text: {
+    fontSize: 16
+  },
+  rowItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: '#dbdbdb',
+    paddingVertical: 10
+  },
+  rowItemRight: {
+    color: '#7a92a5'
   }
 });
 class ReadErrandScreen extends Component {
@@ -33,7 +47,8 @@ class ReadErrandScreen extends Component {
               paddingHorizontal: 16,
               display: 'flex',
               flexDirection: 'row',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              backgroundColor: 'pink'
             }}
           >
             <Ionicons
@@ -42,7 +57,9 @@ class ReadErrandScreen extends Component {
               color={DARK_BLUE}
               style={{ paddingRight: 6 }}
             />
-            <Text style={{ color: DARK_BLUE }}>{date}</Text>
+            <Text style={{ color: DARK_BLUE, flex: 1, lineHeight: 14, backgroundColor: 'orange' }}>
+              {date}
+            </Text>
           </TouchableOpacity>
         );
       },
@@ -53,7 +70,7 @@ class ReadErrandScreen extends Component {
         return (
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('createErrand');
+              navigation.navigate('editErrand');
             }}
           >
             <Text style={styles.headerText}>Edit</Text>
@@ -70,18 +87,81 @@ class ReadErrandScreen extends Component {
     });
   }
 
+  // helper function to convert an arr of names to a sentence
+  attendantNameArrayToString = arr => {
+    if (arr.length === 0) {
+      return 'No one';
+    }
+
+    if (arr.length === 1) {
+      return arr[0];
+    }
+
+    if (arr.length === 2) {
+      return `${arr[0]} and ${arr[1]}`;
+    }
+
+    let str = '';
+    arr.forEach((el, index) => {
+      if (index === arr.length - 1) {
+        str += `and ${el}`;
+      } else {
+        str += `${el}, `;
+      }
+    });
+
+    return str;
+  };
+
+  renderAttendeeNames = () => {
+    const { attendants } = this.props.currentErrand;
+
+    // get human readable list of ppl attending
+    const attendantNames = attendants.map(attendant => {
+      return attendant.name.firstName;
+    });
+
+    return this.attendantNameArrayToString(attendantNames);
+  };
+
   render() {
+    const { name, date, owner, description } = this.props.currentErrand;
     return (
-      <Layout>
-        <Text>ReadErrandScreen</Text>
-        <Text>ReadErrandScreen</Text>
-        <Text>ReadErrandScreen</Text>
-        <Text>ReadErrandScreen</Text>
-        <Text>ReadErrandScreen</Text>
-        <Text>ReadErrandScreen</Text>
-        <Text>ReadErrandScreen</Text>
-        <Text>{this.props.currentErrand.name}</Text>
-      </Layout>
+      <ScrollView style={{ padding: 16 }}>
+        <Text style={{ fontSize: 25, lineHeight: 25, fontWeight: '700' }}>{name}</Text>
+        <Layout style={{ marginVertical: 20 }}>
+          <Text>{moment.unix(date).format('dddd, MMM d, YYYY')}</Text>
+          <Text>{moment.unix(date).format('h:mm A')}</Text>
+        </Layout>
+        <Layout>
+          <Layout
+            style={[
+              {
+                borderTopWidth: 1,
+                borderTopColor: '#dbdbdb'
+              },
+              styles.rowItem
+            ]}
+          >
+            <Text style={styles.text}>Errand event owner:</Text>
+            <Text style={styles.rowItemRight}>
+              {owner.name.firstName} {owner.name.lastName}
+            </Text>
+          </Layout>
+          <Layout style={styles.rowItem}>
+            <Text style={styles.text}>Roommates attending:</Text>
+            <Text style={styles.rowItemRight}>{this.renderAttendeeNames()}</Text>
+          </Layout>
+          <Layout
+            style={{
+              paddingVertical: 10
+            }}
+          >
+            <Text style={styles.text}>Roommates attending:</Text>
+            <Text style={styles.rowItemRight}>{description}</Text>
+          </Layout>
+        </Layout>
+      </ScrollView>
     );
   }
 }
