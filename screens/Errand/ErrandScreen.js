@@ -230,6 +230,16 @@ class ErrandScreen extends Component {
     return initials.toUpperCase();
   };
 
+  /*
+    handler when user clicks on an errand to view it
+  */
+  onErrandPress = errand => {
+    console.log('errand', errand);
+    const { viewErrand, navigation } = this.props;
+    viewErrand(errand);
+    navigation.navigate('readErrand');
+  };
+
   /* 
     this function determines what will be rendered in the agenda
     for a specific day.
@@ -248,7 +258,9 @@ class ErrandScreen extends Component {
     return (
       <TouchableOpacity
         style={[styles.item, { height: item.height }, { flexDirection: 'row' }]}
-        onPress={() => Alert.alert(item.name)}
+        onPress={() => {
+          this.onErrandPress(item);
+        }}
       >
         <Layout style={{ flex: 1 }}>
           <Text>{timeOfDay.format('h:mm A')}</Text>
@@ -301,7 +313,6 @@ class ErrandScreen extends Component {
   loadItemsForMonth = month => {
     this.setState({ currentMonth: month });
     const monthNumber = month.month;
-    console.log('monthnum', monthNumber);
 
     /* 
       only fetch errands for months that have not been loaded.
