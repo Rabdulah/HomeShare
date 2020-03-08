@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import firebase from 'firebase';
 import moment from 'moment';
 import { NavigationEvents } from 'react-navigation';
+import { viewErrand } from '../../actions';
 import { DARK_BLUE } from '../../styles/colours';
 import Avatar from '../../components/Avatar';
 
@@ -408,4 +409,4 @@ const mapStateToProps = ({ auth }) => {
 
   return { group };
 };
-export default connect(mapStateToProps, null)(ErrandScreen);
+export default connect(mapStateToProps, { viewErrand })(ErrandScreen);
