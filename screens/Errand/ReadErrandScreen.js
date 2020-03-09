@@ -48,7 +48,7 @@ class ReadErrandScreen extends Component {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'center',
-              backgroundColor: 'pink'
+              alignItems: 'center'
             }}
           >
             <Ionicons
@@ -57,9 +57,7 @@ class ReadErrandScreen extends Component {
               color={DARK_BLUE}
               style={{ paddingRight: 6 }}
             />
-            <Text style={{ color: DARK_BLUE, flex: 1, lineHeight: 14, backgroundColor: 'orange' }}>
-              {date}
-            </Text>
+            <Text style={{ color: DARK_BLUE, height: '100%' }}>{date}</Text>
           </TouchableOpacity>
         );
       },
@@ -70,7 +68,7 @@ class ReadErrandScreen extends Component {
         return (
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('editErrand');
+              navigation.navigate('updateErrand');
             }}
           >
             <Text style={styles.headerText}>Edit</Text>
