@@ -9,9 +9,6 @@ import firebase from 'firebase';
 import { DARK_BLUE } from '../../styles/colours';
 
 const styles = StyleSheet.create({
-  input: {
-    width: '60%'
-  },
   text: {
     fontSize: 18,
     height: 40,
