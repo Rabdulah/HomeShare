@@ -6,11 +6,20 @@ import { Agenda } from 'react-native-calendars';
 import { Ionicons } from '@expo/vector-icons';
 import firebase from 'firebase';
 import moment from 'moment';
+import { NavigationEvents } from 'react-navigation';
+import { viewErrand } from '../../actions';
 import { DARK_BLUE } from '../../styles/colours';
 import Avatar from '../../components/Avatar';
 
 const FORMAT = 'YYYY-MM-DD';
 const TODAY = moment().format(FORMAT);
+const INITITAL_STATE = {
+  errandsForSelectedDay: {},
+  currentMonth: null,
+  errands: {},
+  monthsLoaded: new Array(13),
+  markedDates: {}
+};
 
 class ErrandScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -38,7 +47,7 @@ class ErrandScreen extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('createChore');
+            navigation.navigate('createErrand');
           }}
         >
           <Ionicons name="md-add" size={30} color={DARK_BLUE} style={{ paddingHorizontal: 16 }} />
@@ -50,28 +59,29 @@ class ErrandScreen extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      errandsForSelectedDay: {},
-      currentMonth: null,
-      errands: null
-    };
+    this.state = INITITAL_STATE;
   }
 
   componentDidMount = async () => {
-    const { group } = this.props;
+    // firebase
+    //   .firestore()
+    //   .collection('errands')
+    //   .add({
+    //     group: '',
+    //     name: 'Another errand',
+    //     description: 'doing smt',
+    //     owner: '',
+    //     date: '',
+    //     attendants: [
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' },
+    //       { count: 3, userRef: '' }
+    //     ]
+    //   });
+  };
 
-    /*
-      get start and end date of the month
-      b/c we will limit how much data we get from
-      firebase to the current month being viewed.
-      */
-    const month = moment().month();
-    const year = moment().year();
-    const startDate = moment([year, month]).toDate();
-    const endDate = moment()
-      .add(1, 'months')
-      .date(0)
-      .toDate();
+  getErrandsForCurrentMonth = async (startDate, endDate) => {
+    const { group } = this.props;
 
     // convoluted firebase fetch
     const response = await firebase
@@ -151,47 +161,40 @@ class ErrandScreen extends Component {
         // for now, just setup errands data for format required.
         this.setupErrandsData(errands);
       });
-    // firebase
-    //   .firestore()
-    //   .collection('errands')
-    //   .add({
-    //     group: '',
-    //     name: 'Another errand',
-    //     description: 'doing smt',
-    //     owner: '',
-    //     date: '',
-    //     attendants: [
-    //       { count: 3, userRef: '' },
-    //       { count: 3, userRef: '' },
-    //       { count: 3, userRef: '' }
-    //     ]
-    //   });
   };
 
   setupErrandsData = errands => {
     // the items / errands in the Agenda require a certain format.
     const { currentMonth } = this.state;
+    const currErrandsInState = this.state.errands;
     let startDate = moment([currentMonth.year, currentMonth.month - 1]);
     let endDate = moment(startDate).endOf('month');
     startDate = parseInt(startDate.format('D'));
     endDate = parseInt(endDate.format('D'));
 
     // setup buckets for errand items
-    const items = {};
+    const items = { ...currErrandsInState };
+    const markedDates = { ...this.state.markedDates };
     for (; startDate <= endDate; startDate += 1) {
+      // format / get double digit day, month cuz the Agenda lib needs this
       const doubleDigitDay = `0${startDate}`.slice(-2);
       const doubleDigitMonth = `0${currentMonth.month}`.slice(-2);
       const dateFormatted = `${currentMonth.year}-${doubleDigitMonth}-${doubleDigitDay}`;
       items[dateFormatted] = [];
     }
-
-    // loop through all items for this month, add to bucket
+    // loop through all items for this month, add to bucket, add to markedDates
     errands.forEach(errand => {
+      // format date properly
       const errandDateFormatted = moment.unix(errand.date).format('YYYY-MM-DD');
+
+      // add errand to appropriate key in items {}
       items[errandDateFormatted].push(errand);
+
+      // make sure to mark the errand
+      markedDates[errandDateFormatted] = { marked: true };
     });
 
-    this.setState({ errands: items }, () => {
+    this.setState({ errands: items, markedDates }, () => {
       this.onUpdateSelectedDate(moment().add(1, 'months'));
     });
   };
@@ -199,7 +202,7 @@ class ErrandScreen extends Component {
   // helper function to convert an arr of names to a sentence
   attendantNameArrayToString = arr => {
     if (arr.length === 0) {
-      return;
+      return 'No one';
     }
 
     if (arr.length === 1) {
@@ -227,6 +230,16 @@ class ErrandScreen extends Component {
     return initials.toUpperCase();
   };
 
+  /*
+    handler when user clicks on an errand to view it
+  */
+  onErrandPress = errand => {
+    console.log('errand', errand);
+    const { viewErrand, navigation } = this.props;
+    viewErrand(errand);
+    navigation.navigate('readErrand');
+  };
+
   /* 
     this function determines what will be rendered in the agenda
     for a specific day.
@@ -245,7 +258,9 @@ class ErrandScreen extends Component {
     return (
       <TouchableOpacity
         style={[styles.item, { height: item.height }, { flexDirection: 'row' }]}
-        onPress={() => Alert.alert(item.name)}
+        onPress={() => {
+          this.onErrandPress(item);
+        }}
       >
         <Layout style={{ flex: 1 }}>
           <Text>{timeOfDay.format('h:mm A')}</Text>
@@ -269,7 +284,7 @@ class ErrandScreen extends Component {
   renderEmptyDate = () => {
     return (
       <Layout style={styles.emptyDate}>
-        <Text>This is empty date!</Text>
+        <Text>This is an empty date!</Text>
       </Layout>
     );
   };
@@ -285,6 +300,7 @@ class ErrandScreen extends Component {
     const formattedDate = moment(date)
       .subtract(1, 'months')
       .format(FORMAT);
+
     const { errands } = this.state;
     const dates = errands[formattedDate];
     this.setState({
@@ -294,46 +310,86 @@ class ErrandScreen extends Component {
     });
   };
 
+  loadItemsForMonth = month => {
+    this.setState({ currentMonth: month });
+    const monthNumber = month.month;
+
+    /* 
+      only fetch errands for months that have not been loaded.
+      
+      this is kept track in the monthsLoaded[]. if, say,
+      monthsLoaded[1] = true, then it means that all errands
+      for January have been loaded.
+    */
+    if (!this.state.monthsLoaded[monthNumber]) {
+      /*
+     get start and end date of the month
+     b/c we will limit how much data we get from
+     firebase to the current month being viewed.
+   */
+      const endDate = moment(month.dateString)
+        .add(1, 'months')
+        .date(0)
+        .endOf('day')
+        .toDate();
+
+      const { year } = month;
+      const startDate = moment([parseInt(year), parseInt(monthNumber) - 1]).toDate();
+
+      // 1.) make a shallow copy of months loaded
+      const monthsLoaded = [...this.state.monthsLoaded];
+
+      // 2.) update part in arr we want to update
+      monthsLoaded[monthNumber] = true;
+
+      this.setState({ monthsLoaded }, () => {
+        this.getErrandsForCurrentMonth(startDate, endDate);
+      });
+    }
+  };
+
+  getErrandsForCurrentMonthHelper = () => {
+    const { current } = this.state;
+    console.log('month in helper', this.state);
+  };
+
   render() {
-    const { errandsForSelectedDay } = this.state;
+    const { errandsForSelectedDay, markedDates } = this.state;
+
     return (
-      <Layout style={{ flex: 1 }}>
-        <Agenda
-          items={errandsForSelectedDay}
-          // Callback that gets called when items for a certain month should be loaded (month became visible)
-          loadItemsForMonth={month => {
-            console.log('trigger items loading');
-            this.setState({ currentMonth: month });
-          }}
-          onDayPress={this.onUpdateSelectedDate}
-          // Callback that fires when the calendar is opened or closed
-          onCalendarToggled={calendarOpened => { }}
-          // Initially selected day
-          selected={TODAY}
-          // Max amount of months allowed to scroll to the past. Default = 50
-          pastScrollRange={50}
-          // Max amount of months allowed to scroll to the future. Default = 50
-          futureScrollRange={50}
-          // Specify how each item should be rendered in agenda
-          renderItem={this.renderItem}
-          // Specify how empty date content with no items should be rendered
-          renderEmptyDate={this.renderEmptyDate}
-          // Specify your item comparison function for increased performance
-          rowHasChanged={(r1, r2) => {
-            return r1.text !== r2.text;
-          }}
-          // By default, agenda dates are marked if they have at least one item, but you can override this if needed
-          markedDates={{
-            '2020-02-16': { marked: true },
-            '2020-02-17': { marked: true },
-            '2020-02-18': { disabled: true }
-          }}
-          // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false
-          disabledByDefault
-          // Agenda container style
-          style={{}}
-        />
-      </Layout>
+      <>
+        <NavigationEvents onDidFocus={this.getErrandsForCurrentMonthHelper} />
+        <Layout style={{ flex: 1 }}>
+          <Agenda
+            items={errandsForSelectedDay}
+            // Callback that gets called when items for a certain month should be loaded (month became visible)
+            loadItemsForMonth={this.loadItemsForMonth}
+            onDayPress={this.onUpdateSelectedDate}
+            // Callback that fires when the calendar is opened or closed
+            onCalendarToggled={calendarOpened => { }}
+            // Initially selected day
+            selected={TODAY}
+            // Max amount of months allowed to scroll to the past. Default = 50
+            pastScrollRange={50}
+            // Max amount of months allowed to scroll to the future. Default = 50
+            futureScrollRange={50}
+            // Specify how each item should be rendered in agenda
+            renderItem={this.renderItem}
+            // Specify how empty date content with no items should be rendered
+            renderEmptyDate={this.renderEmptyDate}
+            // Specify your item comparison function for increased performance
+            rowHasChanged={(r1, r2) => {
+              return r1.text !== r2.text;
+            }}
+            // By default, agenda dates are marked if they have at least one item, but you can override this if needed
+            markedDates={markedDates}
+            // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false
+            disabledByDefault
+            // Agenda container style
+            style={{}}
+          />
+        </Layout>
+      </>
     );
   }
 }
@@ -364,4 +420,4 @@ const mapStateToProps = ({ auth }) => {
 
   return { group };
 };
-export default connect(mapStateToProps, null)(ErrandScreen);
+export default connect(mapStateToProps, { viewErrand })(ErrandScreen);

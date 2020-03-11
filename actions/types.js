@@ -39,5 +39,8 @@ export const GET_CURRENT_PAYMENT = 'get_current_payment';
 export const RETRIEVE_CHORES = 'retrieve_chores';
 export const VIEW_CHORE = 'view_chore';
 
+// errands
+export const VIEW_ERRAND = 'view_errand';
+
 // utilities
 export const VIEW_UTILITY = 'view_utility';
