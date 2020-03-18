@@ -80,6 +80,36 @@ class ErrandScreen extends Component {
     //   });
   };
 
+  // componentDidUpdate(prevProps, prevState, snapshot) {
+  //   if (prevProps.currentErrand !== this.props.currentErrand) {
+  //     // Do whatever you want
+  //     console.log('prevprops', prevProps.currentErrand);
+  //     console.log('props', this.props.currentErrand);
+  //   }
+  // }
+
+  onNewCurrentErrand = newCurrentErrand => {
+    // update big ass list of errands
+
+    const currErrandsInState = this.state.errands;
+    // get date
+    const dateKey = moment.unix(newCurrentErrand.date).format('YYYY-MM-DD');
+    const items = { ...currErrandsInState };
+    // get all current errands for a certain day (clone)
+    let itemsForSpecifiedDate = JSON.parse(JSON.stringify(items[dateKey]));
+
+    itemsForSpecifiedDate = itemsForSpecifiedDate.map(el => {
+      if (el.id === newCurrentErrand.id) {
+        return newCurrentErrand;
+      }
+      return el;
+    });
+    // replace in big ass list
+    items[dateKey] = itemsForSpecifiedDate;
+
+    this.setState({ errands: items });
+  };
+
   getErrandsForCurrentMonth = async (startDate, endDate) => {
     const { group } = this.props;
 
@@ -234,10 +264,9 @@ class ErrandScreen extends Component {
     handler when user clicks on an errand to view it
   */
   onErrandPress = errand => {
-    console.log('errand', errand);
     const { viewErrand, navigation } = this.props;
     viewErrand(errand);
-    navigation.navigate('readErrand');
+    navigation.navigate('readErrand', { onNewCurrentErrand: this.onNewCurrentErrand });
   };
 
   /* 
@@ -350,7 +379,6 @@ class ErrandScreen extends Component {
 
   getErrandsForCurrentMonthHelper = () => {
     const { current } = this.state;
-    console.log('month in helper', this.state);
   };
 
   render() {
@@ -415,9 +443,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, errand }) => {
   const { group } = auth;
+  const { currentErrand } = errand;
 
-  return { group };
+  return { group, currentErrand };
 };
 export default connect(mapStateToProps, { viewErrand })(ErrandScreen);
