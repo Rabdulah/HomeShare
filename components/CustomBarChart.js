@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { BarChart, XAxis, Grid } from 'react-native-svg-charts';
-import { Layout } from '@ui-kitten/components';
+import { Layout, Text as KittenText } from '@ui-kitten/components';
+import { BarChart } from 'react-native-svg-charts';
 import { Text } from 'react-native-svg';
-import * as scale from 'd3-scale';
+import { ORANGE } from '../styles/colours';
 
 class CustomBarChart extends Component {
-  componentDidMount() {}
+  componentDidMount() { }
 
   nameToInitials = name => {
     const initials = name.firstName.charAt(0) + name.lastName.charAt(0);
@@ -14,14 +13,14 @@ class CustomBarChart extends Component {
   };
 
   render() {
-    const fill = 'rgb(134, 65, 244)';
+    const fill = ORANGE;
     const CUT_OFF = 20;
     const BottomLabels = ({ x, y, bandwidth, data }) =>
       data.map((value, index) => (
         <Text
           key={index}
           x={x(index) + bandwidth / 2}
-          y={245}
+          y={312}
           fontSize={14}
           fill={value.count >= CUT_OFF ? 'white' : 'black'}
           alignmentBaseline="middle"
@@ -37,9 +36,7 @@ class CustomBarChart extends Component {
           <Text
             key={index}
             x={x(index) + bandwidth / 2}
-            y={
-              value.count < CUT_OFF ? y(value.count) - 10 : y(value.count) + 15
-            }
+            y={value.count < CUT_OFF ? y(value.count) - 10 : y(value.count) + 15}
             fontSize={14}
             fill={value.count >= CUT_OFF ? 'white' : 'black'}
             alignmentBaseline="middle"
@@ -54,27 +51,36 @@ class CustomBarChart extends Component {
     // PLAY WITH DYNAMIC VIEW-paddingHorizontal
     // switch statement?
     return (
-      <View
+      <Layout
         style={{
-          height: 250,
-          width: '80%',
+          height: 360,
+          width: '100%',
           paddingHorizontal: 70,
-          backgroundColor: 'pink'
+          backgroundColor: 'white',
+          borderRadius: 5,
+          shadowColor: 'rgba(0,0,0,0.19)',
+          shadowOffset: { width: 1, height: 1 },
+          shadowOpacity: 0.5,
+          shadowRadius: 5,
+          elevation: 1
         }}
       >
-        <BarChart
-          style={{ flex: 1 }}
-          data={data}
-          yAccessor={({ item }) => item.count}
-          contentInset={{ top: 20, bottom: 20 }}
-          gridMin={0}
-          spacingInner={0.1 * data.length}
-          svg={{ fill }}
-        >
-          <TopLabels />
-          <BottomLabels />
-        </BarChart>
-      </View>
+        <Layout style={{ flex: 1, padding: 10 }}>
+          <KittenText style={{ textAlign: 'center' }}>Tally Breakdown</KittenText>
+          <BarChart
+            style={{ flex: 1 }}
+            data={data}
+            yAccessor={({ item }) => item.count}
+            contentInset={{ top: 20, bottom: 20 }}
+            gridMin={0}
+            spacingInner={0.1 * data.length}
+            svg={{ fill }}
+          >
+            <TopLabels />
+            <BottomLabels />
+          </BarChart>
+        </Layout>
+      </Layout>
     );
   }
 }

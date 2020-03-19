@@ -5,7 +5,7 @@ import Avatar from './Avatar';
 
 const getHomeOccupancy = () => {
   // TODO: need to get dynamically
-  return ['RA', 'SF', 'DP', 'MC', 'SD', 'SZ', 'MV', 'SP'];
+  return ['RA', 'SF', 'MC'];
 };
 
 // helper function to render a list of people who are home

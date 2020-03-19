@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Layout, Text } from '@ui-kitten/components';
 import { Ionicons } from '@expo/vector-icons';
 import { retrieveChores } from '../../actions';
 import CustomBarChart from '../../components/CustomBarChart';
-import { DARK_BLUE } from '../../styles/colours';
+import { DARK_BLUE, BACKGROUND_LIGHT_GREY } from '../../styles/colours';
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: BACKGROUND_LIGHT_GREY
+  }
+});
 class ReadChoreScreen extends Component {
   // specify custom header in navigationOptions
   static navigationOptions = ({ navigation }) => {
@@ -71,7 +80,7 @@ class ReadChoreScreen extends Component {
   render() {
     const { currentChore } = this.props;
     return (
-      <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Layout style={styles.container}>
         <CustomBarChart data={currentChore.responsibility} />
       </Layout>
     );
