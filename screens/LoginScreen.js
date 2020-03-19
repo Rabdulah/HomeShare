@@ -5,13 +5,7 @@ import { Layout, Text } from '@ui-kitten/components';
 import { Button } from 'react-native-elements';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import {
-  emailChanged,
-  passwordChanged,
-  loginUser,
-  getUserGroup,
-  clearErrors
-} from '../actions';
+import { emailChanged, passwordChanged, loginUser, getUserGroup, clearErrors } from '../actions';
 
 import Input from '../components/Input';
 import Spinner from '../components/Spinner';
@@ -136,9 +130,7 @@ class LoginScreen extends Component {
           >
             Welcome back!
           </Text>
-          <Text style={{ fontSize: 16, color: 'rgba(0, 0, 0, 0.85)' }}>
-            Sign in to continue
-          </Text>
+          <Text style={{ fontSize: 16, color: 'rgba(0, 0, 0, 0.85)' }}>Sign in to continue</Text>
         </Layout>
         <Layout style={{ flex: 3 }}>
           <Input
@@ -158,21 +150,13 @@ class LoginScreen extends Component {
             label="Password"
             containerStyle={{ marginVertical: 15 }}
           />
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('forgotPassword')}
-          >
-            <Text
-              style={{ marginVertical: 15, textAlign: 'right', fontSize: 16 }}
-            >
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('forgotPassword')}>
+            <Text style={{ marginVertical: 15, textAlign: 'right', fontSize: 16 }}>
               Forgot Password?
             </Text>
           </TouchableOpacity>
           {this.renderError()}
-          <View
-            style={[
-              this.props.loading ? { marginVertical: 15 } : { marginTop: 0 }
-            ]}
-          >
+          <View style={[this.props.loading ? { marginVertical: 15 } : { marginTop: 0 }]}>
             {this.renderButton()}
           </View>
           <View
@@ -184,14 +168,8 @@ class LoginScreen extends Component {
             }}
           >
             <Text style={{ fontSize: 16 }}>New user? </Text>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('signup')}
-            >
-              <Text
-                style={{ color: DARK_BLUE, fontWeight: 'bold', fontSize: 16 }}
-              >
-                Signup
-              </Text>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('signup')}>
+              <Text style={{ color: DARK_BLUE, fontWeight: 'bold', fontSize: 16 }}>Signup</Text>
             </TouchableOpacity>
           </View>
         </Layout>

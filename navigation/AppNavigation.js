@@ -140,7 +140,7 @@ const AppNavigator = createBottomTabNavigator(
         },
         {
           labeled: true,
-          activeColor: LIGHT_SEA_GREEN,
+          activeColor: DARK_BLUE,
           inactiveColor: 'grey',
           barStyle: {
             backgroundColor: 'white'
