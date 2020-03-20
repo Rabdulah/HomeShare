@@ -8,6 +8,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getUserGroup } from '../actions';
 import Header from '../components/Header';
 import HomeOccupancy from '../components/HomeOccupancy';
+import _getLocationAsync from '../server/location/backgroundLocation';
 import { PEWTER_BLUE, DARK_BLUE, MOONSTONE_BLUE } from '../styles/colours';
 
 const styles = StyleSheet.create({
@@ -104,6 +105,7 @@ class HomeScreen extends Component {
   };
 
   componentDidMount() {
+    _getLocationAsync();
     const { firstName, lastName, groupInfo, getUserGroup, inGroup, user, navigation } = this.props;
     navigation.setParams({
       firstName,
