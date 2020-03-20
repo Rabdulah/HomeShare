@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   emailChanged,
   passwordChanged,
@@ -64,9 +63,7 @@ class SignupScreen extends Component {
     if (this.props.errorSignUp) {
       return (
         <View style={{ backgroundColor: 'white' }}>
-          <Text style={AuthStyles.errorTextStyle}>
-            {this.props.errorSignUp}
-          </Text>
+          <Text style={AuthStyles.errorTextStyle}>{this.props.errorSignUp}</Text>
         </View>
       );
     }
@@ -78,71 +75,85 @@ class SignupScreen extends Component {
 
   render() {
     return (
-      <View style={AuthStyles.container}>
-        <KeyboardAwareScrollView>
-          <Text style={AuthStyles.subTitle}>Signup for HomeShare</Text>
-          <Input
-            placeholder="First Name"
-            onChangeText={this.onFnameChange}
-            value={this.props.firstName}
-          />
-          <Input
-            placeholder="Last Name"
-            onChangeText={this.onLnameChange}
-            value={this.props.lastName}
-          />
-          <Input
-            placeholder="Username"
-            onChangeText={this.onUsernameChange}
-            value={this.props.username}
-          />
-          <Input
-            placeholder="Email"
-            onChangeText={this.onEmailChange}
-            secure={false}
-            value={this.props.email}
-          />
-          <Input
-            secure
-            secureTextEntry
-            placeholder="Password"
-            onChangeText={this.onPasswordChange}
-            value={this.props.password}
-          />
-
-          {this.renderError()}
-
-          <View
-            style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}
+      <KeyboardAvoidingView style={[{ padding: 25 }, { flex: 1 }]} behavior="height" enabled>
+        <View style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+          <Text
+            style={{
+              fontSize: 32,
+              lineHeight: 32,
+              fontWeight: 'bold',
+              marginVertical: 5,
+              padding: 0
+            }}
           >
-            <Text style={{ marginBottom: 14 }}>
-              Already have an account?{' '}
-              <Text
-                style={{
-                  color: DARK_BLUE
-                }}
-                onPress={this.navigateToLogin}
-              >
-                Sign in here
-              </Text>
-              .
-            </Text>
-            <Button
-              title="Sign Up"
-              buttonStyle={{
-                borderRadius: 5,
-                padding: 10,
-                backgroundColor: DARK_BLUE
-              }}
-              titleStyle={{
-                width: '90%',
-                fontSize: 20
-              }}
-              onPress={this.onButtonPress}
+            Join HomeShare!
+          </Text>
+          <Text style={{ fontSize: 16, color: 'rgba(0, 0, 0, 0.85)' }}> Register your account</Text>
+        </View>
+        <View style={{ flex: 2 }}>
+          <ScrollView>
+            <Input
+              placeholder="First Name"
+              onChangeText={this.onFnameChange}
+              value={this.props.firstName}
             />
-          </View>
-        </KeyboardAwareScrollView>
-      </View>
+            <Input
+              placeholder="Last Name"
+              onChangeText={this.onLnameChange}
+              value={this.props.lastName}
+            />
+            <Input
+              placeholder="Username"
+              onChangeText={this.onUsernameChange}
+              value={this.props.username}
+            />
+            <Input
+              placeholder="Email"
+              onChangeText={this.onEmailChange}
+              secure={false}
+              value={this.props.email}
+            />
+            <Input
+              secure
+              secureTextEntry
+              placeholder="Password"
+              onChangeText={this.onPasswordChange}
+              value={this.props.password}
+            />
+
+            {this.renderError()}
+            <View style={[this.props.loading ? { marginTop: 14 } : { marginTop: 0 }]}>
+              <Button
+                title="Sign Up"
+                buttonStyle={{
+                  borderRadius: 5,
+                  padding: 10,
+                  marginTop: 5,
+                  marginBottom: 10,
+                  backgroundColor: DARK_BLUE
+                }}
+                titleStyle={{
+                  width: '90%',
+                  fontSize: 20
+                }}
+                onPress={this.onButtonPress}
+              />
+              <Text style={{ marginBottom: 14, textAlign: 'center', fontSize: 16 }}>
+                Already have an account?{' '}
+                <Text
+                  style={{
+                    color: DARK_BLUE,
+                    fontWeight: 'bold'
+                  }}
+                  onPress={this.navigateToLogin}
+                >
+                  Signin
+                </Text>
+              </Text>
+            </View>
+          </ScrollView>
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -150,16 +161,7 @@ class SignupScreen extends Component {
 // note: first argument is "state";
 // ({ auth }) gets you state.auth
 const mapStateToProps = ({ auth }) => {
-  const {
-    email,
-    password,
-    errorSignUp,
-    loading,
-    firstName,
-    lastName,
-    username,
-    user
-  } = auth;
+  const { email, password, errorSignUp, loading, firstName, lastName, username, user } = auth;
 
   return {
     email,
