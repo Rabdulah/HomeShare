@@ -25,6 +25,7 @@ class CustomBarChart extends Component {
           fill={value.count >= CUT_OFF ? 'white' : 'black'}
           alignmentBaseline="middle"
           textAnchor="middle"
+          style={{ fontWeight: 'bold' }}
         >
           {this.nameToInitials(value.user.name)}
         </Text>
@@ -66,7 +67,7 @@ class CustomBarChart extends Component {
         }}
       >
         <Layout style={{ flex: 1, padding: 10 }}>
-          <KittenText style={{ textAlign: 'center' }}>Tally Breakdown</KittenText>
+          <KittenText style={{ textAlign: 'center' }}>Breakdown</KittenText>
           <BarChart
             style={{ flex: 1 }}
             data={data}

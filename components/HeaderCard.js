@@ -1,16 +1,28 @@
 import React from 'react';
-import { Card, Text } from '@ui-kitten/components';
+import { Card, Text, Layout } from '@ui-kitten/components';
 
 const HeaderCard = ({ title, subtitle }) => {
   return (
     <Card
       style={{
-        marginBottom: 20,
+        marginBottom: 35,
         height: 120,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        borderWidth: 0,
+        borderBottomWidth: 1,
+        marginLeft: 0,
+        paddingLeft: 0
       }}
     >
-      <Text category="h1">{title}</Text>
+      <Text
+        style={{
+          fontSize: 40,
+          lineHeight: 40,
+          fontWeight: 'bold'
+        }}
+      >
+        {title}
+      </Text>
       <Text>{subtitle}</Text>
     </Card>
   );

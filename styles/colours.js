@@ -4,3 +4,4 @@ export const PEWTER_BLUE = '#95afba';
 export const MOONSTONE_BLUE = '#64a6bd';
 export const ORANGE = '#FF5700';
 export const BACKGROUND_LIGHT_GREY = '#f2F4f5';
+export const LIGHT_GREY_TEXT = '#7a92a5';
