@@ -77,15 +77,20 @@ const AppNavigator = createBottomTabNavigator(
       // nested nav
       screen: createMaterialBottomTabNavigator(
         {
-          profile: {
-            screen: ProfileScreen,
-            navigationOptions: () => ({
-              tabBarColor: '#C1EDCC',
-              tabBarIcon: ({ tintColor }) => (
-                <Ionicons name="ios-person" size={22} color={tintColor} />
-              )
-            })
-          },
+          profile: createStackNavigator(
+            {
+              profile: { screen: ProfileScreen },
+              sendInvite: { screen: SendInviteScreen }
+            },
+            {
+              navigationOptions: () => ({
+                tabBarColor: '#C1EDCC',
+                tabBarIcon: ({ tintColor }) => (
+                  <Ionicons name="ios-person" size={22} color={tintColor} />
+                )
+              })
+            }
+          ),
           home: createStackNavigator(
             {
               home: { screen: HomeScreen },
@@ -98,7 +103,6 @@ const AppNavigator = createBottomTabNavigator(
               payback: { screen: PaybackScreen },
               updatePayment: { screen: UpdatePaymentScreen },
               createGroup: { screen: CreateGroupScreen },
-              sendInvite: { screen: SendInviteScreen },
               chore: { screen: ChoreScreen },
               createChore: { screen: CreateChoreScreen },
               readChore: { screen: ReadChoreScreen },

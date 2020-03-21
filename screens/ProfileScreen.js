@@ -37,6 +37,12 @@ const styles = StyleSheet.create({
   },
   rowItemRight: {
     color: LIGHT_GREY_TEXT
+  },
+  buttonStyle: {
+    borderRadius: 5,
+    padding: 10,
+    backgroundColor: DARK_BLUE,
+    width: '95%'
   }
 });
 class ProfileScreen extends Component {
@@ -76,7 +82,6 @@ class ProfileScreen extends Component {
       return (
         <Layout style={{ flex: 1 }}>
           <Text style={styles.title}>Group Details</Text>
-
           <Layout style={[styles.rowItem]}>
             <Text>Name:</Text>
             <Text style={styles.rowItemRight}> {name}</Text>
@@ -134,38 +139,32 @@ class ProfileScreen extends Component {
       title = 'Create Group';
     }
     return (
-      <Button
-        title={title}
-        buttonStyle={{
-          borderRadius: 5,
-          padding: 10,
-          backgroundColor: DARK_BLUE
-        }}
-        titleStyle={{
-          width: '90%',
-          fontSize: 20
-        }}
-        onPress={this.onButtonPressGroup}
-      />
+      <Layout style={{ flex: 1 }}>
+        <Button
+          title={title}
+          buttonStyle={styles.buttonStyle}
+          titleStyle={{
+            fontSize: 20
+          }}
+          onPress={this.onButtonPressGroup}
+        />
+      </Layout>
     );
   };
 
   renderInviteButton = () => {
     if (this.props.inGroup) {
       return (
-        <Button
-          title="Send Invite"
-          buttonStyle={{
-            borderRadius: 5,
-            padding: 10,
-            backgroundColor: DARK_BLUE
-          }}
-          titleStyle={{
-            width: '90%',
-            fontSize: 20
-          }}
-          onPress={this.onButtonPressInvite}
-        />
+        <Layout style={{ flex: 1, alignSelf: 'flex-end' }}>
+          <Button
+            title="Send Invite"
+            buttonStyle={[styles.buttonStyle, { alignSelf: 'flex-end' }]}
+            titleStyle={{
+              fontSize: 20
+            }}
+            onPress={this.onButtonPressInvite}
+          />
+        </Layout>
       );
     }
   };
@@ -207,8 +206,18 @@ class ProfileScreen extends Component {
         </Layout>
         <Layout style={{ flex: 1 }}>
           {this.renderGroupInfo()}
-          {this.renderGroupButton()}
-          {this.renderInviteButton()}
+          <Layout
+            style={{
+              display: 'flex',
+              backgroundColor: 'pink',
+              flexDirection: 'row'
+            }}
+          >
+            {/* <Text style={styles.buttonStyle}>Hello</Text>
+            <Text style={styles.buttonStyle}>Hello</Text> */}
+            {this.renderGroupButton()}
+            {this.renderInviteButton()}
+          </Layout>
           {this.renderPendingInvites()}
         </Layout>
       </Layout>

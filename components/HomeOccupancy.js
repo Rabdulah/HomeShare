@@ -30,7 +30,7 @@ const renderAvatars = () => {
 const HomeOccupancy = () => {
   return (
     <View style={{ padding: 16 }}>
-      <Text style={{ paddingBottom: 5, fontWeight: 'bold', color: DARK_BLUE }}>Who's Home</Text>
+      <Text style={{ paddingBottom: 5, fontWeight: 'bold', color: DARK_BLUE }}>Recently Home</Text>
       {/* will need to map over list of user's who are home;
               initials should by dynamic ofc. via .map() eventually
            */}

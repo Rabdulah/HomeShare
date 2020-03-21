@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Layout, Text } from '@ui-kitten/components';
-
+import { Ionicons } from '@expo/vector-icons';
 import {
   groupAddressChanged,
   groupNameChanged,
@@ -19,9 +19,33 @@ import AuthStyles from '../styles/auth';
 import { DARK_BLUE } from '../styles/colours';
 
 class SendInviteScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      backgroundColor: 'white'
+    },
+    headerLeft: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Ionicons
+            name="ios-arrow-back"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
+          />
+        </TouchableOpacity>
+      );
+    },
+    headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Invite</Text>
+  });
+
   componentDidMount() {
     this.props.clearErrors();
   }
+
   // Case Where group successfully created
   componentDidUpdate() {
     this.onCreateGroupComplete(this.props);
@@ -38,7 +62,6 @@ class SendInviteScreen extends Component {
   onEmailChanged = text => {
     this.props.inviteEmailChanged(text);
   };
-
 
   onButtonPress = () => {
     this.props.sendInvite(this.props);
@@ -78,8 +101,8 @@ class SendInviteScreen extends Component {
 
   render() {
     return (
-      <Layout style={AuthStyles.container}>
-        <Layout style={{ flex: 3 }}>
+      <Layout style={[AuthStyles.container, { flex: 1, justifyContent: 'center' }]}>
+        <Layout style={{ flex: 1 }}>
           <Input
             secure
             secureTextEntry
@@ -88,17 +111,14 @@ class SendInviteScreen extends Component {
             secure={false}
             value={this.props.inviteEmail}
             label="Email"
-            containerStyle={{ marginVertical: 15 }}
+            containerStyle={{ marginVertical: 20 }}
           />
           {this.renderError()}
-          <View
-            style={[
-              this.props.loading ? { marginVertical: 15 } : { marginTop: 0 }
-            ]}
-          >
+          <View style={[this.props.loading ? { marginVertical: 15 } : { marginTop: 0 }]}>
             {this.renderButton()}
           </View>
         </Layout>
+        <Layout style={{ flex: 0.25 }} />
       </Layout>
     );
   }
@@ -110,7 +130,7 @@ const mapStateToProps = state => {
       return the property on the state obj we care about
       it is specifically state.AUTH b/c that is the value we assigned
       our reducer to in our combineReducers() call.
-  
+
       our reducer produces the "email" property.
     */
 
