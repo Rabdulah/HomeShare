@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, Layout, List, ListItem, Button } from '@ui-kitten/components';
+import { Text, Layout, List, ListItem } from '@ui-kitten/components';
+import { Button } from 'react-native-elements';
 import { NavigationEvents } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { viewPayment, getCurrentPayment } from '../../actions';
 import HeaderCard from '../../components/HeaderCard';
 import Avatar from '../../components/Avatar';
-import { DARK_BLUE } from '../../styles/colours';
+import { DARK_BLUE, ORANGE } from '../../styles/colours';
+import Spinner from '../../components/Spinner';
 
 class ReadPaymentScreen extends Component {
   // specify custom header in navigationOptions
@@ -154,7 +156,7 @@ class ReadPaymentScreen extends Component {
               renderItem={this.renderPayeeList}
               style={{ backgroundColor: 'white' }}
             />
-            <Button
+            {/* <Button
               status="success"
               disabled={this.doesLoggedInUserOweMoney()}
               onPress={() => {
@@ -162,11 +164,19 @@ class ReadPaymentScreen extends Component {
               }}
             >
               {this.renderButtonText()}
-            </Button>
+            </Button> */}
+            <Button
+              title={this.renderButtonText()}
+              buttonStyle={{ backgroundColor: ORANGE }}
+              disabled={this.doesLoggedInUserOweMoney()}
+              onPress={() => {
+                navigation.navigate('payback');
+              }}
+            />
           </Layout>
         ) : (
-            <Layout>
-              <Text>Loading...</Text>
+            <Layout style={{ flex: 1, justifyContent: 'center' }}>
+              <Spinner size="small" colour={DARK_BLUE} />
             </Layout>
           )}
       </>

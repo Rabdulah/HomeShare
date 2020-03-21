@@ -7,6 +7,7 @@ import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
 import { DARK_BLUE } from '../../styles/colours';
 import { retrieveChores, viewChore } from '../../actions';
+import Spinner from '../../components/Spinner';
 
 class ChoreScreen extends Component {
   // specify custom header in navigationOptions
@@ -269,8 +270,8 @@ class ChoreScreen extends Component {
             />
           </Layout>
         ) : (
-            <Layout>
-              <Text>Loading...</Text>
+            <Layout style={{ flex: 1, justifyContent: 'center' }}>
+              <Spinner size="small" colour={DARK_BLUE} />
             </Layout>
           )}
       </>
