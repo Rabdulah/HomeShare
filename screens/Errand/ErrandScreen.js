@@ -8,7 +8,7 @@ import firebase from 'firebase';
 import moment from 'moment';
 import { NavigationEvents } from 'react-navigation';
 import { viewErrand } from '../../actions';
-import { DARK_BLUE } from '../../styles/colours';
+import { DARK_BLUE, ORANGE } from '../../styles/colours';
 import Avatar from '../../components/Avatar';
 
 const FORMAT = 'YYYY-MM-DD';
@@ -415,6 +415,13 @@ class ErrandScreen extends Component {
             disabledByDefault
             // Agenda container style
             style={{}}
+            theme={{
+              agendaTodayColor: DARK_BLUE,
+              agendaKnobColor: DARK_BLUE,
+              dotColor: ORANGE,
+              selectedDotColor: ORANGE,
+              selectedDayBackgroundColor: ORANGE
+            }}
           />
         </Layout>
       </>
