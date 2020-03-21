@@ -46,6 +46,29 @@ const styles = StyleSheet.create({
   }
 });
 class ProfileScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      backgroundColor: 'white'
+    },
+    headerLeft: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('home');
+          }}
+        >
+          <Ionicons
+            name="ios-arrow-back"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
+          />
+        </TouchableOpacity>
+      );
+    },
+    headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Profile</Text>
+  });
+
   componentDidMount() {
     this.subscribeToInvites(this.props);
   }
@@ -133,16 +156,18 @@ class ProfileScreen extends Component {
 
   renderGroupButton = () => {
     let title;
+    const width = { width: '95%' };
     if (this.props.inGroup) {
       title = 'Leave Group';
     } else {
       title = 'Create Group';
+      width.width = '100%';
     }
     return (
       <Layout style={{ flex: 1 }}>
         <Button
           title={title}
-          buttonStyle={styles.buttonStyle}
+          buttonStyle={[styles.buttonStyle, width]}
           titleStyle={{
             fontSize: 20
           }}
@@ -184,7 +209,7 @@ class ProfileScreen extends Component {
   render() {
     const { firstName, lastName, email, username } = this.props;
     return (
-      <Layout style={[AuthStyles.container, { display: 'flex', flex: 1 }]}>
+      <Layout style={[AuthStyles.container, { flex: 1, flexDirection: 'column' }]}>
         <Layout style={{ flex: 1 }}>
           <Text style={styles.title}>User Profile</Text>
           <Layout style={[styles.rowItem]}>
@@ -209,12 +234,9 @@ class ProfileScreen extends Component {
           <Layout
             style={{
               display: 'flex',
-              backgroundColor: 'pink',
               flexDirection: 'row'
             }}
           >
-            {/* <Text style={styles.buttonStyle}>Hello</Text>
-            <Text style={styles.buttonStyle}>Hello</Text> */}
             {this.renderGroupButton()}
             {this.renderInviteButton()}
           </Layout>

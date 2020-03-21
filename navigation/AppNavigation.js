@@ -80,7 +80,8 @@ const AppNavigator = createBottomTabNavigator(
           profile: createStackNavigator(
             {
               profile: { screen: ProfileScreen },
-              sendInvite: { screen: SendInviteScreen }
+              sendInvite: { screen: SendInviteScreen },
+              createGroup: { screen: CreateGroupScreen }
             },
             {
               navigationOptions: () => ({
@@ -102,7 +103,6 @@ const AppNavigator = createBottomTabNavigator(
               readPayment: { screen: ReadPaymentScreen },
               payback: { screen: PaybackScreen },
               updatePayment: { screen: UpdatePaymentScreen },
-              createGroup: { screen: CreateGroupScreen },
               chore: { screen: ChoreScreen },
               createChore: { screen: CreateChoreScreen },
               readChore: { screen: ReadChoreScreen },

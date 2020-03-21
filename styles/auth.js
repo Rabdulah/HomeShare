@@ -9,8 +9,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     flex: 1,
-    paddingVertical: 50,
-    paddingHorizontal: 25
+    padding: 16
   },
   errorTextStyle: {
     color: 'red',
