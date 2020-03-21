@@ -80,14 +80,6 @@ class ErrandScreen extends Component {
     //   });
   };
 
-  // componentDidUpdate(prevProps, prevState, snapshot) {
-  //   if (prevProps.currentErrand !== this.props.currentErrand) {
-  //     // Do whatever you want
-  //     console.log('prevprops', prevProps.currentErrand);
-  //     console.log('props', this.props.currentErrand);
-  //   }
-  // }
-
   onNewCurrentErrand = newCurrentErrand => {
     // update big ass list of errands
 

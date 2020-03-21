@@ -131,7 +131,6 @@ class PaymentScreen extends Component {
           };
         });
         payments = payments.sort((a, b) => b.date - a.date);
-        console.log('pyam', payments);
         this.calculateBalance(payments);
         retrievePayments(payments);
       });
@@ -159,7 +158,6 @@ class PaymentScreen extends Component {
       return totalBalance + currentPaymentBalance;
     }, 0);
 
-    console.log('paymentInfo', paymentInfo);
     this.setState({ balance, paymentInfo });
   };
 
