@@ -122,10 +122,10 @@ class ProfileScreen extends Component {
     // Show pending invites only if you have them and you are not in a group
     if (!this.props.inGroup && this.props.pendingInvites.length) {
       return (
-        <View>
-          <Text style={AuthStyles.subTitle}>Pending Invites</Text>
+        <Layout>
+          <Text style={styles.title}>Pending Invites</Text>
           <List data={this.props.pendingInvites} renderItem={this.renderInvite} />
-        </View>
+        </Layout>
       );
     }
   };
@@ -207,7 +207,7 @@ class ProfileScreen extends Component {
   };
 
   render() {
-    const { firstName, lastName, email, username } = this.props;
+    const { firstName, lastName, email, username, inGroup } = this.props;
     return (
       <Layout style={[AuthStyles.container, { flex: 1, flexDirection: 'column' }]}>
         <Layout style={{ flex: 1 }}>
@@ -234,13 +234,14 @@ class ProfileScreen extends Component {
           <Layout
             style={{
               display: 'flex',
-              flexDirection: 'row'
+              flexDirection: inGroup ? 'row' : 'column',
+              flex: inGroup ? 0 : 1
             }}
           >
+            {this.renderPendingInvites()}
             {this.renderGroupButton()}
             {this.renderInviteButton()}
           </Layout>
-          {this.renderPendingInvites()}
         </Layout>
       </Layout>
     );
