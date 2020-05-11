@@ -48,4 +48,4 @@ Making sure that user information is private and secure is important to us. That
 ## Invite Only
 You control who has access to your group. No unexpected visitors allowed. Just use a roommate's email to send and invite to your group so that you can start using HomeShare together!
 
-![Chat](./assets/group3.png)
+![Chat](./assets/group.png)
