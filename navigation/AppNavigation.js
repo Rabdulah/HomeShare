@@ -77,15 +77,21 @@ const AppNavigator = createBottomTabNavigator(
       // nested nav
       screen: createMaterialBottomTabNavigator(
         {
-          profile: {
-            screen: ProfileScreen,
-            navigationOptions: () => ({
-              tabBarColor: '#C1EDCC',
-              tabBarIcon: ({ tintColor }) => (
-                <Ionicons name="ios-person" size={22} color={tintColor} />
-              )
-            })
-          },
+          profile: createStackNavigator(
+            {
+              profile: { screen: ProfileScreen },
+              sendInvite: { screen: SendInviteScreen },
+              createGroup: { screen: CreateGroupScreen }
+            },
+            {
+              navigationOptions: () => ({
+                tabBarColor: '#C1EDCC',
+                tabBarIcon: ({ tintColor }) => (
+                  <Ionicons name="ios-person" size={22} color={tintColor} />
+                )
+              })
+            }
+          ),
           home: createStackNavigator(
             {
               home: { screen: HomeScreen },
@@ -97,8 +103,6 @@ const AppNavigator = createBottomTabNavigator(
               readPayment: { screen: ReadPaymentScreen },
               payback: { screen: PaybackScreen },
               updatePayment: { screen: UpdatePaymentScreen },
-              createGroup: { screen: CreateGroupScreen },
-              sendInvite: { screen: SendInviteScreen },
               chore: { screen: ChoreScreen },
               createChore: { screen: CreateChoreScreen },
               readChore: { screen: ReadChoreScreen },
@@ -106,7 +110,8 @@ const AppNavigator = createBottomTabNavigator(
               errand: { screen: ErrandScreen },
               createErrand: { screen: CreateErrandScreen },
               readErrand: { screen: ReadErrandScreen },
-              updateErrand: { screen: UpdateErrandScreen }
+              updateErrand: { screen: UpdateErrandScreen },
+              chat: { screen: ChatScreen }
             },
             {
               defaultNavigationOptions: {
@@ -121,16 +126,16 @@ const AppNavigator = createBottomTabNavigator(
                 )
               })
             }
-          ),
-          chat: {
-            screen: ChatScreen,
-            navigationOptions: () => ({
-              tabBarColor: '#DFEDC4',
-              tabBarIcon: ({ tintColor }) => (
-                <Ionicons name="ios-chatboxes" size={22} color={tintColor} />
-              )
-            })
-          }
+          )
+          // chat: {
+          //   screen: ChatScreen,
+          //   navigationOptions: () => ({
+          //     tabBarColor: '#DFEDC4',
+          //     tabBarIcon: ({ tintColor }) => (
+          //       <Ionicons name="ios-chatboxes" size={22} color={tintColor} />
+          //     )
+          //   })
+          // }
           // review: {
           //   screen: createStackNavigator({
           //     review: { screen: ReviewScreen },
@@ -140,7 +145,7 @@ const AppNavigator = createBottomTabNavigator(
         },
         {
           labeled: true,
-          activeColor: LIGHT_SEA_GREEN,
+          activeColor: DARK_BLUE,
           inactiveColor: 'grey',
           barStyle: {
             backgroundColor: 'white'

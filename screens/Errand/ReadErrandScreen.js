@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Layout, Text } from '@ui-kitten/components';
 import { Button } from 'react-native-elements';
 import firebase from 'firebase';
-import { DARK_BLUE } from '../../styles/colours';
+import { DARK_BLUE, ORANGE } from '../../styles/colours';
 import { viewErrand } from '../../actions';
 
 const styles = StyleSheet.create({
@@ -302,9 +302,7 @@ class ReadErrandScreen extends Component {
         </Layout>
         <Button
           title={this.renderButtonText()}
-          type="outline"
-          titleStyle={{ color: DARK_BLUE }}
-          buttonStyle={{ borderColor: DARK_BLUE }}
+          buttonStyle={{ backgroundColor: ORANGE }}
           onPress={this.onButtonPress}
         />
       </ScrollView>

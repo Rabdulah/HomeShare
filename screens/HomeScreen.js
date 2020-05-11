@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { Layout } from '@ui-kitten/components';
 import { connect } from 'react-redux';
 import { FlatGrid } from 'react-native-super-grid';
 import { Ionicons } from '@expo/vector-icons';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getUserGroup } from '../actions';
-import Header from '../components/Header';
 import HomeOccupancy from '../components/HomeOccupancy';
-import { PEWTER_BLUE, DARK_BLUE, MOONSTONE_BLUE } from '../styles/colours';
+import Header from '../components/Header';
+import { PEWTER_BLUE, DARK_BLUE, MOONSTONE_BLUE, LIGHT_SEA_GREEN, ORANGE } from '../styles/colours';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,10 +19,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     height: 150,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    shadowColor: 'rgba(0,0,0,0.19)',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 1
   },
   itemName: {
-    fontSize: 16,
+    fontSize: 18,
     color: DARK_BLUE,
     fontWeight: '600'
   },
@@ -46,30 +52,26 @@ const items = [
   {
     name: 'Errands',
     icon: 'md-calendar',
-    code: '#f39c12',
-    numItems: '4 upcoming',
+    code: ORANGE,
     route: 'errand'
-  },
-  {
-    name: 'Utilities',
-    icon: 'md-outlet',
-    code: '#f542f2',
-    numItems: '4 items due',
-    route: 'utility'
   },
   {
     name: 'Payments',
     icon: 'md-cash',
-    code: '#2ecc71',
-    numItems: '4 items due',
+    code: LIGHT_SEA_GREEN,
     route: 'payments'
   },
   {
     name: 'Chores',
     icon: 'md-trash',
     code: MOONSTONE_BLUE,
-    numItems: '4 items due',
     route: 'chore'
+  },
+  {
+    name: 'Chat',
+    icon: 'ios-chatboxes',
+    code: ORANGE,
+    route: 'chat'
   }
 ];
 
@@ -81,33 +83,52 @@ class HomeScreen extends Component {
     const lastName = params ? params.lastName : null;
     const address = params ? params.address : null;
     const shortFormAddress = address ? address.split(',')[0] : '';
+    const info = {
+      firstName,
+      lastName,
+      address,
+      shortFormAddress
+    };
     return {
-      // header: () => {
-      //   return (
-      //     <Header
-      //       style={{ backgroundColor: 'white' }}
-      //       title={`${firstName} ${lastName}`}
-      //       subtitle={`${shortFormAddress}`}
-      //     />
-      //   );
-      // }
+      safeAreaInsets: { top: 0 },
+      header: () => {
+        return (
+          <Header
+            style={{ backgroundColor: 'white' }}
+            title={`${firstName} ${lastName}`}
+            subtitle={`${shortFormAddress}`}
+            info={info}
+          />
+        );
+      },
       headerStyle: {
         backgroundColor: 'white',
-        border: 'none'
-      },
-      headerTitle: () => (
-        <Text
-          style={{ fontWeight: 'bold', textAlign: 'center' }}
-        >{`${firstName} ${lastName}\n${shortFormAddress}`}</Text>
-      )
+        border: 'none',
+        height: 100
+      }
+      // headerTitle: () => (
+      //   <Text
+      //     style={{ fontWeight: 'bold', textAlign: 'center' }}
+      //   >{`${firstName} ${lastName}\n${shortFormAddress}`}</Text>
+      // )
     };
   };
 
   componentDidMount() {
-    const { firstName, lastName, groupInfo, getUserGroup, inGroup, user, navigation } = this.props;
+    const {
+      firstName,
+      lastName,
+      groupInfo,
+      getUserGroup,
+      inGroup,
+      username,
+      user,
+      navigation
+    } = this.props;
     navigation.setParams({
       firstName,
-      lastName
+      lastName,
+      username
     });
     if (inGroup) {
       getUserGroup(user);
@@ -121,32 +142,41 @@ class HomeScreen extends Component {
     const { groupInfo, firstName, lastName, navigation } = this.props;
     const lighterPewterBlue = `#${lightenDarkenColor(PEWTER_BLUE.slice(1), 55)}`;
     return (
-      <View style={styles.container}>
-        <HomeOccupancy />
-        <View style={{ backgroundColor: lighterPewterBlue, flex: 1 }}>
-          <FlatGrid
-            scrollEnabled={false}
-            itemDimension={130}
-            items={items}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.itemContainer}
-                onPress={() => {
-                  navigation.navigate(item.route);
-                }}
-              >
-                <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-                  <Ionicons name={item.icon} size={32} color={item.code} />
-                </View>
-                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-                  <Text style={styles.itemName}>{item.name}</Text>
-                  <Text style={styles.itemCode}>{item.numItems}</Text>
-                </View>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      </View>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Layout style={styles.container}>
+          <HomeOccupancy />
+          <Layout
+            style={{
+              backgroundColor: 'rgba(38, 84, 124, 0.175)',
+              flex: 1,
+              padding: 8,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <FlatGrid
+              scrollEnabled={false}
+              itemDimension={130}
+              items={items}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.itemContainer}
+                  onPress={() => {
+                    navigation.navigate(item.route);
+                  }}
+                >
+                  <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+                    <Ionicons name={item.icon} size={32} color={item.code} />
+                  </View>
+                  <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <Text style={styles.itemName}>{item.name}</Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            />
+          </Layout>
+        </Layout>
+      </SafeAreaView>
     );
   }
 }

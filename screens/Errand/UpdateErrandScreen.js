@@ -132,7 +132,6 @@ class UpdateErrandScreen extends Component {
 
   toggleShowDate = () => {
     const { showDate } = this.state;
-    console.log('woof', showDate);
     this.setState({ showDate: !showDate });
   };
 

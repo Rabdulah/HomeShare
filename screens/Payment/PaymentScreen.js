@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Layout, Text } from '@ui-kitten/components';
+import { Layout, Text } from '@ui-kitten/components';
+import { Button } from 'react-native-elements';
 import { ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import firebase from 'firebase';
@@ -9,7 +10,7 @@ import HeaderCard from '../../components/HeaderCard';
 import ItemCard from '../../components/ItemCard';
 import Spinner from '../../components/Spinner';
 import { viewPayment, retrievePayments } from '../../actions';
-import { DARK_BLUE } from '../../styles/colours';
+import { DARK_BLUE, ORANGE } from '../../styles/colours';
 
 // import React, { Component } from 'react';
 // import { View, Text, Button, FlatList } from 'react-native';
@@ -98,7 +99,8 @@ class PaymentScreen extends Component {
     super(props);
 
     this.state = {
-      balance: 0
+      balance: 0,
+      paymentInfo: []
     };
   }
 
@@ -116,11 +118,14 @@ class PaymentScreen extends Component {
       .then(snapshot => {
         let payments = snapshot.docs.map(doc => {
           const { cost, date, name, owner, payees } = doc.data();
+
+          const ownerDetails = payees.filter(payee => payee.user.id === owner);
+
           return {
             cost,
             date,
             name,
-            owner,
+            owner: ownerDetails[0].user,
             payees,
             id: doc.id
           };
@@ -133,12 +138,13 @@ class PaymentScreen extends Component {
 
   calculateBalance = payments => {
     const { user } = this.props;
+    const paymentInfo = [];
     const balance = payments.reduce((totalBalance, currentPayment) => {
       // check if the currentPayment belongs to the logged in user
       const currentPaymentBalance = currentPayment.payees.reduce((currPaymentBalance, payee) => {
         let amount = 0;
         // first check if current payment belongs to owner
-        if (currentPayment.owner === user) {
+        if (currentPayment.owner.id === user) {
           if (payee.user.id !== user && !payee.isPaid) {
             amount = payee.amount;
           }
@@ -148,10 +154,11 @@ class PaymentScreen extends Component {
         }
         return currPaymentBalance + amount;
       }, 0);
-
+      paymentInfo.push(currentPaymentBalance);
       return totalBalance + currentPaymentBalance;
     }, 0);
-    this.setState({ balance });
+
+    this.setState({ balance, paymentInfo });
   };
 
   onPaymentPress = paymentId => {
@@ -168,6 +175,7 @@ class PaymentScreen extends Component {
 
   renderPayments = () => {
     const { payments } = this.props;
+    const { paymentInfo } = this.state;
     if (payments.length === 0) {
       return <Spinner size="small" colour={DARK_BLUE} />;
     }
@@ -179,6 +187,8 @@ class PaymentScreen extends Component {
           name={payment.name}
           id={payment.id}
           onPress={this.onPaymentPress}
+          owner={payment.owner}
+          amount={paymentInfo[index]}
         />
       );
     });
@@ -187,7 +197,7 @@ class PaymentScreen extends Component {
   render() {
     const { payments, navigation } = this.props;
     const { balance } = this.state;
-    const headerCardSubtitle = balance >= 0 ? 'is owed to you.' : 'is the total you owe.';
+    const headerCardSubtitle = balance >= 0 ? 'in total is owed to you.' : 'is the total you owe.';
 
     return (
       <Layout style={{ padding: 16, flex: 1, flexDirection: 'column' }}>
@@ -202,13 +212,12 @@ class PaymentScreen extends Component {
           {this.renderPayments()}
         </ScrollView>
         <Button
-          status="success"
+          title="Add a payment"
+          buttonStyle={{ backgroundColor: ORANGE }}
           onPress={() => {
             navigation.navigate('createPayment');
           }}
-        >
-          Add a payment
-        </Button>
+        />
       </Layout>
     );
   }

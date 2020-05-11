@@ -1,25 +1,44 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Layout, Text } from '@ui-kitten/components';
+import { Ionicons } from '@expo/vector-icons';
 
-import {
-  groupAddressChanged,
-  groupNameChanged,
-  addGroup,
-  clearErrors
-} from '../actions';
-
+import { groupAddressChanged, groupNameChanged, addGroup, clearErrors } from '../actions';
 import Input from '../components/Input';
 import Spinner from '../components/Spinner';
 import AuthStyles from '../styles/auth';
 import { DARK_BLUE } from '../styles/colours';
 
 class CreateGroupScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerStyle: {
+      backgroundColor: 'white'
+    },
+    headerLeft: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Ionicons
+            name="ios-arrow-back"
+            size={30}
+            color={DARK_BLUE}
+            style={{ paddingHorizontal: 16 }}
+          />
+        </TouchableOpacity>
+      );
+    },
+    headerTitle: () => <Text style={{ fontWeight: 'bold' }}>Create Group</Text>
+  });
+
   componentDidMount() {
     this.props.clearErrors();
   }
+
   // Case Where group successfully created
   componentDidUpdate() {
     this.onCreateGroupComplete(this.props);
@@ -56,6 +75,7 @@ class CreateGroupScreen extends Component {
         buttonStyle={{
           borderRadius: 5,
           padding: 10,
+          marginVertical: 18,
           backgroundColor: DARK_BLUE
         }}
         titleStyle={{
@@ -80,7 +100,7 @@ class CreateGroupScreen extends Component {
   render() {
     return (
       <Layout style={AuthStyles.container}>
-        <Layout style={{ flex: 3 }}>
+        <Layout style={{ flex: 1 }}>
           <Input
             placeholder="Name"
             onChangeText={this.onNameChange}
@@ -100,11 +120,7 @@ class CreateGroupScreen extends Component {
             containerStyle={{ marginVertical: 15 }}
           />
           {this.renderError()}
-          <View
-            style={[
-              this.props.loading ? { marginVertical: 15 } : { marginTop: 0 }
-            ]}
-          >
+          <View style={[this.props.loading ? { marginVertical: 15 } : { marginTop: 0 }]}>
             {this.renderButton()}
           </View>
         </Layout>
